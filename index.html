@@ -1,0 +1,1820 @@
+<!doctype html>
+<html lang="en-GB" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Westend Signature — Private Chauffeur &amp; Concierge · Lagos · Abuja</title>
+<meta name="description" content="Westend Signature is a private chauffeur and concierge service in Lagos and Abuja, with a Westend-owned fleet of luxury SUVs and saloons. Arrive exceptionally.">
+<meta name="theme-color" content="#090909">
+<meta property="og:title" content="Westend Signature — Arrive exceptionally.">
+<meta property="og:description" content="Private chauffeur & concierge in Lagos and Abuja.">
+<meta property="og:image" content="assets/images/hero-g-class.jpg">
+
+<!-- Progressive enhancement: content is visible by default. Motion only hides the hero copy
+     briefly while the entrance animation is being prepared, with a failsafe. -->
+<script>
+  (function (d) {
+    var r = d.documentElement;
+    r.classList.remove('no-js'); r.classList.add('js');
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) {
+      r.classList.add('motion-pending');
+      setTimeout(function () { r.classList.remove('motion-pending'); }, 2500);
+    }
+  })(document);
+</script>
+
+<link rel="preload" as="image" href="assets/images/hero-g-class.jpg" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap">
+
+<style>
+/* =========================================================================
+   Westend Signature — design tokens
+   ========================================================================= */
+:root {
+  --obsidian: #090909;
+  --charcoal: #191918;
+  --ivory: #F3EFE6;
+  --gold: #C9AA73;
+  --stone: #A29B90;
+  /* Accessible variants for small text on ivory */
+  --gold-deep: #7A5F30;
+  --stone-deep: #5F594F;
+  --line-dark: rgba(243, 239, 230, .14);
+  --line-light: rgba(9, 9, 9, .14);
+
+  --serif: "Cormorant Garamond", "Iowan Old Style", "Times New Roman", serif;
+  --sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --gutter: clamp(1rem, 4vw, 4rem);
+  --max: 1440px;
+  --header-h: 76px;
+  --section-pad: clamp(5.5rem, 11vw, 10.5rem);
+
+  --ease: cubic-bezier(.22, .61, .36, 1);
+  --t-hover: 220ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--header-h);
+  background: var(--obsidian);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.has-lenis) { scroll-behavior: smooth; }
+}
+html.is-locked { overflow: hidden; }
+/* Lenis recommended styles */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--obsidian);
+  color: var(--ivory);
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: clamp(1rem, .96rem + .2vw, 1.0625rem);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+h1, h2, h3, h4 { margin: 0; font-weight: 400; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+figure { margin: 0; }
+
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: fixed; left: 1rem; top: -4rem; z-index: 200;
+  background: var(--gold); color: var(--obsidian); padding: .75rem 1.1rem;
+  text-decoration: none; font-size: .875rem; letter-spacing: .04em;
+  transition: top var(--t-hover) var(--ease);
+}
+.skip-link:focus { top: 1rem; }
+
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.on-ivory :focus-visible { outline-color: var(--gold-deep); }
+[tabindex="-1"]:focus { outline: none; }
+
+.container { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+.on-ivory { background: var(--ivory); color: var(--obsidian); }
+.on-dark { background: var(--obsidian); color: var(--ivory); }
+.on-charcoal { background: var(--charcoal); color: var(--ivory); }
+
+/* Typography */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .9rem;
+  font-size: .72rem; font-weight: 500; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--gold);
+}
+.eyebrow::before { content: ""; width: 2.5rem; height: 1px; background: currentColor; opacity: .7; }
+.on-ivory .eyebrow { color: var(--gold-deep); }
+.display {
+  font-family: var(--serif); font-weight: 300; line-height: .98; letter-spacing: -.012em;
+  font-size: clamp(2.75rem, 1.6rem + 5vw, 6.5rem);
+}
+.display em { font-style: italic; color: var(--gold); }
+.on-ivory .display em { color: var(--gold-deep); }
+.lead { font-size: clamp(1.05rem, 1rem + .3vw, 1.2rem); line-height: 1.7; color: var(--stone); max-width: 34rem; }
+.on-ivory .lead { color: var(--stone-deep); }
+.rule { height: 1px; background: var(--line-dark); border: 0; margin: 0; }
+.on-ivory .rule { background: var(--line-light); }
+
+/* Buttons */
+.btn {
+  --bg: transparent; --fg: var(--ivory); --bd: rgba(243, 239, 230, .45);
+  display: inline-flex; align-items: center; justify-content: center; gap: .75rem;
+  min-height: 48px; padding: .8rem 1.6rem;
+  background: var(--bg); color: var(--fg); border: 1px solid var(--bd); border-radius: 0;
+  font-size: .78rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+  text-decoration: none; white-space: nowrap;
+  transition: background-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease);
+}
+.btn:hover { --bg: var(--gold); --fg: var(--obsidian); --bd: var(--gold); }
+.btn--solid { --bg: var(--ivory); --fg: var(--obsidian); --bd: var(--ivory); }
+.btn--solid:hover { --bg: var(--gold); --bd: var(--gold); }
+.btn--dark { --bg: var(--obsidian); --fg: var(--ivory); --bd: var(--obsidian); }
+.btn--dark:hover { --bg: var(--charcoal); --fg: var(--gold); --bd: var(--charcoal); }
+.btn--ghost-dark { --fg: var(--obsidian); --bd: rgba(9, 9, 9, .35); }
+.btn--ghost-dark:hover { --bg: var(--obsidian); --fg: var(--ivory); --bd: var(--obsidian); }
+.btn .arrow { width: 1.1rem; height: 1px; background: currentColor; position: relative; transition: transform var(--t-hover) var(--ease); }
+.btn .arrow::after { content: ""; position: absolute; right: 0; top: -3px; width: 7px; height: 7px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); }
+.btn:hover .arrow { transform: translateX(4px); }
+.btn[disabled] { opacity: .6; cursor: progress; }
+
+.text-link {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 44px;
+  background: none; border: 0; padding: 0;
+  font-size: .75rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+  text-decoration: none; color: inherit;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px; background-position: 0 calc(50% + .85em); background-repeat: no-repeat;
+  transition: color var(--t-hover) var(--ease), background-size var(--t-hover) var(--ease);
+}
+.text-link:hover { color: var(--gold); }
+.on-ivory .text-link:hover { color: var(--gold-deep); }
+.text-link--gold { color: var(--gold); }
+.on-ivory .text-link--gold { color: var(--gold-deep); }
+.text-link--gold:hover { color: var(--ivory); }
+.on-ivory .text-link--gold:hover { color: var(--obsidian); }
+.no-js [data-view-vehicle] { display: none; }
+
+/* =========================================================================
+   Header
+   ========================================================================= */
+.site-header {
+  position: fixed; inset: 0 0 auto 0; z-index: 100;
+  height: var(--header-h);
+  color: var(--ivory);
+  transition: background-color 400ms var(--ease), border-color 400ms var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.site-header.is-solid, .site-header.menu-open {
+  background: rgba(9, 9, 9, .96);
+  border-bottom-color: var(--line-dark);
+}
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .site-header.is-solid { background: rgba(9, 9, 9, .88); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+}
+.site-header__inner {
+  height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  max-width: none;
+}
+.wordmark {
+  display: inline-flex; flex-direction: column; line-height: 1; text-decoration: none; gap: .38rem;
+  min-height: 44px; justify-content: center;
+}
+.wordmark__main { font-family: var(--serif); font-weight: 500; font-size: 1.32rem; letter-spacing: .3em; margin-right: -.3em; }
+.wordmark__sub { font-size: .55rem; font-weight: 500; letter-spacing: .62em; color: var(--gold); padding-left: .1em; }
+.primary-nav ul { display: flex; gap: clamp(1.25rem, 2.6vw, 2.75rem); }
+.primary-nav a {
+  display: inline-flex; align-items: center; min-height: 44px;
+  text-decoration: none; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(243, 239, 230, .82);
+  position: relative; transition: color var(--t-hover) var(--ease);
+}
+.primary-nav a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 10px; height: 1px; background: var(--gold);
+  transform: scaleX(0); transform-origin: left; transition: transform var(--t-hover) var(--ease);
+}
+.primary-nav a:hover, .primary-nav a[aria-current="true"] { color: var(--ivory); }
+.primary-nav a:hover::after, .primary-nav a[aria-current="true"]::after { transform: scaleX(1); }
+.header-actions { display: flex; align-items: center; gap: 1.75rem; }
+.cities { font-size: .7rem; letter-spacing: .26em; text-transform: uppercase; color: var(--stone); white-space: nowrap; }
+.header-actions .btn { min-height: 44px; padding: .65rem 1.25rem; font-size: .7rem; }
+
+.menu-toggle {
+  display: none; width: 48px; height: 48px; margin-right: -12px;
+  background: none; border: 0; position: relative;
+}
+.menu-toggle span[aria-hidden] {
+  position: absolute; left: 12px; right: 12px; height: 1px; background: currentColor;
+  transition: transform 300ms var(--ease), opacity 200ms var(--ease);
+}
+.menu-toggle span[aria-hidden]:nth-of-type(2) { top: 20px; }
+.menu-toggle span[aria-hidden]:nth-of-type(3) { top: 27px; }
+.menu-toggle[aria-expanded="true"] span[aria-hidden]:nth-of-type(2) { transform: translateY(3.5px) rotate(45deg); }
+.menu-toggle[aria-expanded="true"] span[aria-hidden]:nth-of-type(3) { transform: translateY(-3.5px) rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed; inset: var(--header-h) 0 0 0; z-index: 99;
+  background: var(--obsidian);
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 2.5rem var(--gutter) calc(2rem + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  opacity: 0; transform: translateY(-8px);
+  transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+}
+.mobile-menu.is-open { opacity: 1; transform: none; }
+.mobile-menu[hidden] { display: none; }
+.mobile-menu nav ul { display: grid; }
+.mobile-menu nav li { border-bottom: 1px solid var(--line-dark); }
+.mobile-menu nav a {
+  display: flex; justify-content: space-between; align-items: center; min-height: 64px;
+  font-family: var(--serif); font-size: clamp(1.9rem, 7vw, 2.6rem); font-weight: 300;
+  text-decoration: none;
+}
+.mobile-menu nav a span { font-family: var(--sans); font-size: .7rem; letter-spacing: .2em; color: var(--stone); }
+.mobile-menu__foot { display: grid; gap: 1.5rem; padding-top: 2.5rem; }
+.mobile-menu__foot .btn { width: 100%; }
+
+@media (max-width: 1080px) {
+  .primary-nav, .header-actions .btn, .header-actions .cities { display: none; }
+  .menu-toggle { display: inline-block; }
+}
+@media (min-width: 1081px) { .mobile-menu { display: none !important; } }
+
+/* =========================================================================
+   Hero
+   ========================================================================= */
+.hero {
+  position: relative; min-height: 600px; height: 94vh; height: 94svh;
+  overflow: hidden; color: var(--ivory); background: var(--obsidian);
+  display: flex; align-items: flex-end;
+}
+.hero__media, .hero__media-inner { position: absolute; inset: 0; }
+.hero__media { transform-origin: 50% 60%; will-change: transform; }
+.hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; }
+.hero__shade {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(9,9,9,.55) 0%, rgba(9,9,9,0) 22%, rgba(9,9,9,0) 45%, rgba(9,9,9,.82) 100%),
+    linear-gradient(90deg, rgba(9,9,9,.55) 0%, rgba(9,9,9,0) 60%);
+}
+.hero__word {
+  position: absolute; left: 50%; top: 34%; transform: translate(-50%, -50%);
+  margin: 0; pointer-events: none; user-select: none;
+  font-family: var(--serif); font-weight: 300; line-height: .8; letter-spacing: .04em;
+  font-size: clamp(6rem, 25vw, 26rem); white-space: nowrap;
+  color: rgba(243, 239, 230, .075);
+}
+.hero__word-inner { display: block; will-change: transform; }
+.hero__content {
+  position: relative; z-index: 2; width: 100%;
+  padding-bottom: clamp(3rem, 7vh, 5.5rem);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 2rem;
+}
+.hero h1 {
+  font-family: var(--serif); font-weight: 300; line-height: .92; letter-spacing: -.02em;
+  font-size: clamp(3.4rem, 1.5rem + 8.4vw, 10rem);
+  margin: 1.4rem 0 1.6rem;
+}
+.hero h1 .line { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+.hero h1 .line-inner { display: block; }
+.hero h1 em { font-style: italic; }
+.hero__support { font-size: clamp(1.05rem, 1rem + .4vw, 1.3rem); color: rgba(243, 239, 230, .86); font-weight: 300; letter-spacing: .01em; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: .9rem 1.6rem; align-items: center; margin-top: 2.2rem; }
+.hero__aside { display: grid; gap: 1.2rem; justify-items: end; text-align: right; padding-bottom: .5rem; }
+.hero__aside .cities { color: rgba(243, 239, 230, .7); }
+.scroll-cue { display: inline-flex; align-items: center; gap: .8rem; font-size: .66rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(243, 239, 230, .6); }
+.scroll-cue::after { content: ""; width: 1px; height: 46px; background: linear-gradient(var(--gold), transparent); }
+
+/* Motion-pending: only the hero copy waits for its entrance animation */
+.motion-pending .hero .line-inner { transform: translateY(110%); }
+.motion-pending .hero [data-hero-fade] { opacity: 0; }
+.motion-pending .hero__media-inner { transform: scale(1.06); }
+
+@media (max-width: 720px) {
+  .hero { height: 92svh; min-height: 560px; }
+  .hero__content { grid-template-columns: 1fr; }
+  .hero__aside { display: none; }
+  .hero__word { top: 30%; font-size: 34vw; }
+  .hero__actions .btn { flex: 1 1 auto; }
+}
+
+/* =========================================================================
+   Quick enquiry strip
+   ========================================================================= */
+.quick { padding-block: clamp(2rem, 4vw, 3rem); border-bottom: 1px solid var(--line-light); }
+.quick__form {
+  display: grid; grid-template-columns: minmax(180px, .9fr) repeat(3, minmax(0, 1fr)) auto;
+  align-items: end; gap: 0;
+}
+.quick__intro { padding-right: 2rem; align-self: center; }
+.quick__intro h2 { font-family: var(--serif); font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); font-weight: 400; line-height: 1.1; }
+.quick__intro p { font-size: .8rem; color: var(--stone-deep); margin-top: .4rem; }
+.quick__field { display: grid; gap: .25rem; padding: .25rem 1.5rem; border-left: 1px solid var(--line-light); }
+.quick__field label { font-size: .66rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--stone-deep); }
+.quick__field select, .quick__field input {
+  width: 100%; min-height: 48px; border: 0; border-bottom: 1px solid transparent; background: transparent;
+  font-family: var(--serif); font-size: 1.35rem; color: var(--obsidian); padding: 0; border-radius: 0;
+  -webkit-appearance: none; appearance: none;
+  transition: border-color var(--t-hover) var(--ease);
+}
+.quick__field select { background-image: linear-gradient(45deg, transparent 50%, var(--obsidian) 50%), linear-gradient(135deg, var(--obsidian) 50%, transparent 50%); background-position: calc(100% - 9px) 55%, calc(100% - 4px) 55%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 1.5rem; }
+.quick__field select:hover, .quick__field input:hover { border-bottom-color: var(--line-light); }
+.quick__form .btn { margin-left: 1.5rem; min-height: 56px; padding-inline: 2.2rem; }
+@media (max-width: 1080px) {
+  .quick__form { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 1.25rem; }
+  .quick__intro { grid-column: 1 / -1; padding: 0 0 .5rem; }
+  .quick__intro + .quick__field { border-left: 0; padding-left: 0; }
+  .quick__form .btn { grid-column: 1 / -1; margin: .5rem 0 0; }
+}
+@media (max-width: 640px) {
+  .quick__form { grid-template-columns: 1fr; }
+  .quick__field { border-left: 0; padding: 0 0 .25rem; border-bottom: 1px solid var(--line-light); }
+}
+
+/* =========================================================================
+   Section heads
+   ========================================================================= */
+.section { padding-block: var(--section-pad); position: relative; }
+.section-head { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 2rem 4rem; align-items: end; }
+.section-head .display { margin-top: 1.5rem; }
+.section-head .lead { justify-self: end; }
+@media (max-width: 860px) { .section-head { grid-template-columns: 1fr; } .section-head .lead { justify-self: start; } }
+
+/* =========================================================================
+   Fleet
+   ========================================================================= */
+.fleet { padding-top: var(--section-pad); }
+.fleet__intro { padding-bottom: clamp(3rem, 6vw, 5rem); }
+.fleet__nav { display: flex; align-items: center; gap: 2rem; padding-block: 1.25rem; border-top: 1px solid var(--line-dark); }
+.fleet__labels { display: flex; flex-wrap: wrap; gap: .25rem 2.25rem; }
+.fleet__labels a {
+  display: inline-flex; gap: .7rem; align-items: baseline; min-height: 44px; align-items: center;
+  text-decoration: none; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--stone); transition: color var(--t-hover) var(--ease);
+}
+.fleet__labels a span { font-family: var(--serif); font-size: 1rem; letter-spacing: .05em; color: var(--gold); }
+.fleet__labels a:hover, .fleet__labels a.is-active { color: var(--ivory); }
+.fleet__progress { display: none; flex: 1; height: 1px; background: var(--line-dark); position: relative; min-width: 80px; }
+.fleet__progress-bar { position: absolute; inset: 0; background: var(--gold); transform-origin: left; transform: scaleX(0); }
+.fleet__note { font-size: .78rem; color: var(--stone); padding-block: 2rem var(--section-pad); }
+
+/* Default (stacked) layout — mobile, tablet, reduced motion, and no-JS */
+.collection { padding-block: clamp(3rem, 6vw, 5rem); border-top: 1px solid var(--line-dark); }
+.collection__inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr); gap: 2.5rem clamp(2rem, 5vw, 5rem); }
+.collection__index { font-family: var(--serif); font-size: 1rem; color: var(--gold); letter-spacing: .1em; }
+.collection__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2.2rem, 1.5rem + 2.4vw, 3.6rem); line-height: 1; margin: .9rem 0 1.1rem; }
+.collection__desc { color: var(--stone); max-width: 22rem; }
+.collection__models { margin-top: 1.6rem; display: grid; gap: .4rem; font-size: .8rem; letter-spacing: .08em; color: rgba(243, 239, 230, .75); }
+.collection__models li::before { content: "—  "; color: var(--gold); }
+.collection__vehicles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 2.5rem 2rem; align-items: start; }
+
+.vehicle { display: grid; gap: 1.4rem; align-content: start; }
+.vehicle__media { position: relative; overflow: hidden; aspect-ratio: 4 / 3; background: var(--charcoal); }
+.vehicle__zoom { position: absolute; inset: 0; will-change: transform; }
+.vehicle__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 250ms var(--ease); }
+.vehicle:hover .vehicle__media img, .vehicle:focus-within .vehicle__media img { transform: scale(1.03); }
+.vehicle__name { font-family: var(--serif); font-size: clamp(1.6rem, 1.3rem + .8vw, 2.1rem); line-height: 1.05; }
+.vehicle__desc { color: var(--stone); font-size: .95rem; margin-top: .6rem; max-width: 30rem; }
+.vehicle__actions { display: flex; flex-wrap: wrap; gap: .25rem 1.75rem; margin-top: 1rem; }
+.collection--single .vehicle { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: end; gap: 2.5rem; }
+
+@media (max-width: 860px) {
+  .collection__inner { grid-template-columns: 1fr; }
+  .collection--single .vehicle { grid-template-columns: 1fr; }
+}
+
+/* Pinned desktop layout (enabled by script on large screens with motion allowed) */
+.fleet.is-pinned .fleet__pin { height: 100vh; display: flex; flex-direction: column; padding-top: var(--header-h); }
+.fleet.is-pinned .fleet__progress { display: block; }
+.fleet.is-pinned .fleet__viewport { flex: 1; min-height: 0; overflow: clip; position: relative; }
+.fleet.is-pinned .fleet__track { display: flex; width: 300%; height: 100%; will-change: transform; }
+.fleet.is-pinned .collection { width: calc(100% / 3); flex: none; height: 100%; border-top: 0; padding-block: clamp(1.5rem, 4vh, 3rem) clamp(1.5rem, 5vh, 3.5rem); display: flex; align-items: center; }
+.fleet.is-pinned .collection__inner { width: 100%; align-items: center; }
+.fleet.is-pinned .collection__vehicles { grid-template-columns: repeat(var(--count, 2), minmax(0, 1fr)); }
+.fleet.is-pinned .vehicle__media { aspect-ratio: auto; height: min(calc(100vh - 440px), 24vw); min-height: 180px; }
+.fleet.is-pinned .collection--triple .collection__inner { grid-template-columns: minmax(0, .8fr) minmax(0, 2.6fr); }
+.fleet.is-pinned .collection--triple .vehicle__media { height: min(calc(100vh - 480px), 16vw); min-height: 170px; }
+.fleet.is-pinned .collection--single .vehicle__media { height: min(calc(100vh - 300px), 34vw); }
+.fleet.is-pinned .collection--triple .vehicle__desc { font-size: .88rem; }
+.fleet.is-pinned .collection--triple .vehicle__actions { gap: 0 1.25rem; }
+.fleet.is-pinned .fleet__note { padding-top: 0; }
+
+/* =========================================================================
+   Vehicle dialog
+   ========================================================================= */
+.vehicle-dialog {
+  width: min(1120px, calc(100% - 2 * var(--gutter))); max-width: none; max-height: calc(100% - 2rem);
+  padding: 0; border: 1px solid var(--line-dark); background: var(--charcoal); color: var(--ivory);
+  overflow: auto; overscroll-behavior: contain;
+}
+.vehicle-dialog[open] { animation: dialog-in 420ms var(--ease); }
+.vehicle-dialog::backdrop { background: rgba(9, 9, 9, .78); }
+.vehicle-dialog[open]::backdrop { animation: fade-in 320ms var(--ease); }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.vehicle-dialog__grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+.vehicle-dialog__media { background: var(--obsidian); min-height: 100%; }
+@media (max-width: 760px) { .vehicle-dialog__media { aspect-ratio: 4 / 3; min-height: 0; } }
+.vehicle-dialog__media img { width: 100%; height: 100%; min-height: 360px; object-fit: cover; }
+@media (max-width: 760px) { .vehicle-dialog__media img { min-height: 0; } }
+.vehicle-dialog__body { padding: clamp(2rem, 4vw, 3.5rem); display: flex; flex-direction: column; gap: 1.2rem; position: relative; }
+.vehicle-dialog__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2.2rem, 1.6rem + 2vw, 3.4rem); line-height: 1; }
+.vehicle-dialog__desc { color: rgba(243, 239, 230, .82); }
+.vehicle-dialog__note { font-size: .78rem; color: var(--stone); border-top: 1px solid var(--line-dark); padding-top: 1rem; margin-top: auto; }
+.vehicle-dialog__actions { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: center; }
+.dialog-close {
+  position: absolute; top: .75rem; right: .75rem; width: 48px; height: 48px;
+  background: none; border: 1px solid transparent; color: var(--ivory);
+  transition: border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease);
+}
+.dialog-close:hover { border-color: var(--line-dark); color: var(--gold); }
+.dialog-close::before, .dialog-close::after { content: ""; position: absolute; left: 14px; right: 14px; top: 50%; height: 1px; background: currentColor; transform: rotate(45deg); }
+.dialog-close::after { transform: rotate(-45deg); }
+@media (max-width: 760px) {
+  .vehicle-dialog__grid { grid-template-columns: 1fr; }
+  .vehicle-dialog__body { padding-top: 2.25rem; }
+}
+
+/* =========================================================================
+   Experiences
+   ========================================================================= */
+.experiences .section-head { margin-bottom: clamp(4rem, 9vw, 8rem); }
+.exp-list { display: grid; gap: clamp(5rem, 10vw, 9rem); }
+.exp { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1rem, 2.5vw, 2.5rem); align-items: end; }
+.exp__media { position: relative; overflow: hidden; background: #ddd6c8; }
+.exp__media img { width: 100%; height: 100%; object-fit: cover; }
+.exp__media.is-parallax img { position: absolute; left: 0; top: -6%; height: 112%; }
+.exp__text { display: grid; gap: 1rem; align-content: end; }
+.exp__num { font-family: var(--serif); color: var(--gold-deep); font-size: 1rem; letter-spacing: .12em; }
+.exp__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.4rem + 2vw, 3.2rem); line-height: 1.02; }
+.exp__text p { color: var(--stone-deep); max-width: 26rem; }
+.exp__text .text-link { justify-self: start; margin-top: .4rem; }
+
+.exp--a .exp__media { grid-column: 1 / span 6; aspect-ratio: 4 / 5; }
+.exp--a .exp__text { grid-column: 8 / span 4; padding-bottom: 3rem; }
+.exp--b .exp__text { grid-column: 1 / span 4; grid-row: 1; align-self: start; padding-top: 4rem; }
+.exp--b .exp__media { grid-column: 5 / span 8; grid-row: 1; aspect-ratio: 3 / 2; }
+.exp-pair { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1rem, 2.5vw, 2.5rem); align-items: start; }
+.exp-pair .exp { display: grid; grid-template-columns: 1fr; row-gap: 1.75rem; }
+.exp-pair .exp:nth-child(1) { grid-column: 2 / span 4; }
+.exp-pair .exp:nth-child(2) { grid-column: 7 / span 6; margin-top: clamp(4rem, 12vw, 12rem); }
+.exp-pair .exp:nth-child(1) .exp__media { aspect-ratio: 4 / 5; }
+.exp-pair .exp:nth-child(2) .exp__media { aspect-ratio: 3 / 2; }
+.exp--e .exp__text { grid-column: 2 / span 4; grid-row: 1; padding-bottom: 2rem; }
+.exp--e .exp__media { grid-column: 7 / span 5; grid-row: 1; aspect-ratio: 4 / 5; }
+
+@media (max-width: 860px) {
+  .exp, .exp-pair { grid-template-columns: 1fr; row-gap: 1.75rem; }
+  .exp > *, .exp-pair > .exp { grid-column: 1 / -1 !important; grid-row: auto !important; padding: 0 !important; margin: 0 !important; }
+  .exp-pair { row-gap: clamp(5rem, 10vw, 9rem); }
+  .exp--b .exp__media, .exp--e .exp__media { order: -1; }
+  .exp__media { aspect-ratio: 4 / 3 !important; }
+}
+
+/* =========================================================================
+   The Westend Standard
+   ========================================================================= */
+.standard { padding-block: 0; }
+.standard__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.standard__visual { position: relative; }
+.standard__figure { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.standard__figure img { width: 100%; height: 100%; object-fit: cover; }
+.standard__figure figcaption {
+  position: absolute; left: var(--gutter); right: var(--gutter); bottom: 2rem;
+  display: flex; justify-content: space-between; gap: 1rem;
+  font-size: .7rem; letter-spacing: .24em; text-transform: uppercase; color: rgba(243, 239, 230, .78);
+}
+.standard__figure::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,9,9,.25), rgba(9,9,9,0) 30%, rgba(9,9,9,.55)); pointer-events: none; }
+.standard__figure figcaption { z-index: 1; }
+.standard__content { padding: var(--section-pad) var(--gutter); padding-left: clamp(2rem, 6vw, 7rem); }
+.standard__head { padding-top: calc(var(--header-h) * .5); min-height: 60vh; display: grid; align-content: center; gap: 1.6rem; }
+.statement { min-height: 62vh; display: grid; align-content: center; gap: 1.1rem; border-top: 1px solid var(--line-dark); padding-block: 3rem; transition: opacity 600ms var(--ease); }
+.statement:last-child { min-height: 70vh; }
+.statement__num { font-family: var(--serif); color: var(--gold); letter-spacing: .14em; }
+.statement h3 { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.4rem + 2vw, 3.4rem); line-height: 1.02; }
+.statement p { color: var(--stone); max-width: 28rem; }
+.standard.is-scrolly .statement { opacity: .35; }
+.standard.is-scrolly .statement.is-active { opacity: 1; }
+@media (max-width: 1023px) {
+  .standard__grid { grid-template-columns: 1fr; }
+  .standard__figure { position: relative; height: auto; aspect-ratio: 4 / 5; max-height: 80vh; }
+  .standard__content { padding-left: var(--gutter); }
+  .standard__head, .statement, .statement:last-child { min-height: 0; }
+  .standard__head { padding-top: 0; padding-bottom: 3rem; }
+}
+
+/* =========================================================================
+   Booking enquiry
+   ========================================================================= */
+.booking__grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.4fr); gap: 3rem clamp(3rem, 7vw, 8rem); align-items: start; }
+.booking__intro { position: sticky; top: calc(var(--header-h) + 2rem); display: grid; gap: 1.6rem; }
+.booking__intro .display { font-size: clamp(2.6rem, 1.6rem + 3.6vw, 5rem); }
+.booking__notice { font-size: .85rem; color: var(--stone-deep); border-left: 1px solid var(--gold-deep); padding-left: 1rem; max-width: 26rem; }
+.contact-channels { display: grid; gap: .25rem; border-top: 1px solid var(--line-light); padding-top: 1.5rem; }
+.contact-channels[hidden] { display: none; }
+.contact-channels a { display: inline-flex; gap: 1rem; align-items: baseline; min-height: 44px; align-items: center; text-decoration: none; font-family: var(--serif); font-size: 1.35rem; }
+.contact-channels a span { font-family: var(--sans); font-size: .66rem; letter-spacing: .22em; text-transform: uppercase; color: var(--stone-deep); min-width: 5.5rem; }
+.contact-channels a:hover { color: var(--gold-deep); }
+@media (max-width: 960px) { .booking__grid { grid-template-columns: 1fr; } .booking__intro { position: static; } }
+
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.9rem 2rem; }
+.form__full { grid-column: 1 / -1; }
+.form__status { grid-column: 1 / -1; font-size: .9rem; }
+.form__status:empty { display: none; }
+.form__status.is-info { padding: .9rem 1rem; background: rgba(201, 170, 115, .16); border-left: 2px solid var(--gold-deep); }
+.form__status.is-error { padding: .9rem 1rem; background: rgba(150, 40, 30, .07); border-left: 2px solid #9B2C20; color: #7D2017; }
+.field { display: grid; gap: .45rem; align-content: start; min-width: 0; }
+.field > label:not(.check), .field legend, .field__label {
+  font-size: .68rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--stone-deep);
+}
+.field .req { color: var(--gold-deep); margin-left: .2em; }
+.field .hint { font-size: .8rem; color: var(--stone-deep); }
+fieldset.field { border: 0; padding: 0; margin: 0; }
+fieldset.field legend { padding: 0; margin-bottom: .45rem; }
+.input {
+  width: 100%; min-height: 52px; padding: .75rem 0;
+  border: 0; border-bottom: 1px solid rgba(9, 9, 9, .28); border-radius: 0; background: transparent;
+  font-size: 1rem; color: var(--obsidian);
+  -webkit-appearance: none; appearance: none;
+  transition: border-color var(--t-hover) var(--ease), background-color var(--t-hover) var(--ease);
+}
+.input::placeholder { color: rgba(95, 89, 79, .75); }
+.input:hover { border-bottom-color: rgba(9, 9, 9, .5); }
+.input:focus { border-bottom-color: var(--obsidian); outline: none; background: rgba(9, 9, 9, .025); }
+.input:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+select.input { background-image: linear-gradient(45deg, transparent 50%, var(--obsidian) 50%), linear-gradient(135deg, var(--obsidian) 50%, transparent 50%); background-position: calc(100% - 9px) 55%, calc(100% - 4px) 55%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 1.5rem; }
+textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
+.input[aria-invalid="true"] { border-bottom-color: #9B2C20; }
+.field__error { font-size: .82rem; color: #8E271C; display: flex; gap: .4rem; }
+.field__error:empty { display: none; }
+.field__error::before { content: "!"; display: inline-grid; place-items: center; width: 1.1rem; height: 1.1rem; flex: none; border: 1px solid currentColor; border-radius: 50%; font-size: .65rem; font-weight: 700; margin-top: .15rem; }
+.phone { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; }
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+
+.segmented { display: flex; gap: .75rem; flex-wrap: wrap; }
+.segmented label { position: relative; flex: 1 1 8rem; }
+.segmented input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.segmented span {
+  display: flex; align-items: center; justify-content: center; min-height: 52px; padding: .5rem 1rem;
+  border: 1px solid rgba(9, 9, 9, .28); font-family: var(--serif); font-size: 1.25rem;
+  transition: background-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease);
+}
+.segmented label:hover span { border-color: var(--obsidian); }
+.segmented input:checked + span { background: var(--obsidian); color: var(--ivory); border-color: var(--obsidian); }
+.segmented input:focus-visible + span { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
+.segmented input[aria-invalid="true"] + span { border-color: #9B2C20; }
+
+.check { display: grid; grid-template-columns: auto 1fr; gap: .9rem; align-items: start; font-size: .92rem; color: var(--obsidian); cursor: pointer; }
+.check input { width: 22px; height: 22px; margin: .1rem 0 0; accent-color: var(--obsidian); cursor: pointer; }
+.check a { color: var(--gold-deep); text-underline-offset: 3px; }
+.form__submit { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; padding-top: .5rem; }
+.form__submit p { font-size: .8rem; color: var(--stone-deep); max-width: 24rem; }
+@media (max-width: 640px) {
+  .form { grid-template-columns: 1fr; }
+  .form > * { grid-column: 1 / -1; }
+  .form__submit .btn { width: 100%; }
+}
+
+/* Summary */
+.summary { display: grid; gap: 1.75rem; }
+.summary[hidden] { display: none; }
+.summary h3 { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.5rem + 1.6vw, 3rem); line-height: 1.05; }
+.summary__alert { padding: 1.1rem 1.25rem; border: 1px solid var(--gold-deep); background: rgba(201, 170, 115, .14); font-size: .95rem; }
+.summary__alert strong { display: block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; margin-bottom: .35rem; }
+.summary__alert--ok { border-color: #3D5A3A; background: rgba(61, 90, 58, .08); }
+.summary dl { display: grid; grid-template-columns: minmax(9rem, auto) 1fr; margin: 0; border-top: 1px solid var(--line-light); }
+.summary dt, .summary dd { padding: .8rem 0; border-bottom: 1px solid var(--line-light); margin: 0; }
+.summary dt { font-size: .68rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--stone-deep); padding-right: 1.5rem; padding-top: 1rem; }
+.summary dd { overflow-wrap: anywhere; white-space: pre-line; }
+.summary__actions { display: flex; flex-wrap: wrap; gap: .9rem; }
+.summary__feedback { font-size: .85rem; color: var(--stone-deep); min-height: 1.4em; }
+@media (max-width: 560px) { .summary dl { grid-template-columns: 1fr; } .summary dt { border-bottom: 0; padding-bottom: 0; } .summary__actions .btn { flex: 1 1 100%; } }
+
+/* =========================================================================
+   Footer
+   ========================================================================= */
+.site-footer { padding-block: clamp(5rem, 10vw, 8rem) 2.5rem; border-top: 1px solid var(--line-dark); }
+.footer__top { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
+.footer__mark { font-family: var(--serif); font-weight: 300; font-size: clamp(2.2rem, 1.4rem + 3vw, 4.4rem); letter-spacing: .14em; line-height: 1; }
+.footer__mark span { display: block; font-family: var(--sans); font-size: .7rem; font-weight: 500; letter-spacing: .5em; color: var(--gold); margin-top: 1rem; }
+.footer__tag { margin-top: 1.75rem; color: var(--stone); }
+.footer__col h2 { font-size: .68rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--stone); margin-bottom: 1rem; }
+.footer__col a { display: inline-flex; min-height: 40px; align-items: center; text-decoration: none; color: rgba(243, 239, 230, .85); transition: color var(--t-hover) var(--ease); }
+.footer__col a:hover { color: var(--gold); }
+.footer__col p { color: rgba(243, 239, 230, .85); }
+.footer__bottom { margin-top: clamp(4rem, 8vw, 7rem); padding-top: 1.75rem; border-top: 1px solid var(--line-dark); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; font-size: .78rem; color: var(--stone); }
+.footer__bottom ul { display: flex; gap: 1.75rem; }
+.footer__bottom a { text-decoration: none; display: inline-flex; min-height: 40px; align-items: center; }
+.footer__bottom a:hover { color: var(--ivory); }
+@media (max-width: 860px) { .footer__top { grid-template-columns: 1fr 1fr; } .footer__brand { grid-column: 1 / -1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+}
+</style>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- =====================================================================
+     SITE CONFIGURATION — edit these values; leave a value empty to hide it.
+     Nothing here is invented: add the real details before launch.
+     ===================================================================== -->
+<script>
+  window.WESTEND_CONFIG = {
+    email: "",            // e.g. "reservations@yourdomain.com" — shown in Contact and used for "Email this enquiry"
+    phone: "",            // e.g. "+234 800 000 0000" — shown in Contact as a tap-to-call link
+    whatsapp: "",         // international number, digits only, e.g. "2348000000000" — enables "Send via WhatsApp"
+    enquiryEndpoint: "",  // URL that accepts a JSON POST of the enquiry. Empty = no backend: a summary is shown instead.
+    smoothScroll: true    // Lenis smooth scrolling on desktop pointers (always off for reduced motion and touch)
+  };
+</script>
+
+<header class="site-header" id="site-header">
+  <div class="container site-header__inner">
+    <a class="wordmark" href="#top" aria-label="Westend Signature — back to top">
+      <span class="wordmark__main" aria-hidden="true">WESTEND</span>
+      <span class="wordmark__sub" aria-hidden="true">SIGNATURE</span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Main">
+      <ul>
+        <li><a href="#fleet">Fleet</a></li>
+        <li><a href="#experiences">Experiences</a></li>
+        <li><a href="#standard">The Westend Standard</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <span class="cities">Lagos · Abuja</span>
+      <a class="btn" href="#enquiry" data-goto-form>Reserve your journey</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="sr-only">Open menu</span>
+        <span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav aria-label="Mobile">
+      <ul>
+        <li><a href="#fleet">Fleet <span>01</span></a></li>
+        <li><a href="#experiences">Experiences <span>02</span></a></li>
+        <li><a href="#standard">The Westend Standard <span>03</span></a></li>
+        <li><a href="#contact">Contact <span>04</span></a></li>
+      </ul>
+    </nav>
+    <div class="mobile-menu__foot">
+      <a class="btn btn--solid" href="#enquiry" data-goto-form>Reserve your journey <span class="arrow" aria-hidden="true"></span></a>
+      <span class="cities">Lagos · Abuja</span>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ================================ HERO ================================ -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero__media">
+      <div class="hero__media-inner">
+        <!-- IMAGE: replace assets/images/hero-g-class.jpg (2400×1350) -->
+        <img src="assets/images/hero-g-class.jpg" width="2400" height="1350"
+             alt="A black Mercedes-Benz G-Class waiting at the entrance of an elegant hotel at dusk"
+             fetchpriority="high" decoding="async">
+      </div>
+    </div>
+    <div class="hero__shade" aria-hidden="true"></div>
+    <p class="hero__word" aria-hidden="true"><span class="hero__word-inner">WESTEND</span></p>
+
+    <div class="container hero__content">
+      <div>
+        <p class="eyebrow" data-hero-fade>Private chauffeur &amp; concierge</p>
+        <h1 id="hero-title">
+          <span class="line"><span class="line-inner">Arrive</span></span>
+          <span class="line"><span class="line-inner"><em>exceptionally.</em></span></span>
+        </h1>
+        <p class="hero__support" data-hero-fade>Your city. Your pace. Our signature.</p>
+        <div class="hero__actions">
+          <a class="btn btn--solid" href="#fleet" data-hero-fade>Explore the fleet <span class="arrow" aria-hidden="true"></span></a>
+          <a class="btn" href="#enquiry" data-goto-form data-hero-fade>Plan your journey</a>
+        </div>
+      </div>
+      <div class="hero__aside" data-hero-fade>
+        <span class="cities">Lagos · Abuja</span>
+        <span class="scroll-cue" aria-hidden="true">Scroll</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== QUICK ENQUIRY =========================== -->
+  <section class="quick on-ivory" aria-labelledby="quick-title">
+    <div class="container">
+      <form class="quick__form" id="quick-form" action="#enquiry" novalidate>
+        <div class="quick__intro">
+          <h2 id="quick-title">Plan a journey</h2>
+          <p>An enquiry — we confirm availability personally.</p>
+        </div>
+        <div class="quick__field">
+          <label for="q-city">City</label>
+          <select id="q-city" name="city">
+            <option value="Lagos">Lagos</option>
+            <option value="Abuja">Abuja</option>
+          </select>
+        </div>
+        <div class="quick__field">
+          <label for="q-service">Service type</label>
+          <select id="q-service" name="service">
+            <option value="">Select a service</option>
+            <option>Airport arrivals</option>
+            <option>Executive chauffeur</option>
+            <option>Weddings &amp; occasions</option>
+            <option>Private city travel</option>
+            <option>Concierge assistance</option>
+          </select>
+        </div>
+        <div class="quick__field">
+          <label for="q-date">Journey date</label>
+          <input id="q-date" name="date" type="date">
+        </div>
+        <button class="btn btn--dark" type="submit">Enquire <span class="arrow" aria-hidden="true"></span></button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================================ FLEET ================================ -->
+  <section class="fleet on-dark" id="fleet" aria-labelledby="fleet-title">
+    <div class="container fleet__intro">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal>The fleet</p>
+          <h2 class="display" id="fleet-title" data-reveal>A presence for <em>every</em> occasion.</h2>
+        </div>
+        <p class="lead" data-reveal>Every vehicle is Westend-owned, prepared before each journey and presented with care — from capable SUVs to quietly elegant saloons.</p>
+      </div>
+    </div>
+
+    <div class="fleet__pin">
+      <div class="container fleet__nav">
+        <ol class="fleet__labels" aria-label="Fleet collections">
+          <li><a href="#collection-signature" data-fleet-step="0" class="is-active"><span>01</span>Signature SUVs</a></li>
+          <li><a href="#collection-prestige" data-fleet-step="1"><span>02</span>Prestige SUVs</a></li>
+          <li><a href="#collection-executive" data-fleet-step="2"><span>03</span>Executive Saloons</a></li>
+        </ol>
+        <div class="fleet__progress" aria-hidden="true"><div class="fleet__progress-bar"></div></div>
+      </div>
+
+      <div class="fleet__viewport">
+        <div class="fleet__track">
+
+          <!-- ---------- Collection 1 ---------- -->
+          <section class="collection collection--double" id="collection-signature" aria-labelledby="col-1-title" style="--count:2">
+            <div class="container collection__inner">
+              <header data-panel-text data-reveal-stack>
+                <p class="collection__index">01 / 03</p>
+                <h3 class="collection__title" id="col-1-title">Signature SUVs</h3>
+                <p class="collection__desc">Composed, capable and quietly assured — our everyday choice for city travel, airport runs and longer road journeys.</p>
+                <ul class="collection__models"><li>Toyota Prado</li><li>Toyota Land Cruiser</li></ul>
+              </header>
+              <div class="collection__vehicles">
+                <article class="vehicle" data-reveal-stack
+                  data-vehicle="toyota-prado" data-name="Toyota Prado" data-collection="Signature SUVs"
+                  data-detail="A composed, capable SUV that suits everyday city journeys as comfortably as longer road travel. Presented immaculately and driven with care, it is a dependable choice for families, small groups and business travellers who value a calm, unhurried ride.">
+                  <figure class="vehicle__media"><div class="vehicle__zoom">
+                    <!-- IMAGE: replace assets/images/fleet-prado.jpg (1600×1200) -->
+                    <img src="assets/images/fleet-prado.jpg" width="1600" height="1200" loading="lazy" decoding="async"
+                         alt="A dark Toyota Prado parked on a quiet city street in the evening">
+                  </div></figure>
+                  <div data-panel-text>
+                    <h4 class="vehicle__name">Toyota Prado</h4>
+                    <p class="vehicle__desc">Composed and dependable, for everyday city travel and longer journeys alike.</p>
+                    <div class="vehicle__actions">
+                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Toyota Prado</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="toyota-prado">Enquire about this vehicle<span class="sr-only">: Toyota Prado</span></a>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="vehicle" data-reveal-stack
+                  data-vehicle="toyota-land-cruiser" data-name="Toyota Land Cruiser" data-collection="Signature SUVs"
+                  data-detail="Assured presence and a calm, settled ride. The Land Cruiser is well suited to executive movements, airport transfers and journeys beyond the city, with your chauffeur attending to the details so you can rest, work or simply take in the view.">
+                  <figure class="vehicle__media"><div class="vehicle__zoom">
+                    <!-- IMAGE: replace assets/images/fleet-land-cruiser.jpg (1600×1200) -->
+                    <img src="assets/images/fleet-land-cruiser.jpg" width="1600" height="1200" loading="lazy" decoding="async"
+                         alt="A black Toyota Land Cruiser at a private driveway entrance">
+                  </div></figure>
+                  <div data-panel-text>
+                    <h4 class="vehicle__name">Toyota Land Cruiser</h4>
+                    <p class="vehicle__desc">Assured presence and a calm ride for executive days and airport transfers.</p>
+                    <div class="vehicle__actions">
+                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Toyota Land Cruiser</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="toyota-land-cruiser">Enquire about this vehicle<span class="sr-only">: Toyota Land Cruiser</span></a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <!-- ---------- Collection 2 ---------- -->
+          <section class="collection collection--triple" id="collection-prestige" aria-labelledby="col-2-title" style="--count:3">
+            <div class="container collection__inner">
+              <header data-panel-text data-reveal-stack>
+                <p class="collection__index">02 / 03</p>
+                <h3 class="collection__title" id="col-2-title">Prestige SUVs</h3>
+                <p class="collection__desc">For arrivals where first impressions matter — refined, distinctive and handled with the same discretion as every Westend journey.</p>
+                <ul class="collection__models"><li>Range Rover</li><li>Mercedes-Benz G-Class</li><li>Mercedes-Benz SUVs</li></ul>
+              </header>
+              <div class="collection__vehicles">
+                <article class="vehicle" data-reveal-stack
+                  data-vehicle="range-rover" data-name="Range Rover" data-collection="Prestige SUVs"
+                  data-detail="Refined and quietly confident, the Range Rover brings a sense of occasion without ever feeling showy. A considered choice for executive engagements, private dinners and arrivals where first impressions matter.">
+                  <figure class="vehicle__media"><div class="vehicle__zoom">
+                    <!-- IMAGE: replace assets/images/fleet-range-rover.jpg (1600×1200) -->
+                    <img src="assets/images/fleet-range-rover.jpg" width="1600" height="1200" loading="lazy" decoding="async"
+                         alt="A dark Range Rover outside a contemporary building at dusk">
+                  </div></figure>
+                  <div data-panel-text>
+                    <h4 class="vehicle__name">Range Rover</h4>
+                    <p class="vehicle__desc">Refined and quietly confident, for arrivals that set the tone.</p>
+                    <div class="vehicle__actions">
+                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Range Rover</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="range-rover">Enquire<span class="sr-only"> about the Range Rover</span></a>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="vehicle" data-reveal-stack
+                  data-vehicle="mercedes-g-class" data-name="Mercedes-Benz G-Class" data-collection="Prestige SUVs"
+                  data-detail="An unmistakable silhouette for occasions that call for presence. The G-Class is a favourite for celebrations, special evenings and statement arrivals — always handled with the discretion and care that define a Westend journey.">
+                  <figure class="vehicle__media"><div class="vehicle__zoom">
+                    <!-- IMAGE: replace assets/images/fleet-g-class.jpg (1600×1200) -->
+                    <img src="assets/images/fleet-g-class.jpg" width="1600" height="1200" loading="lazy" decoding="async"
+                         alt="A black Mercedes-Benz G-Class photographed from the front three-quarter angle at night">
+                  </div></figure>
+                  <div data-panel-text>
+                    <h4 class="vehicle__name">Mercedes-Benz G-Class</h4>
+                    <p class="vehicle__desc">An unmistakable presence for occasions that deserve one.</p>
+                    <div class="vehicle__actions">
+                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Mercedes-Benz G-Class</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="mercedes-g-class">Enquire<span class="sr-only"> about the Mercedes-Benz G-Class</span></a>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="vehicle" data-reveal-stack
+                  data-vehicle="mercedes-suv" data-name="Mercedes-Benz SUV" data-collection="Prestige SUVs"
+                  data-detail="Spacious, comfortable and composed, our Mercedes-Benz SUVs suit executive days, family travel and airport arrivals. Let us know your plans and we will advise which vehicle in this collection best fits your journey.">
+                  <figure class="vehicle__media"><div class="vehicle__zoom">
+                    <!-- IMAGE: replace assets/images/fleet-mercedes-suv.jpg (1600×1200) -->
+                    <img src="assets/images/fleet-mercedes-suv.jpg" width="1600" height="1200" loading="lazy" decoding="async"
+                         alt="A dark Mercedes-Benz SUV parked beneath soft architectural lighting">
+                  </div></figure>
+                  <div data-panel-text>
+                    <h4 class="vehicle__name">Mercedes-Benz SUVs</h4>
+                    <p class="vehicle__desc">Spacious comfort for executive days, family travel and arrivals.</p>
+                    <div class="vehicle__actions">
+                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Mercedes-Benz SUVs</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="mercedes-suv">Enquire<span class="sr-only"> about Mercedes-Benz SUVs</span></a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <!-- ---------- Collection 3 ---------- -->
+          <section class="collection collection--single" id="collection-executive" aria-labelledby="col-3-title" style="--count:1">
+            <div class="container collection__inner">
+              <header data-panel-text data-reveal-stack>
+                <p class="collection__index">03 / 03</p>
+                <h3 class="collection__title" id="col-3-title">Executive Saloons</h3>
+                <p class="collection__desc">Understated elegance for business travel, evening engagements and journeys where discretion comes first.</p>
+                <ul class="collection__models"><li>Mercedes-Benz luxury saloons</li></ul>
+              </header>
+              <div class="collection__vehicles">
+                <article class="vehicle" data-reveal-stack
+                  data-vehicle="mercedes-saloon" data-name="Mercedes-Benz Luxury Saloon" data-collection="Executive Saloons"
+                  data-detail="A Mercedes-Benz luxury saloon for executive travel, evening engagements and journeys where understated elegance is preferred. Quiet, composed and beautifully presented — a natural choice when you would rather arrive without announcement.">
+                  <figure class="vehicle__media"><div class="vehicle__zoom">
+                    <!-- IMAGE: replace assets/images/fleet-mercedes-saloon.jpg (1600×1200) -->
+                    <img src="assets/images/fleet-mercedes-saloon.jpg" width="1600" height="1200" loading="lazy" decoding="async"
+                         alt="A black Mercedes-Benz luxury saloon with its rear door held open at an evening venue">
+                  </div></figure>
+                  <div data-panel-text>
+                    <h4 class="vehicle__name">Mercedes-Benz luxury saloon</h4>
+                    <p class="vehicle__desc">Quiet, composed and beautifully presented — for executive travel and evenings where you would rather arrive without announcement.</p>
+                    <div class="vehicle__actions">
+                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Mercedes-Benz luxury saloon</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="mercedes-saloon">Enquire about this vehicle<span class="sr-only">: Mercedes-Benz luxury saloon</span></a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+    <div class="container"><p class="fleet__note">Photography is illustrative. The exact vehicle for your journey is confirmed personally with your enquiry.</p></div>
+  </section>
+
+  <!-- ============================= EXPERIENCES ============================= -->
+  <section class="section experiences on-ivory" id="experiences" aria-labelledby="exp-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal>Experiences</p>
+          <h2 class="display" id="exp-title" data-reveal>More than a <em>journey.</em></h2>
+        </div>
+        <p class="lead" data-reveal>Whether it is a single airport arrival or a full day of engagements, every journey is planned around you — your timings, your preferences, your pace.</p>
+      </div>
+
+      <div class="exp-list">
+        <article class="exp exp--a">
+          <figure class="exp__media" data-parallax data-reveal>
+            <!-- IMAGE: replace assets/images/exp-airport.jpg (1600×2000) -->
+            <img src="assets/images/exp-airport.jpg" width="1600" height="2000" loading="lazy" decoding="async"
+                 alt="A chauffeur waiting beside a dark SUV at an airport arrivals kerb">
+          </figure>
+          <div class="exp__text">
+            <span class="exp__num" data-reveal>01</span>
+            <h3 class="exp__title" data-reveal>Airport arrivals</h3>
+            <p data-reveal>Step off a long flight and straight into calm. Your chauffeur is ready when you land, with the onward journey arranged before you arrive in Lagos or Abuja.</p>
+            <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Airport arrivals" data-reveal>Plan an arrival</a>
+          </div>
+        </article>
+
+        <article class="exp exp--b">
+          <div class="exp__text">
+            <span class="exp__num" data-reveal>02</span>
+            <h3 class="exp__title" data-reveal>Executive chauffeur</h3>
+            <p data-reveal>Meetings, roadshows and full working days, kept to schedule with quiet efficiency — so your time in the car is yours to use as you wish.</p>
+            <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Executive chauffeur" data-reveal>Arrange a chauffeur</a>
+          </div>
+          <figure class="exp__media" data-parallax data-reveal>
+            <!-- IMAGE: replace assets/images/exp-executive.jpg (2000×1333) -->
+            <img src="assets/images/exp-executive.jpg" width="2000" height="1333" loading="lazy" decoding="async"
+                 alt="A black executive saloon moving through a business district at dusk">
+          </figure>
+        </article>
+
+        <div class="exp-pair">
+          <article class="exp exp--c">
+            <figure class="exp__media" data-reveal>
+              <!-- IMAGE: replace assets/images/exp-weddings.jpg (1600×2000) -->
+              <img src="assets/images/exp-weddings.jpg" width="1600" height="2000" loading="lazy" decoding="async"
+                   alt="A luxury vehicle waiting at a decorated wedding venue entrance">
+            </figure>
+            <div class="exp__text">
+              <span class="exp__num" data-reveal>03</span>
+              <h3 class="exp__title" data-reveal>Weddings &amp; occasions</h3>
+              <p data-reveal>Elegant vehicles and composed chauffeurs for weddings, celebrations and evenings that deserve a considered arrival.</p>
+              <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Weddings & occasions" data-reveal>Discuss your occasion</a>
+            </div>
+          </article>
+          <article class="exp exp--d">
+            <figure class="exp__media" data-parallax data-reveal>
+              <!-- IMAGE: replace assets/images/exp-city.jpg (2000×1333) -->
+              <img src="assets/images/exp-city.jpg" width="2000" height="1333" loading="lazy" decoding="async"
+                   alt="City lights reflected on a dark SUV during an evening drive">
+            </figure>
+            <div class="exp__text">
+              <span class="exp__num" data-reveal>04</span>
+              <h3 class="exp__title" data-reveal>Private city travel</h3>
+              <p data-reveal>Dinners, appointments, shopping and evenings out — move through Lagos and Abuja at your own pace, with a chauffeur who waits while you take your time.</p>
+              <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Private city travel" data-reveal>Plan city travel</a>
+            </div>
+          </article>
+        </div>
+
+        <article class="exp exp--e">
+          <div class="exp__text">
+            <span class="exp__num" data-reveal>05</span>
+            <h3 class="exp__title" data-reveal>Concierge assistance</h3>
+            <p data-reveal>Beyond the journey itself, our team can help coordinate the details around it. Tell us what you need and we will advise personally on what we can arrange.</p>
+            <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Concierge assistance" data-reveal>Speak to our concierge</a>
+          </div>
+          <figure class="exp__media" data-parallax data-reveal>
+            <!-- IMAGE: replace assets/images/exp-concierge.jpg (1600×2000) -->
+            <img src="assets/images/exp-concierge.jpg" width="1600" height="2000" loading="lazy" decoding="async"
+                 alt="A chauffeur holding a rear passenger door open beneath a hotel canopy">
+          </figure>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= THE WESTEND STANDARD ========================= -->
+  <section class="standard on-dark" id="standard" aria-labelledby="standard-title">
+    <div class="standard__grid">
+      <div class="standard__visual">
+        <figure class="standard__figure">
+          <!-- IMAGE: replace assets/images/standard-interior.jpg (1600×2000) -->
+          <img src="assets/images/standard-interior.jpg" width="1600" height="2000" loading="lazy" decoding="async"
+               alt="The rear cabin of a luxury vehicle with soft leather seats and warm ambient lighting">
+          <figcaption><span>The Westend Standard</span><span class="standard__counter" aria-hidden="true">01 / 04</span></figcaption>
+        </figure>
+      </div>
+      <div class="standard__content">
+        <div class="standard__head">
+          <p class="eyebrow" data-reveal>The Westend Standard</p>
+          <h2 class="display" id="standard-title" data-reveal>Every detail, <em>considered.</em></h2>
+          <p class="lead" data-reveal>Luxury, for us, is the absence of friction — the quiet confidence that everything has been thought of before you needed to ask.</p>
+        </div>
+        <ol class="statements">
+          <li class="statement">
+            <span class="statement__num" data-reveal>01</span>
+            <h3 data-reveal>A Westend-owned fleet</h3>
+            <p data-reveal>Every vehicle is our own — maintained, prepared and presented to our standard, never sourced at the last minute.</p>
+          </li>
+          <li class="statement">
+            <span class="statement__num" data-reveal>02</span>
+            <h3 data-reveal>Thoughtfully coordinated journeys</h3>
+            <p data-reveal>Timings, routes and arrival details are planned ahead, so the day unfolds without you having to think about it.</p>
+          </li>
+          <li class="statement">
+            <span class="statement__num" data-reveal>03</span>
+            <h3 data-reveal>Personal attention</h3>
+            <p data-reveal>You speak with people who know your journey, remember your preferences and care about the outcome.</p>
+          </li>
+          <li class="statement">
+            <span class="statement__num" data-reveal>04</span>
+            <h3 data-reveal>Discreet service</h3>
+            <p data-reveal>What is said in the car stays in the car. Privacy is part of the service, not an addition to it.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ BOOKING ENQUIRY ============================ -->
+  <section class="section booking on-ivory" id="contact" aria-labelledby="booking-title">
+    <div class="container booking__grid">
+      <div class="booking__intro">
+        <p class="eyebrow" data-reveal>Reserve your journey</p>
+        <h2 class="display" id="booking-title" data-reveal>Your next arrival, <em>considered.</em></h2>
+        <p class="lead" data-reveal>Share a few details and our team will reply personally to confirm availability and the finer points of your journey.</p>
+        <p class="booking__notice" data-reveal>This is an enquiry, not a confirmed booking. Nothing is reserved or charged until we have spoken with you.</p>
+        <ul class="contact-channels" id="contact-channels" hidden aria-label="Contact Westend directly"></ul>
+      </div>
+
+      <div class="booking__form" id="enquiry" tabindex="-1">
+        <form class="form" id="enquiry-form" novalidate aria-describedby="form-status">
+          <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+
+          <div class="field" data-field="name">
+            <label for="f-name">Full name<span class="req" aria-hidden="true">*</span></label>
+            <input class="input" id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-error">
+            <p class="field__error" id="f-name-error"></p>
+          </div>
+
+          <div class="field" data-field="email">
+            <label for="f-email">Email<span class="req" aria-hidden="true">*</span></label>
+            <input class="input" id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="f-email-error">
+            <p class="field__error" id="f-email-error"></p>
+          </div>
+
+          <div class="field form__full" data-field="phone">
+            <label for="f-phone">Phone<span class="req" aria-hidden="true">*</span></label>
+            <div class="phone">
+              <select class="input" id="f-code" name="countryCode" autocomplete="tel-country-code" aria-label="Country code">
+                <option value="+234" selected>NG +234</option>
+                <option value="+44">UK +44</option>
+                <option value="+1">US/CA +1</option>
+                <option value="+971">AE +971</option>
+                <option value="+233">GH +233</option>
+                <option value="+27">ZA +27</option>
+                <option value="+33">FR +33</option>
+                <option value="+49">DE +49</option>
+                <option value="+41">CH +41</option>
+                <option value="+966">SA +966</option>
+                <option value="+974">QA +974</option>
+                <option value="">Other</option>
+              </select>
+              <input class="input" id="f-phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" required aria-describedby="f-phone-hint f-phone-error">
+            </div>
+            <p class="hint" id="f-phone-hint">Choose “Other” to type your full international number.</p>
+            <p class="field__error" id="f-phone-error"></p>
+          </div>
+
+          <fieldset class="field" data-field="city">
+            <legend>City<span class="req" aria-hidden="true">*</span></legend>
+            <div class="segmented">
+              <label><input type="radio" name="city" value="Lagos" required aria-describedby="f-city-error"><span>Lagos</span></label>
+              <label><input type="radio" name="city" value="Abuja" aria-describedby="f-city-error"><span>Abuja</span></label>
+            </div>
+            <p class="field__error" id="f-city-error"></p>
+          </fieldset>
+
+          <div class="field" data-field="service">
+            <label for="f-service">Service type<span class="req" aria-hidden="true">*</span></label>
+            <select class="input" id="f-service" name="service" required aria-describedby="f-service-error">
+              <option value="">Select a service</option>
+              <option>Airport arrivals</option>
+              <option>Executive chauffeur</option>
+              <option>Weddings &amp; occasions</option>
+              <option>Private city travel</option>
+              <option>Concierge assistance</option>
+            </select>
+            <p class="field__error" id="f-service-error"></p>
+          </div>
+
+          <div class="field form__full" data-field="vehicle">
+            <label for="f-vehicle">Preferred vehicle</label>
+            <select class="input" id="f-vehicle" name="vehicle">
+              <option value="">No preference — please advise</option>
+              <optgroup label="Signature SUVs">
+                <option value="toyota-prado">Toyota Prado</option>
+                <option value="toyota-land-cruiser">Toyota Land Cruiser</option>
+              </optgroup>
+              <optgroup label="Prestige SUVs">
+                <option value="range-rover">Range Rover</option>
+                <option value="mercedes-g-class">Mercedes-Benz G-Class</option>
+                <option value="mercedes-suv">Mercedes-Benz SUV</option>
+              </optgroup>
+              <optgroup label="Executive Saloons">
+                <option value="mercedes-saloon">Mercedes-Benz luxury saloon</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <fieldset class="field form__full" data-field="datetime">
+            <legend>Date and time<span class="req" aria-hidden="true">*</span></legend>
+            <div class="split">
+              <div class="field" data-field="date">
+                <label class="field__label" for="f-date">Date</label>
+                <input class="input" id="f-date" name="date" type="date" required aria-describedby="f-date-error">
+                <p class="field__error" id="f-date-error"></p>
+              </div>
+              <div class="field" data-field="time">
+                <label class="field__label" for="f-time">Pickup time</label>
+                <input class="input" id="f-time" name="time" type="time" step="900" required aria-describedby="f-time-error">
+                <p class="field__error" id="f-time-error"></p>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="field" data-field="pickup">
+            <label for="f-pickup">Pickup location<span class="req" aria-hidden="true">*</span></label>
+            <input class="input" id="f-pickup" name="pickup" type="text" autocomplete="off" placeholder="Address, hotel or airport" required aria-describedby="f-pickup-error">
+            <p class="field__error" id="f-pickup-error"></p>
+          </div>
+
+          <div class="field" data-field="destination">
+            <label for="f-destination">Destination</label>
+            <input class="input" id="f-destination" name="destination" type="text" autocomplete="off" placeholder="Or “as directed” for hourly service">
+          </div>
+
+          <div class="field" data-field="passengers">
+            <label for="f-passengers">Passengers<span class="req" aria-hidden="true">*</span></label>
+            <input class="input" id="f-passengers" name="passengers" type="number" min="1" step="1" inputmode="numeric" required aria-describedby="f-passengers-error">
+            <p class="field__error" id="f-passengers-error"></p>
+          </div>
+
+          <div class="field form__full" data-field="requirements">
+            <label for="f-requirements">Luggage &amp; special requirements</label>
+            <textarea class="input" id="f-requirements" name="requirements" rows="4" placeholder="Luggage, flight number, child seats, accessibility needs, stops along the way…"></textarea>
+          </div>
+
+          <div class="field form__full" data-field="privacy">
+            <label class="check" for="f-privacy">
+              <input type="checkbox" id="f-privacy" name="privacy" required aria-describedby="f-privacy-error">
+              <span>I have read the <a href="privacy.html" target="_blank" rel="noopener">privacy notice<span class="sr-only"> (opens in a new tab)</span></a> and agree to Westend Signature using these details to respond to my enquiry.<span class="req" aria-hidden="true">*</span></span>
+            </label>
+            <p class="field__error" id="f-privacy-error"></p>
+          </div>
+
+          <div class="field form__full" data-field="marketing">
+            <label class="check" for="f-marketing">
+              <input type="checkbox" id="f-marketing" name="marketing">
+              <span>Optional: I would like to hear occasionally from Westend Signature about services and news. You can unsubscribe at any time.</span>
+            </label>
+          </div>
+
+          <div class="form__full form__submit">
+            <button class="btn btn--dark" type="submit" id="f-submit">Request availability <span class="arrow" aria-hidden="true"></span></button>
+            <p>Fields marked <span aria-hidden="true">*</span><span class="sr-only">with an asterisk</span> are required. We reply personally to confirm availability.</p>
+          </div>
+        </form>
+
+        <div class="summary" id="enquiry-summary" hidden>
+          <h3 id="summary-title" tabindex="-1">Your enquiry summary</h3>
+          <div class="summary__alert" id="summary-alert"></div>
+          <dl id="summary-list"></dl>
+          <div class="summary__actions" id="summary-actions">
+            <button type="button" class="btn btn--dark" id="summary-copy">Copy summary</button>
+            <button type="button" class="btn btn--ghost-dark" id="summary-download">Download (.txt)</button>
+            <a class="btn btn--ghost-dark" id="summary-email" hidden>Email this enquiry</a>
+            <a class="btn btn--ghost-dark" id="summary-whatsapp" hidden target="_blank" rel="noopener">Send via WhatsApp</a>
+            <button type="button" class="btn btn--ghost-dark" id="summary-edit">Edit enquiry</button>
+          </div>
+          <p class="summary__feedback" id="summary-feedback" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================================ FOOTER ================================ -->
+<footer class="site-footer on-dark">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <p class="footer__mark">WESTEND<span>SIGNATURE</span></p>
+        <p class="footer__tag">Private chauffeur &amp; concierge<br>Lagos · Abuja</p>
+      </div>
+      <nav class="footer__col" aria-label="Footer">
+        <h2>Explore</h2>
+        <ul>
+          <li><a href="#fleet">Fleet</a></li>
+          <li><a href="#experiences">Experiences</a></li>
+          <li><a href="#standard">The Westend Standard</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="footer__col">
+        <h2>Enquiries</h2>
+        <ul id="footer-contact"><li><a href="#enquiry" data-goto-form>Reserve your journey</a></li></ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© <span id="year">2026</span> Westend Signature. All rights reserved.</p>
+      <ul>
+        <li><a href="privacy.html">Privacy notice</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================ VEHICLE DIALOG ============================ -->
+<dialog class="vehicle-dialog" id="vehicle-dialog" aria-labelledby="vd-title" aria-describedby="vd-desc">
+  <div class="vehicle-dialog__grid">
+    <figure class="vehicle-dialog__media"><img id="vd-img" src="" alt="" width="1600" height="1200"></figure>
+    <div class="vehicle-dialog__body">
+      <button type="button" class="dialog-close" id="vd-close"><span class="sr-only">Close vehicle details</span></button>
+      <p class="eyebrow" id="vd-collection"></p>
+      <h2 class="vehicle-dialog__title" id="vd-title"></h2>
+      <p class="vehicle-dialog__desc" id="vd-desc"></p>
+      <div class="vehicle-dialog__actions">
+        <a class="btn btn--solid" href="#enquiry" id="vd-enquire" data-enquire-vehicle="">Enquire about this vehicle <span class="arrow" aria-hidden="true"></span></a>
+        <button type="button" class="text-link" id="vd-back">Back to the fleet</button>
+      </div>
+      <p class="vehicle-dialog__note">Photography is illustrative. Availability and the specific vehicle are confirmed personally when we reply to your enquiry.</p>
+    </div>
+  </div>
+</dialog>
+
+<!-- Pinned, compatible dependencies (the page remains fully usable if these fail to load) -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  'use strict';
+  var cfg = window.WESTEND_CONFIG || {};
+  var root = document.documentElement;
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasGsap = !!(window.gsap && window.ScrollTrigger);
+  var motion = hasGsap && !prefersReduced;
+  if (!motion) root.classList.remove('motion-pending');
+
+  var header = $('#site-header');
+  var main = $('#main');
+  var footer = $('.site-footer');
+  var form = $('#enquiry-form');
+  var formWrap = $('#enquiry');
+  var lenis = null;
+  var fleetST = null;
+
+  /* ---------- Utilities ---------- */
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function todayISO() { var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  var locks = 0;
+  function lockScroll() { if (locks++ === 0) { root.classList.add('is-locked'); if (lenis) lenis.stop(); } }
+  function unlockScroll() { if (locks > 0 && --locks === 0) { root.classList.remove('is-locked'); if (lenis) lenis.start(); } }
+
+  function scrollToY(y, immediate) {
+    if (lenis) lenis.scrollTo(y, { immediate: !!immediate, force: true });
+    else window.scrollTo({ top: y, behavior: (immediate || prefersReduced) ? 'auto' : 'smooth' });
+  }
+  function scrollToEl(el) {
+    if (lenis) lenis.scrollTo(el, { offset: -header.offsetHeight, force: true });
+    else el.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  /* ---------- Year ---------- */
+  $('#year').textContent = new Date().getFullYear();
+
+  /* ---------- Header state ---------- */
+  function onScroll() { header.classList.toggle('is-solid', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- Contact configuration ---------- */
+  (function renderContact() {
+    var items = [];
+    if (cfg.phone) items.push({ label: 'Telephone', text: cfg.phone, href: 'tel:' + cfg.phone.replace(/[^\d+]/g, '') });
+    if (cfg.whatsapp) items.push({ label: 'WhatsApp', text: 'Message us', href: 'https://wa.me/' + String(cfg.whatsapp).replace(/\D/g, ''), external: true });
+    if (cfg.email) items.push({ label: 'Email', text: cfg.email, href: 'mailto:' + cfg.email });
+    if (!items.length) return;
+    var list = $('#contact-channels'), foot = $('#footer-contact');
+    items.forEach(function (it) {
+      var li = document.createElement('li'), a = document.createElement('a');
+      a.href = it.href;
+      if (it.external) { a.target = '_blank'; a.rel = 'noopener'; }
+      a.innerHTML = '<span></span>';
+      a.firstChild.textContent = it.label;
+      a.appendChild(document.createTextNode(it.text));
+      li.appendChild(a); list.appendChild(li);
+      var li2 = document.createElement('li'), a2 = document.createElement('a');
+      a2.href = it.href; a2.textContent = it.label === 'WhatsApp' ? 'WhatsApp' : it.text;
+      if (it.external) { a2.target = '_blank'; a2.rel = 'noopener'; }
+      li2.appendChild(a2); foot.appendChild(li2);
+    });
+    list.hidden = false;
+  })();
+
+  /* ---------- Mobile menu ---------- */
+  var toggle = $('.menu-toggle'), menu = $('#mobile-menu');
+  function menuOpen() { return toggle.getAttribute('aria-expanded') === 'true'; }
+  function setMenu(open, returnFocus) {
+    if (open === menuOpen()) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.querySelector('.sr-only').textContent = open ? 'Close menu' : 'Open menu';
+    header.classList.toggle('menu-open', open);
+    main.inert = open; footer.inert = open;
+    if (open) {
+      menu.hidden = false;
+      requestAnimationFrame(function () { menu.classList.add('is-open'); });
+      lockScroll();
+      var first = menu.querySelector('a'); if (first) first.focus();
+    } else {
+      menu.classList.remove('is-open');
+      unlockScroll();
+      setTimeout(function () { if (!menuOpen()) menu.hidden = true; }, prefersReduced ? 0 : 300);
+      if (returnFocus) toggle.focus();
+    }
+  }
+  toggle.addEventListener('click', function () { setMenu(!menuOpen(), false); });
+  document.addEventListener('keydown', function (e) {
+    if (!menuOpen()) return;
+    if (e.key === 'Escape') { e.preventDefault(); setMenu(false, true); return; }
+    if (e.key === 'Tab') {
+      var f = [toggle].concat($$('a, button', menu));
+      var i = f.indexOf(document.activeElement);
+      if (e.shiftKey && (i <= 0)) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      else if (i === -1) { e.preventDefault(); f[0].focus(); }
+    }
+  });
+  window.matchMedia('(min-width: 1081px)').addEventListener('change', function (m) { if (m.matches) setMenu(false, false); });
+
+  /* ---------- In-page links (keeps focus with the content, works with Lenis) ---------- */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    if (a.hasAttribute('data-enquire-vehicle') || a.hasAttribute('data-enquire-service') || a.hasAttribute('data-goto-form') || a.hasAttribute('data-fleet-step')) return;
+    var id = a.getAttribute('href').slice(1);
+    var target = id ? document.getElementById(id) : null;
+    if (!target) return;
+    if (menuOpen()) setMenu(false, false);
+    e.preventDefault();
+    scrollToEl(target);
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+    history.replaceState(null, '', '#' + id);
+  });
+
+  /* ---------- Enquiry prefill + navigation to the form ---------- */
+  var status = $('#form-status');
+  function showInfo(msg) { status.className = 'form__status is-info'; status.textContent = msg; }
+  function goToForm(message) {
+    if (menuOpen()) setMenu(false, false);
+    var summary = $('#enquiry-summary');
+    if (!summary.hidden) { summary.hidden = true; form.hidden = false; }
+    if (message) showInfo(message);
+    scrollToEl(formWrap);
+    var firstEmpty = $$('input:not([type=hidden]):not([type=checkbox]):not([type=radio]), select, textarea', form)
+      .filter(function (el) { return el.required && !el.value; })[0] || $('#f-name');
+    firstEmpty.focus({ preventScroll: true });
+    history.replaceState(null, '', '#enquiry');
+  }
+  function setVehicle(id) {
+    var sel = $('#f-vehicle');
+    sel.value = id;
+    return sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text : '';
+  }
+  function setService(name) { $('#f-service').value = name; }
+
+  document.addEventListener('click', function (e) {
+    var t;
+    if ((t = e.target.closest('[data-enquire-vehicle]'))) {
+      e.preventDefault();
+      var name = setVehicle(t.getAttribute('data-enquire-vehicle'));
+      if (dialog.open) { returnFocusOnClose = false; dialog.close(); }
+      goToForm(name ? 'Preferred vehicle selected: ' + name + '.' : '');
+    } else if ((t = e.target.closest('[data-enquire-service]'))) {
+      e.preventDefault();
+      setService(t.getAttribute('data-enquire-service'));
+      goToForm('Service selected: ' + t.getAttribute('data-enquire-service') + '.');
+    } else if ((t = e.target.closest('[data-goto-form]'))) {
+      e.preventDefault();
+      goToForm('');
+    }
+  });
+
+  var quick = $('#quick-form');
+  $('#q-date').min = todayISO();
+  $('#f-date').min = todayISO();
+  quick.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var carried = [];
+    var city = $('#q-city').value, service = $('#q-service').value, date = $('#q-date').value;
+    if (city) { form.elements.city.value = city; carried.push(city); }
+    if (service) { setService(service); carried.push(service); }
+    if (date) {
+      $('#f-date').value = date;
+      carried.push(new Date(date + 'T00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }));
+    }
+    goToForm(carried.length ? 'Carried over from your quick enquiry: ' + carried.join(' · ') + '.' : '');
+  });
+
+  /* ---------- Vehicle dialog ---------- */
+  var dialog = $('#vehicle-dialog');
+  var lastTrigger = null, returnFocusOnClose = true;
+  function openVehicle(card, trigger) {
+    var img = card.querySelector('img');
+    $('#vd-img').src = img.getAttribute('src');
+    $('#vd-img').alt = img.alt;
+    $('#vd-collection').textContent = card.getAttribute('data-collection');
+    $('#vd-title').textContent = card.getAttribute('data-name');
+    $('#vd-desc').textContent = card.getAttribute('data-detail');
+    $('#vd-enquire').setAttribute('data-enquire-vehicle', card.getAttribute('data-vehicle'));
+    lastTrigger = trigger; returnFocusOnClose = true;
+    dialog.showModal();
+    lockScroll();
+    $('#vd-close').focus();
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-view-vehicle]');
+    if (b) openVehicle(b.closest('.vehicle'), b);
+  });
+  $('#vd-close').addEventListener('click', function () { dialog.close(); });
+  $('#vd-back').addEventListener('click', function () { dialog.close(); });
+  dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', function () {
+    unlockScroll();
+    if (returnFocusOnClose && lastTrigger) lastTrigger.focus({ preventScroll: true });
+  });
+
+  /* ---------- Form validation ---------- */
+  var rules = {
+    name: function (v) { return v.trim().length >= 2 || 'Please enter your full name.'; },
+    email: function (v) {
+      if (!v.trim()) return 'Please enter your email address.';
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || 'Please enter a valid email address, for example name@example.com.';
+    },
+    phone: function (v) {
+      if (!v.trim()) return 'Please enter a phone number so we can reach you.';
+      var digits = v.replace(/\D/g, '');
+      return (/^[\d\s()+.-]+$/.test(v) && digits.length >= 6 && digits.length <= 15) || 'Please enter a valid phone number using digits only.';
+    },
+    city: function (v) { return !!v || 'Please choose Lagos or Abuja.'; },
+    service: function (v) { return !!v || 'Please choose the type of service.'; },
+    date: function (v) {
+      if (!v) return 'Please choose a date for your journey.';
+      return v >= todayISO() || 'Please choose today or a future date.';
+    },
+    time: function (v) { return !!v || 'Please choose a pickup time.'; },
+    pickup: function (v) { return v.trim().length >= 2 || 'Please tell us where to collect you.'; },
+    passengers: function (v) {
+      if (!v) return 'Please enter the number of passengers.';
+      var n = Number(v);
+      return (Number.isInteger(n) && n >= 1) || 'Please enter a whole number, 1 or more.';
+    },
+    privacy: function (v, el) { return el.checked || 'Please confirm you have read the privacy notice.'; }
+  };
+  function controlsFor(name) { return $$('[name="' + name + '"]', form); }
+  function valueOf(name) { var el = form.elements[name]; return el ? (el.value || '') : ''; }
+  function setError(name, msg) {
+    var err = $('#f-' + name + '-error');
+    controlsFor(name).forEach(function (c) { if (msg) c.setAttribute('aria-invalid', 'true'); else c.removeAttribute('aria-invalid'); });
+    if (err) err.textContent = msg || '';
+  }
+  function validateField(name) {
+    var el = controlsFor(name)[0];
+    var res = rules[name](valueOf(name), el);
+    setError(name, res === true ? '' : res);
+    return res === true;
+  }
+  var attempted = false;
+  Object.keys(rules).forEach(function (name) {
+    controlsFor(name).forEach(function (c) {
+      var evt = (c.type === 'radio' || c.type === 'checkbox' || c.tagName === 'SELECT') ? 'change' : 'blur';
+      c.addEventListener(evt, function () { if (attempted || c.getAttribute('aria-invalid')) validateField(name); });
+      if (evt === 'blur') c.addEventListener('input', function () { if (c.getAttribute('aria-invalid')) validateField(name); });
+    });
+  });
+
+  function collect() {
+    var veh = $('#f-vehicle');
+    var code = valueOf('countryCode');
+    return [
+      ['Full name', valueOf('name').trim()],
+      ['Email', valueOf('email').trim()],
+      ['Phone', (code ? code + ' ' : '') + valueOf('phone').trim()],
+      ['City', valueOf('city')],
+      ['Service', valueOf('service')],
+      ['Preferred vehicle', veh.selectedIndex > 0 ? veh.options[veh.selectedIndex].text : 'No preference'],
+      ['Date', new Date(valueOf('date') + 'T00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })],
+      ['Pickup time', valueOf('time')],
+      ['Pickup location', valueOf('pickup').trim()],
+      ['Destination', valueOf('destination').trim() || 'Not specified'],
+      ['Passengers', valueOf('passengers')],
+      ['Luggage & requirements', valueOf('requirements').trim() || 'None noted'],
+      ['Privacy notice', 'Agreed'],
+      ['Marketing updates', form.elements.marketing.checked ? 'Yes, opted in' : 'No']
+    ];
+  }
+  function toText(rows, sent) {
+    var lines = ['WESTEND SIGNATURE — JOURNEY ENQUIRY', sent ? 'Status: Sent via website' : 'Status: NOT SENT — enquiry summary prepared on the website', ''];
+    rows.forEach(function (r) { lines.push(r[0] + ': ' + r[1]); });
+    lines.push('', 'Prepared: ' + new Date().toLocaleString('en-GB'));
+    lines.push('This is an enquiry, not a booking confirmation.');
+    return lines.join('\n');
+  }
+
+  var summary = $('#enquiry-summary');
+  var summaryText = '';
+  function showSummary(rows, mode) {
+    summaryText = toText(rows, mode === 'sent');
+    var alert = $('#summary-alert');
+    alert.className = 'summary__alert' + (mode === 'sent' ? ' summary__alert--ok' : '');
+    var channels = [cfg.email && 'email', cfg.whatsapp && 'WhatsApp'].filter(Boolean);
+    if (mode === 'sent') {
+      $('#summary-title').textContent = 'Thank you — your enquiry has been sent.';
+      alert.innerHTML = '<strong>Enquiry received, not yet confirmed</strong>This is not a booking confirmation. Our team will contact you personally to confirm availability.';
+    } else {
+      $('#summary-title').textContent = 'Your enquiry summary';
+      alert.innerHTML = '<strong>Not sent</strong>' + (mode === 'error'
+        ? 'We could not send your enquiry just now, so it has <em>not</em> been received.'
+        : 'This website is not yet connected to a booking system, so your enquiry has <em>not</em> been sent.') +
+        (channels.length ? ' Please send it to us by ' + channels.join(' or ') + ', or copy or download it below.' : ' Please copy or download it below and share it with Westend Signature directly.');
+    }
+    var dl = $('#summary-list'); dl.innerHTML = '';
+    rows.forEach(function (r) {
+      var dt = document.createElement('dt'), dd = document.createElement('dd');
+      dt.textContent = r[0]; dd.textContent = r[1]; dl.appendChild(dt); dl.appendChild(dd);
+    });
+    var email = $('#summary-email'), wa = $('#summary-whatsapp');
+    email.hidden = !(cfg.email && mode !== 'sent');
+    if (cfg.email) email.href = 'mailto:' + cfg.email + '?subject=' + encodeURIComponent('Journey enquiry — ' + rows[0][1]) + '&body=' + encodeURIComponent(summaryText);
+    wa.hidden = !(cfg.whatsapp && mode !== 'sent');
+    if (cfg.whatsapp) wa.href = 'https://wa.me/' + String(cfg.whatsapp).replace(/\D/g, '') + '?text=' + encodeURIComponent(summaryText);
+    $('#summary-copy').hidden = mode === 'sent'; $('#summary-download').hidden = false;
+    $('#summary-edit').textContent = mode === 'sent' ? 'Start a new enquiry' : 'Edit enquiry';
+    $('#summary-edit').setAttribute('data-mode', mode);
+    $('#summary-feedback').textContent = '';
+    form.hidden = true; summary.hidden = false;
+    scrollToEl(formWrap);
+    $('#summary-title').focus({ preventScroll: true });
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    attempted = true;
+    var invalid = Object.keys(rules).filter(function (n) { return !validateField(n); });
+    if (invalid.length) {
+      status.className = 'form__status is-error';
+      status.textContent = invalid.length === 1 ? 'Please review the highlighted field.' : 'Please review the ' + invalid.length + ' highlighted fields.';
+      controlsFor(invalid[0])[0].focus();
+      return;
+    }
+    status.className = 'form__status'; status.textContent = '';
+    var rows = collect();
+    if (!cfg.enquiryEndpoint) { showSummary(rows, 'nobackend'); return; }
+    var btn = $('#f-submit'); btn.disabled = true; btn.firstChild.textContent = 'Sending… ';
+    var payload = {}; rows.forEach(function (r) { payload[r[0]] = r[1]; });
+    payload.marketingConsent = form.elements.marketing.checked;
+    fetch(cfg.enquiryEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); showSummary(rows, 'sent'); })
+      .catch(function () { showSummary(rows, 'error'); })
+      .then(function () { btn.disabled = false; btn.firstChild.textContent = 'Request availability '; });
+  });
+
+  $('#summary-copy').addEventListener('click', function () {
+    var fb = $('#summary-feedback');
+    function fallback() {
+      var ta = document.createElement('textarea'); ta.value = summaryText; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(ta);
+      fb.textContent = ok ? 'Summary copied to your clipboard.' : 'Copying is not available in this browser — please use Download instead.';
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(summaryText).then(function () { fb.textContent = 'Summary copied to your clipboard.'; }, fallback);
+    } else fallback();
+  });
+  $('#summary-download').addEventListener('click', function () {
+    var blob = new Blob([summaryText], { type: 'text/plain;charset=utf-8' });
+    var url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = 'westend-enquiry-' + todayISO() + '.txt';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    $('#summary-feedback').textContent = 'Summary downloaded as a text file.';
+  });
+  $('#summary-edit').addEventListener('click', function () {
+    if (this.getAttribute('data-mode') === 'sent') { form.reset(); attempted = false; }
+    summary.hidden = true; form.hidden = false;
+    $('#f-name').focus();
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  });
+
+  /* =====================================================================
+     Motion — GSAP + ScrollTrigger (+ optional Lenis), one shared ticker
+     ===================================================================== */
+  if (!motion) return;
+
+  try {
+    gsap.registerPlugin(ScrollTrigger);
+
+    if (cfg.smoothScroll !== false && window.Lenis && window.matchMedia('(pointer: fine)').matches) {
+      lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+      root.classList.add('has-lenis');
+    }
+
+    /* Hero entrance (~1.5s, timed) */
+    var lines = $$('.hero .line-inner');
+    var fades = $$('.hero [data-hero-fade]');
+    var mediaInner = $('.hero__media-inner');
+    // Remove the CSS pending state first so GSAP doesn't read it as an existing transform
+    // (same task, so nothing is painted in between).
+    root.classList.remove('motion-pending');
+    gsap.set(lines, { yPercent: 110 });
+    gsap.set(fades, { opacity: 0, y: 16 });
+    gsap.set(mediaInner, { scale: 1.06 });
+    gsap.timeline({ defaults: { ease: 'power3.out' } })
+      .to(mediaInner, { scale: 1, duration: 1.5, ease: 'power2.out' }, 0)
+      .to(fades[0], { opacity: 1, y: 0, duration: .7 }, 0)
+      .to(lines, { yPercent: 0, duration: .9, stagger: .12, ease: 'power4.out' }, .1)
+      .to(fades.slice(1), { opacity: 1, y: 0, duration: .7, stagger: .08 }, .55);
+
+    /* Hero scroll (scrubbed) */
+    gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
+      .to('.hero__media', { scale: 1.08, ease: 'none' }, 0)
+      .to('.hero__word-inner', { yPercent: -45, ease: 'none' }, 0)
+      .to('.hero__content', { opacity: 0, y: -48, ease: 'none', duration: .6 }, 0);
+
+    /* Section reveals: 24px rise + fade, 80ms stagger */
+    function batchReveal(els) {
+      gsap.set(els, { opacity: 0, y: 24 });
+      ScrollTrigger.batch(els, {
+        start: 'top 88%', once: true,
+        onEnter: function (b) { gsap.to(b, { opacity: 1, y: 0, duration: .8, stagger: .08, ease: 'power3.out', overwrite: true }); }
+      });
+    }
+    batchReveal($$('[data-reveal]'));
+
+    var mm = gsap.matchMedia();
+
+    /* Gentle parallax on selected photographs (not on small screens) */
+    mm.add('(min-width: 861px)', function () {
+      $$('[data-parallax]').forEach(function (fig) {
+        fig.classList.add('is-parallax');
+        gsap.fromTo(fig.querySelector('img'), { yPercent: -5 }, {
+          yPercent: 5, ease: 'none',
+          scrollTrigger: { trigger: fig, start: 'top bottom', end: 'bottom top', scrub: true }
+        });
+      });
+      return function () { $$('[data-parallax]').forEach(function (f) { f.classList.remove('is-parallax'); }); };
+    });
+
+    /* Fleet — bounded pinned sequence on desktop, stacked cards elsewhere */
+    var fleet = $('#fleet');
+    var labels = $$('[data-fleet-step]');
+    var bar = $('.fleet__progress-bar');
+    var panels = $$('.collection');
+    var activeStep = 0;
+    function setActive(i) {
+      if (i === activeStep) return;
+      activeStep = i;
+      labels.forEach(function (l, j) { l.classList.toggle('is-active', j === i); if (j === i) l.setAttribute('aria-current', 'step'); else l.removeAttribute('aria-current'); });
+    }
+    function stepY(i) { return fleetST.start + (fleetST.end - fleetST.start) * (i / (panels.length - 1)); }
+
+    mm.add('(min-width: 1024px) and (min-height: 620px)', function () {
+      fleet.classList.add('is-pinned');
+      var track = $('.fleet__track'), vp = $('.fleet__viewport');
+      // Off-screen panels are clipped horizontally, so load their images ahead of time.
+      ScrollTrigger.create({ trigger: fleet, start: 'top bottom+=600', once: true, onEnter: function () { $$('img', fleet).forEach(function (i) { i.loading = 'eager'; }); } });
+      var tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.fleet__pin', start: 'top top',
+          end: function () { return '+=' + Math.round(window.innerHeight * 1.1); },   // ≈210vh of total scroll space
+          pin: true, scrub: .6, invalidateOnRefresh: true, anticipatePin: 1,
+          onUpdate: function (self) {
+            bar.style.transform = 'scaleX(' + self.progress.toFixed(4) + ')';
+            setActive(Math.round(self.progress * (panels.length - 1)));
+          }
+        }
+      });
+      tl.to(track, { x: function () { return -(track.scrollWidth - vp.clientWidth); }, ease: 'none', duration: panels.length - 1 }, 0);
+      panels.forEach(function (p, i) {
+        if (!i) return;
+        tl.fromTo($$('.vehicle__zoom', p), { scale: 1.08 }, { scale: 1, duration: 1, ease: 'none' }, i - 1);
+        tl.fromTo($$('[data-panel-text]', p), { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .3, stagger: .05, ease: 'power2.out' }, i - .55);
+      });
+      fleetST = tl.scrollTrigger;
+      return function () { fleet.classList.remove('is-pinned'); fleetST = null; bar.style.transform = ''; };
+    });
+    mm.add('(max-width: 1023px), (max-height: 619px)', function () {
+      batchReveal($$('[data-reveal-stack]'));
+    });
+
+    labels.forEach(function (l) {
+      l.addEventListener('click', function (e) {
+        e.preventDefault();
+        var i = Number(l.getAttribute('data-fleet-step'));
+        if (fleetST) scrollToY(stepY(i));
+        else scrollToEl(panels[i]);
+      });
+    });
+    // Keyboard users tabbing into an off-screen panel are taken to that panel.
+    $('.fleet__track').addEventListener('focusin', function (e) {
+      if (!fleetST) return;
+      var i = panels.indexOf(e.target.closest('.collection'));
+      if (i > -1 && i !== activeStep) { scrollToY(stepY(i), true); ScrollTrigger.update(); }
+    });
+
+    /* The Westend Standard — sticky interior image, statements scroll alongside */
+    mm.add('(min-width: 1024px)', function () {
+      var standard = $('#standard'), statements = $$('.statement'), counter = $('.standard__counter');
+      standard.classList.add('is-scrolly');
+      statements[0].classList.add('is-active');
+      statements.forEach(function (s, i) {
+        ScrollTrigger.create({
+          trigger: s, start: 'top 62%', end: 'bottom 38%',
+          onToggle: function (self) {
+            if (!self.isActive) return;
+            statements.forEach(function (x) { x.classList.toggle('is-active', x === s); });
+            counter.textContent = pad(i + 1) + ' / ' + pad(statements.length);
+          }
+        });
+      });
+      gsap.fromTo('.standard__figure img', { scale: 1.08 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: standard, start: 'top bottom', end: 'bottom bottom', scrub: true } });
+      return function () { standard.classList.remove('is-scrolly'); statements.forEach(function (x) { x.classList.remove('is-active'); }); };
+    });
+
+    /* Nav highlighting */
+    [['#fleet', 0], ['#experiences', 1], ['#standard', 2], ['#contact', 3]].forEach(function (pair) {
+      var link = $$('.primary-nav a')[pair[1]];
+      ScrollTrigger.create({
+        trigger: pair[0], start: 'top 50%', end: 'bottom 50%',
+        onToggle: function (self) { if (self.isActive) link.setAttribute('aria-current', 'true'); else link.removeAttribute('aria-current'); }
+      });
+    });
+
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+    window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+  } catch (err) {
+    // Never leave content hidden if motion fails.
+    console.error('[Westend] motion disabled:', err);
+    root.classList.remove('motion-pending');
+    try {
+      ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
+      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content', { clearProps: 'all' });
+    } catch (e2) {}
+  }
+});
+</script>
+</body>
+</html>
