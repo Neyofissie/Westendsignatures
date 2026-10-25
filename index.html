@@ -525,8 +525,8 @@ figure { margin: 0; }
 .vd__car { position: relative; min-height: 160px; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); }
 .vd__img {
   position: absolute; inset: -22% -12%; width: 124%; height: 144%; object-fit: contain; object-position: 50% 50% !important;
-  -webkit-mask-image: radial-gradient(ellipse 46% 40% at 50% 50%, #000 60%, transparent 100%);
-  mask-image: radial-gradient(ellipse 46% 40% at 50% 50%, #000 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 36% 40% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 36% 40% at 50% 50%, #000 55%, transparent 100%);
   transition: transform 900ms var(--ease), opacity 700ms var(--ease);
 }
 .vd__word {
@@ -633,6 +633,59 @@ figure { margin: 0; }
   .vd__img { inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 50% !important; }
   .vd__tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .vd__panels { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+}
+
+/* ---------- Vehicle view micro-interactions (motion only when the visitor allows it) ---------- */
+.vd__img, .vd__word { translate: var(--px, 0px) var(--py, 0px); }
+.vd__word { translate: calc(var(--px, 0px) * -.6) 0; }
+.vd__icon svg, .vd-car svg, .vd-tile__icon svg { transition: transform 220ms var(--ease), color 220ms var(--ease); }
+@keyframes vd-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes pill-pop { 50% { transform: scale(1.08); } }
+@keyframes concierge-ping { 0%, 70% { transform: scale(1); opacity: 0; } 75% { opacity: .65; } 100% { transform: scale(1.55); opacity: 0; } }
+@keyframes bell { 20% { transform: rotate(-14deg); } 40% { transform: rotate(10deg); } 60% { transform: rotate(-6deg); } 80% { transform: rotate(3deg); } }
+@media (prefers-reduced-motion: no-preference) {
+  .vd__img { transition: transform 900ms var(--ease), opacity 700ms var(--ease), translate 700ms cubic-bezier(.22, .61, .36, 1); }
+  .vd__word { transition: opacity 900ms var(--ease), translate 900ms cubic-bezier(.22, .61, .36, 1); }
+  /* Collection list: gold rail grows in, icon nudges forward, active car glows */
+  .vd-car { position: relative; }
+  .vd-car::before { content: ""; position: absolute; left: -1px; top: 24%; bottom: 24%; width: 2px; border-radius: 2px; background: var(--gold); transform: scaleY(0); transition: transform 220ms var(--ease); }
+  .vd-car:hover::before, .vd-car:focus-visible::before, .vd-car[aria-current="true"]::before { transform: scaleY(1); }
+  .vd-car:hover svg, .vd-car:focus-visible svg { transform: translateX(3px); }
+  .vd-car[aria-current="true"] svg { filter: drop-shadow(0 0 6px rgba(201, 170, 115, .55)); }
+  /* Tiles lift, ring turns gold, icon tilts */
+  .vd-tile__icon { transition: border-color 220ms var(--ease), transform 220ms var(--ease), box-shadow 220ms var(--ease), color 220ms var(--ease); }
+  .vd-tile:hover .vd-tile__icon { border-color: rgba(201, 170, 115, .6); color: var(--gold); transform: translateY(-3px); box-shadow: 0 12px 26px -14px rgba(201, 170, 115, .55); }
+  .vd-tile:hover .vd-tile__icon svg { transform: rotate(-12deg) scale(1.08); }
+  /* Controls: arrows lean the way they go, close turns, everything presses in */
+  #vd-prev:hover svg, #vd-prev:focus-visible svg { transform: translateX(-3px); }
+  #vd-next:hover svg, #vd-next:focus-visible svg { transform: translateX(3px); }
+  .vd__close:hover svg, .vd__close:focus-visible svg { transform: rotate(90deg); }
+  .vd__icon, .vd-car, .vd-plan .btn, .vd-feat, .vd__concierge-btn { transition-property: background-color, border-color, color, transform; transition-duration: 220ms; transition-timing-function: var(--ease); }
+  .vd__icon:active, .vd-car:active, .vd-plan .btn:active, .vd__concierge-btn:active { transform: scale(.96); }
+  .vd-pill input:checked + span { animation: pill-pop 260ms cubic-bezier(.34, 1.56, .64, 1); }
+  /* Request button: a soft sheen passes across on hover or focus */
+  .vd-plan .btn { position: relative; overflow: hidden; }
+  .vd-plan .btn::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .6), transparent); transform: skewX(-20deg); transition: left 650ms var(--ease); pointer-events: none; }
+  .vd-plan .btn:hover::after, .vd-plan .btn:focus-visible::after { left: 130%; }
+  /* Features: gold underline draws under the feature name */
+  .vd-feat__value { background: linear-gradient(var(--gold), var(--gold)) 0 100% / 0 1px no-repeat; transition: background-size 250ms var(--ease), color 220ms var(--ease); }
+  .vd-feat:hover .vd-feat__value, .vd-feat:focus-visible .vd-feat__value { background-size: 100% 1px; }
+  /* Concierge: an occasional quiet ping, and the bell rings on hover */
+  .vd__concierge-btn { position: relative; }
+  .vd__concierge-btn::after { content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 1px solid var(--gold); opacity: 0; animation: concierge-ping 5s var(--ease) 2.5s infinite; pointer-events: none; }
+  .vd__concierge-btn:hover svg, .vd__concierge-btn:focus-visible svg { animation: bell 650ms var(--ease); }
+  /* New vehicle: heading, counter and feature rows rise in */
+  .vd__heading.is-swap > * { animation: vd-rise 480ms var(--ease) both; }
+  .vd__heading.is-swap > :nth-child(2) { animation-delay: 70ms; }
+  .vd__index.is-swap { animation: vd-rise 420ms var(--ease) both; }
+  .vd-feats.is-swap li { animation: vd-rise 460ms var(--ease) both; }
+  .vd-feats.is-swap li:nth-child(2) { animation-delay: 70ms; }
+  .vd-feats.is-swap li:nth-child(3) { animation-delay: 140ms; }
+}
+
+@media (hover: none) {
+  .vd-tile:hover .vd-tile__icon { transform: none; box-shadow: none; border-color: var(--line-dark); color: var(--ivory); }
+  .vd-tile:hover .vd-tile__icon svg, .vd-car:hover svg { transform: none; }
 }
 
 /* =========================================================================
@@ -1881,7 +1934,38 @@ document.addEventListener('DOMContentLoaded', function () {
       var det = el('p', 'vd-feat__detail', f.detail); det.id = 'vd-feat-' + k;
       li.appendChild(b); li.appendChild(det); vdFeats.appendChild(li);
     });
+    if (!prefersReduced) { replay($('.vd__heading', dialog)); replay($('#vd-index')); replay(vdFeats); }
+    countUp();
   }
+  // Micro-interactions: replay the rise-in on new content, count numeric tiles up, gentle pointer parallax.
+  function replay(node) { node.classList.remove('is-swap'); void node.offsetWidth; node.classList.add('is-swap'); }
+  function countUp() {
+    if (prefersReduced) return;
+    $$('.vd-tile__value', vdTiles).forEach(function (n, k) {
+      var m = /^(~?)(\d+)$/.exec(n.textContent); if (!m) return;
+      var prefix = m[1], target = Number(m[2]), start = null, delay = 200 + k * 80, dur = 750;
+      n.textContent = prefix + '0';
+      setTimeout(function () {
+        requestAnimationFrame(function step(ts) {
+          if (start === null) start = ts;
+          var q = Math.min(1, (ts - start) / dur), e = 1 - Math.pow(1 - q, 3);
+          n.textContent = prefix + Math.round(target * e);
+          if (q < 1) requestAnimationFrame(step);
+        });
+      }, delay);
+    });
+  }
+  (function parallax() {
+    var stage = $('#vd-stage');
+    if (prefersReduced || !window.matchMedia('(pointer: fine)').matches) return;
+    stage.addEventListener('pointermove', function (e) {
+      var r = stage.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      stage.style.setProperty('--px', (x * 14).toFixed(1) + 'px');
+      stage.style.setProperty('--py', (y * 8).toFixed(1) + 'px');
+    });
+    stage.addEventListener('pointerleave', function () { stage.style.setProperty('--px', '0px'); stage.style.setProperty('--py', '0px'); });
+  })();
   vdFeats.addEventListener('click', function (e) {
     var b = e.target.closest('.vd-feat'); if (!b) return;
     var open = b.getAttribute('aria-expanded') !== 'true';
