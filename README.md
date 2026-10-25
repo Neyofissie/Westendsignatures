@@ -49,7 +49,15 @@ assets/images/      demonstration images (placeholders, see below)
 
 ## Editing vehicles
 
-Each vehicle is an `<article class="vehicle">` in the Fleet section. The card text is written in the markup. The vehicle detail dialog reads `data-name`, `data-collection` and `data-detail`. The id in `data-vehicle` must match an `<option value>` in the enquiry form's "Preferred vehicle" select. No prices, capacities, model years or availability are stated, by design.
+Each fleet card is an `<article class="vehicle">` in the Fleet section, and its `data-vehicle` id must match an `<option value>` in the enquiry form's "Preferred vehicle" select.
+
+"View vehicle" opens a full-screen vehicle page with the large model name, feature markers on the photo, an "at a glance" row, two feature sections (close-up crops of the same photo) and an enquiry button. Its content lives in `window.WESTEND_VEHICLES` (the `VEHICLE DETAILS` script near the end of `index.html`):
+
+- `spots`: feature markers; `x`/`y` are percentages on the 4:3 photo, `side: "left"` puts the label on the left.
+- `stats`: the at-a-glance row. It currently shows collection, ideal use and ownership, because no seating, luggage or other figures have been confirmed. Replace them with real figures for Westend's own vehicles when available (e.g. `{ value: "5", label: "Seats" }`).
+- `features`: title, text and the crop point (`x`, `y`, `zoom`) on the photo.
+
+No prices, capacities, model years or availability are stated, by design.
 
 ## Motion and accessibility
 

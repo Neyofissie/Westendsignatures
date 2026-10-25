@@ -420,39 +420,123 @@ figure { margin: 0; }
 .fleet.is-pinned .fleet__note { padding-top: 0; }
 
 /* =========================================================================
-   Vehicle dialog
+   Vehicle detail view (full-screen dialog)
    ========================================================================= */
-.vehicle-dialog {
-  width: min(1120px, calc(100% - 2 * var(--gutter))); max-width: none; max-height: calc(100% - 2rem);
-  padding: 0; border: 1px solid var(--line-dark); background: var(--charcoal); color: var(--ivory);
-  overflow: auto; overscroll-behavior: contain;
+.vd {
+  width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+  background: var(--obsidian); color: var(--ivory); overflow: hidden;
 }
-.vehicle-dialog[open] { animation: dialog-in 420ms var(--ease); }
-.vehicle-dialog::backdrop { background: rgba(9, 9, 9, .78); }
-.vehicle-dialog[open]::backdrop { animation: fade-in 320ms var(--ease); }
-@keyframes dialog-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.vd::backdrop { background: var(--obsidian); }
+.vd[open] { animation: fade-in 360ms var(--ease); }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-.vehicle-dialog__grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
-.vehicle-dialog__media { background: var(--obsidian); min-height: 100%; }
-@media (max-width: 760px) { .vehicle-dialog__media { aspect-ratio: 4 / 3; min-height: 0; } }
-.vehicle-dialog__media img { width: 100%; height: 100%; min-height: 360px; object-fit: cover; }
-@media (max-width: 760px) { .vehicle-dialog__media img { min-height: 0; } }
-.vehicle-dialog__body { padding: clamp(2rem, 4vw, 3.5rem); display: flex; flex-direction: column; gap: 1.2rem; position: relative; }
-.vehicle-dialog__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2.2rem, 1.6rem + 2vw, 3.4rem); line-height: 1; }
-.vehicle-dialog__desc { color: rgba(243, 239, 230, .82); }
-.vehicle-dialog__note { font-size: .78rem; color: var(--stone); border-top: 1px solid var(--line-dark); padding-top: 1rem; margin-top: auto; }
-.vehicle-dialog__actions { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: center; }
-.dialog-close {
-  position: absolute; top: .75rem; right: .75rem; width: 48px; height: 48px;
-  background: none; border: 1px solid transparent; color: var(--ivory);
-  transition: border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease);
+.vd__scroll { height: 100%; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.vd__bar {
+  position: sticky; top: 0; z-index: 5; height: var(--header-h);
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: var(--obsidian); border-bottom: 1px solid var(--line-dark);
 }
-.dialog-close:hover { border-color: var(--line-dark); color: var(--gold); }
-.dialog-close::before, .dialog-close::after { content: ""; position: absolute; left: 14px; right: 14px; top: 50%; height: 1px; background: currentColor; transform: rotate(45deg); }
-.dialog-close::after { transform: rotate(-45deg); }
-@media (max-width: 760px) {
-  .vehicle-dialog__grid { grid-template-columns: 1fr; }
-  .vehicle-dialog__body { padding-top: 2.25rem; }
+.vd .vd__bar { max-width: none; }
+.vd.no-trans * { transition: none !important; }
+.vd__crumb { font-size: .7rem; letter-spacing: .24em; text-transform: uppercase; color: var(--stone); }
+.vd__crumb strong { color: var(--ivory); font-weight: 500; }
+.vd__controls { margin-left: auto; display: flex; align-items: center; gap: .25rem; }
+.vd__index { font-family: var(--serif); letter-spacing: .12em; color: var(--gold); margin: 0 .5rem; min-width: 4.5rem; text-align: center; }
+.vd__icon {
+  width: 48px; height: 48px; display: inline-grid; place-items: center; background: none;
+  border: 1px solid transparent; color: var(--ivory); transition: border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease);
+}
+.vd__icon:hover { border-color: var(--line-dark); color: var(--gold); }
+.vd__icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.2; }
+.vd__close { margin-left: .75rem; }
+
+.vd__hero { position: relative; padding-block: clamp(5rem, 13vh, 8.5rem) 0; overflow: hidden; }
+.vd__word {
+  position: absolute; left: 50%; top: clamp(.75rem, 3vh, 2rem); transform: translateX(-50%); margin: 0;
+  font-family: var(--serif); font-weight: 300; line-height: .8; white-space: nowrap; letter-spacing: .04em;
+  font-size: clamp(4.5rem, 12.5vw, 13rem); color: rgba(243, 239, 230, .08); pointer-events: none; user-select: none;
+}
+.vd__hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 2rem clamp(2rem, 4vw, 4rem); align-items: center; }
+.vd__intro { display: grid; gap: 1.2rem; align-content: center; }
+.vd__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2.6rem, 1.6rem + 3vw, 4.8rem); line-height: .98; }
+.vd__desc { color: rgba(243, 239, 230, .8); max-width: 30rem; }
+.vd__intro .btn { justify-self: start; margin-top: .5rem; }
+.vd__media { position: relative; aspect-ratio: 4 / 3; }
+.vd__media img { width: 100%; height: 100%; object-fit: cover; box-shadow: 0 50px 90px -40px rgba(0, 0, 0, .9); }
+
+/* Feature markers on the photograph */
+.vd__spots { position: absolute; inset: 0; }
+.vd-spot { position: absolute; left: var(--x); top: var(--y); }
+.vd-spot__dot { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(201, 170, 115, .28); }
+.vd-spot__dot::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--gold); animation: spot-pulse 2.2s var(--ease) infinite; }
+@keyframes spot-pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
+.vd-spot__label {
+  position: absolute; bottom: 24px; left: -8px; white-space: nowrap; padding: .55rem .8rem;
+  background: rgba(9, 9, 9, .82); border: 1px solid rgba(201, 170, 115, .5);
+  font-size: .66rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+}
+.vd-spot__label::before { content: ""; position: absolute; left: 7px; top: 100%; height: 18px; border-left: 1px dashed var(--gold); }
+.vd-spot--left .vd-spot__label { left: auto; right: -8px; }
+.vd-spot--left .vd-spot__label::before { left: auto; right: 7px; }
+
+/* At-a-glance row */
+.vd__stats { margin-top: clamp(2.5rem, 6vh, 4rem); background: var(--charcoal); border-block: 1px solid var(--line-dark); }
+.vd__stats-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vd-stat { position: relative; padding: clamp(2.5rem, 5vw, 4rem) clamp(1rem, 3vw, 2.5rem); border-left: 1px solid var(--line-dark); text-align: center; }
+.vd-stat:first-child { border-left: 0; }
+.vd-stat::before { content: ""; position: absolute; left: 50%; top: -28px; height: 52px; border-left: 1px dashed rgba(201, 170, 115, .7); }
+.vd-stat::after { content: ""; position: absolute; left: 50%; top: -31px; width: 7px; height: 7px; margin-left: -3px; border-radius: 50%; background: var(--gold); }
+.vd-stat__value { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.3rem + 2vw, 3.4rem); line-height: 1.05; }
+.vd-stat__label { margin-top: .9rem; font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--stone); }
+.vd__stats-note { padding-block: 0 2rem; font-size: .78rem; color: var(--stone); text-align: center; }
+
+/* Feature sections */
+.vd-feature { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: min(70vh, 640px); }
+.vd-feature:nth-child(even) .vd-feature__text { order: 2; }
+.vd-feature:nth-child(odd) { background: var(--charcoal); }
+.vd-feature__text { display: grid; align-content: center; gap: 1.1rem; padding: clamp(2.5rem, 6vw, 6rem) clamp(1.25rem, 5vw, 5rem); }
+.vd-feature__num { display: flex; align-items: center; gap: 1rem; font-family: var(--serif); color: var(--gold); letter-spacing: .14em; }
+.vd-feature__num::after { content: ""; width: 5rem; border-top: 1px dashed rgba(201, 170, 115, .6); }
+.vd-feature__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.4rem + 2vw, 3.4rem); line-height: 1.02; }
+.vd-feature__text p { color: var(--stone); max-width: 30rem; }
+.vd-feature__media { position: relative; overflow: hidden; min-height: 320px; background: var(--charcoal); }
+.vd-feature__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(var(--zoom, 2)); }
+
+.vd__cta { padding-block: clamp(4rem, 9vw, 7rem); text-align: center; display: grid; justify-items: center; gap: 1.5rem; }
+.vd__cta h3 { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.4rem + 2vw, 3.2rem); line-height: 1.05; }
+.vd__cta-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 1.5rem; align-items: center; }
+.vd__note { font-size: .78rem; color: var(--stone); max-width: 34rem; }
+
+/* Entrance states (applied only when motion is allowed) */
+.vd.is-animating .vd__word { opacity: 0; transform: translate(-46%, 0); }
+.vd.is-animating .vd__media img { opacity: 0; transform: scale(1.05); }
+.vd.is-animating .vd__intro > * { opacity: 0; transform: translateY(20px); }
+.vd.is-animating .vd-spot { opacity: 0; transform: scale(.6); }
+.vd.is-animating .vd-stat__value, .vd.is-animating .vd-stat__label { opacity: 0; transform: translateY(18px); }
+.vd .vd__word, .vd .vd__media img, .vd .vd__intro > *, .vd .vd-spot, .vd .vd-stat__value, .vd .vd-stat__label {
+  transition: opacity 700ms var(--ease), transform 800ms var(--ease);
+}
+.vd .vd-spot { transition-duration: 380ms; transition-timing-function: cubic-bezier(.34, 1.56, .64, 1); }
+.vd .vd-feature__text > *, .vd .vd-feature__media { transition: opacity 700ms var(--ease), transform 800ms var(--ease); }
+.vd.has-motion .vd-feature:not(.is-in) .vd-feature__text > * { opacity: 0; transform: translateY(24px); }
+.vd.has-motion .vd-feature:not(.is-in) .vd-feature__media { opacity: 0; }
+
+@media (max-width: 900px) {
+  .vd__hero-grid { grid-template-columns: 1fr; }
+  .vd__media { order: -1; }
+  .vd__hero { padding-top: clamp(3.5rem, 9vh, 5rem); }
+  .vd__word { top: .5rem; font-size: 22vw; }
+  .vd-spot__label { font-size: .56rem; letter-spacing: .12em; padding: .4rem .55rem; bottom: 18px; }
+  .vd-spot__label::before { height: 12px; }
+  .vd-feature { grid-template-columns: 1fr; min-height: 0; }
+  .vd-feature:nth-child(even) .vd-feature__text { order: 0; }
+  .vd-feature__media { aspect-ratio: 4 / 3; min-height: 0; order: -1; }
+}
+@media (max-width: 560px) {
+  .vd__crumb { display: none; }
+  .vd__stats-grid { grid-template-columns: 1fr; }
+  .vd-stat { border-left: 0; border-top: 1px solid var(--line-dark); padding-block: 2rem; }
+  .vd-stat:first-child { border-top: 0; }
+  .vd-stat::before, .vd-stat::after { display: none; }
 }
 
 /* =========================================================================
@@ -799,8 +883,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
               </header>
               <div class="collection__vehicles">
                 <article class="vehicle" data-reveal-stack
-                  data-vehicle="toyota-prado" data-name="Toyota Prado" data-collection="Signature SUVs"
-                  data-detail="A composed, capable SUV that suits everyday city journeys as comfortably as longer road travel. Presented immaculately and driven with care, it is a dependable choice for families, small groups and business travellers who value a calm, unhurried ride.">
+                  data-vehicle="toyota-prado" data-name="Toyota Prado" data-collection="Signature SUVs">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
                     <!-- IMAGE: replace assets/images/fleet-prado.jpg (1448×1086) -->
                     <img src="assets/images/fleet-prado.jpg" width="1448" height="1086" loading="lazy" decoding="async"
@@ -817,8 +900,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                 </article>
 
                 <article class="vehicle" data-reveal-stack
-                  data-vehicle="toyota-land-cruiser" data-name="Toyota Land Cruiser" data-collection="Signature SUVs"
-                  data-detail="Assured presence and a calm, settled ride. The Land Cruiser is well suited to executive movements, airport transfers and journeys beyond the city, with your chauffeur attending to the details so you can rest, work or simply take in the view.">
+                  data-vehicle="toyota-land-cruiser" data-name="Toyota Land Cruiser" data-collection="Signature SUVs">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
                     <!-- IMAGE: replace assets/images/fleet-land-cruiser.jpg (1448×1086) -->
                     <img src="assets/images/fleet-land-cruiser.jpg" width="1448" height="1086" loading="lazy" decoding="async"
@@ -848,8 +930,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
               </header>
               <div class="collection__vehicles">
                 <article class="vehicle" data-reveal-stack
-                  data-vehicle="range-rover" data-name="Range Rover" data-collection="Prestige SUVs"
-                  data-detail="Refined and quietly confident, the Range Rover brings a sense of occasion without ever feeling showy. A considered choice for executive engagements, private dinners and arrivals where first impressions matter.">
+                  data-vehicle="range-rover" data-name="Range Rover" data-collection="Prestige SUVs">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
                     <!-- IMAGE: replace assets/images/fleet-range-rover.jpg (1448×1086) -->
                     <img src="assets/images/fleet-range-rover.jpg" width="1448" height="1086" loading="lazy" decoding="async"
@@ -866,8 +947,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                 </article>
 
                 <article class="vehicle" data-reveal-stack
-                  data-vehicle="mercedes-g-class" data-name="Mercedes-Benz G-Class" data-collection="Prestige SUVs"
-                  data-detail="An unmistakable silhouette for occasions that call for presence. The G-Class is a favourite for celebrations, special evenings and statement arrivals — always handled with the discretion and care that define a Westend journey.">
+                  data-vehicle="mercedes-g-class" data-name="Mercedes-Benz G-Class" data-collection="Prestige SUVs">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
                     <!-- IMAGE: replace assets/images/fleet-g-class.jpg (1448×1086) -->
                     <img src="assets/images/fleet-g-class.jpg" width="1448" height="1086" loading="lazy" decoding="async"
@@ -884,8 +964,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                 </article>
 
                 <article class="vehicle" data-reveal-stack
-                  data-vehicle="mercedes-suv" data-name="Mercedes-Benz SUV" data-collection="Prestige SUVs"
-                  data-detail="Spacious, comfortable and composed, our Mercedes-Benz SUVs suit executive days, family travel and airport arrivals. Let us know your plans and we will advise which vehicle in this collection best fits your journey.">
+                  data-vehicle="mercedes-suv" data-name="Mercedes-Benz SUV" data-collection="Prestige SUVs">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
                     <!-- IMAGE: replace assets/images/fleet-mercedes-suv.jpg (1448×1086) -->
                     <img src="assets/images/fleet-mercedes-suv.jpg" width="1448" height="1086" loading="lazy" decoding="async"
@@ -915,8 +994,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
               </header>
               <div class="collection__vehicles">
                 <article class="vehicle" data-reveal-stack
-                  data-vehicle="mercedes-saloon" data-name="Mercedes-Benz Luxury Saloon" data-collection="Executive Saloons"
-                  data-detail="A Mercedes-Benz luxury saloon for executive travel, evening engagements and journeys where understated elegance is preferred. Quiet, composed and beautifully presented — a natural choice when you would rather arrive without announcement.">
+                  data-vehicle="mercedes-saloon" data-name="Mercedes-Benz Luxury Saloon" data-collection="Executive Saloons">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
                     <!-- IMAGE: replace assets/images/fleet-mercedes-saloon.jpg (1448×1086) -->
                     <img src="assets/images/fleet-mercedes-saloon.jpg" width="1448" height="1086" loading="lazy" decoding="async"
@@ -1270,23 +1348,123 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
   </div>
 </footer>
 
-<!-- ============================ VEHICLE DIALOG ============================ -->
-<dialog class="vehicle-dialog" id="vehicle-dialog" aria-labelledby="vd-title" aria-describedby="vd-desc">
-  <div class="vehicle-dialog__grid">
-    <figure class="vehicle-dialog__media"><img id="vd-img" src="" alt="" width="1600" height="1200"></figure>
-    <div class="vehicle-dialog__body">
-      <button type="button" class="dialog-close" id="vd-close"><span class="sr-only">Close vehicle details</span></button>
-      <p class="eyebrow" id="vd-collection"></p>
-      <h2 class="vehicle-dialog__title" id="vd-title"></h2>
-      <p class="vehicle-dialog__desc" id="vd-desc"></p>
-      <div class="vehicle-dialog__actions">
-        <a class="btn btn--solid" href="#enquiry" id="vd-enquire" data-enquire-vehicle="">Enquire about this vehicle <span class="arrow" aria-hidden="true"></span></a>
-        <button type="button" class="text-link" id="vd-back">Back to the fleet</button>
+<!-- ========================== VEHICLE DETAIL VIEW ========================== -->
+<dialog class="vd" id="vehicle-dialog" aria-labelledby="vd-title" data-lenis-prevent>
+  <div class="vd__scroll" id="vd-scroll">
+    <div class="vd__bar container">
+      <p class="vd__crumb">Fleet · <strong id="vd-collection"></strong></p>
+      <div class="vd__controls">
+        <button type="button" class="vd__icon" id="vd-prev" aria-label="Previous vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <span class="vd__index" id="vd-index" aria-live="polite"></span>
+        <button type="button" class="vd__icon" id="vd-next" aria-label="Next vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        <button type="button" class="vd__icon vd__close" id="vd-close" aria-label="Close vehicle details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
       </div>
-      <p class="vehicle-dialog__note">Photography is illustrative. Availability and the specific vehicle are confirmed personally when we reply to your enquiry.</p>
     </div>
+
+    <section class="vd__hero">
+      <p class="vd__word" id="vd-word" aria-hidden="true"></p>
+      <div class="container vd__hero-grid">
+        <figure class="vd__media">
+          <img id="vd-img" src="" alt="" width="1448" height="1086">
+          <ul class="vd__spots" id="vd-spots" aria-hidden="true"></ul>
+        </figure>
+        <div class="vd__intro">
+          <p class="eyebrow" id="vd-eyebrow"></p>
+          <h2 class="vd__title" id="vd-title"></h2>
+          <p class="vd__desc" id="vd-desc"></p>
+          <a class="btn btn--solid" href="#enquiry" id="vd-enquire" data-enquire-vehicle="">Enquire about this vehicle <span class="arrow" aria-hidden="true"></span></a>
+        </div>
+      </div>
+      <div class="vd__stats">
+        <dl class="container vd__stats-grid" id="vd-stats"></dl>
+        <p class="container vd__stats-note">Seating, luggage space and the exact specification are confirmed personally with your enquiry.</p>
+      </div>
+    </section>
+
+    <div class="vd__features" id="vd-features"></div>
+
+    <section class="container vd__cta">
+      <h3 id="vd-cta-title"></h3>
+      <div class="vd__cta-actions">
+        <a class="btn btn--solid" href="#enquiry" id="vd-enquire-2" data-enquire-vehicle="">Enquire about this vehicle <span class="arrow" aria-hidden="true"></span></a>
+        <button type="button" class="text-link" id="vd-next-2"></button>
+      </div>
+      <p class="vd__note">Photography is illustrative. Availability and the specific vehicle are confirmed personally when we reply to your enquiry.</p>
+    </section>
   </div>
 </dialog>
+
+<!-- =====================================================================
+     VEHICLE DETAILS — content for the "View vehicle" screen.
+     id must match the card's data-vehicle and the enquiry form option.
+     spots: x/y are positions on the 4:3 photo (%); side "left" puts the label left of the marker.
+     stats: short "at a glance" items. Add real figures (e.g. { value: "5", label: "Seats" })
+     only once confirmed for Westend's own vehicles.
+     ===================================================================== -->
+<script>
+  window.WESTEND_VEHICLES = [
+    { id: "toyota-prado", name: "Toyota Prado", collection: "Signature SUVs", word: "PRADO",
+      image: "assets/images/fleet-prado.jpg",
+      alt: "A black Toyota Prado parked on a quiet, tree-lined residential street in the evening",
+      intro: "A composed, capable SUV that suits everyday city journeys as comfortably as longer road travel. Presented immaculately and driven with care, it is a dependable choice for families, small groups and business travellers who value a calm, unhurried ride.",
+      spots: [ { x: 18, y: 32, label: "Dependable everyday comfort" }, { x: 72, y: 47, label: "Smart, understated presence", side: "left" }, { x: 40, y: 68, label: "Confident on any road" } ],
+      stats: [ { value: "Signature", label: "Collection" }, { value: "Everyday", label: "Ideal for city & road travel" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
+      features: [
+        { title: "Comfort, every day", text: "A calm, comfortable cabin for school runs, errands and full days in the city — with a chauffeur who knows the roads.", x: 30, y: 35, zoom: 1.8 },
+        { title: "Quietly capable", text: "Equally at ease on smooth city streets and longer road journeys, so plans can change without changing cars.", x: 40, y: 68, zoom: 2 }
+      ] },
+    { id: "toyota-land-cruiser", name: "Toyota Land Cruiser", collection: "Signature SUVs", word: "LAND CRUISER",
+      image: "assets/images/fleet-land-cruiser.jpg",
+      alt: "A black Toyota Land Cruiser in front of a modern villa entrance at blue hour, lit by warm wall lights",
+      intro: "Assured presence and a calm, settled ride. The Land Cruiser is well suited to executive movements, airport transfers and journeys beyond the city, with your chauffeur attending to the details so you can rest, work or simply take in the view.",
+      spots: [ { x: 27, y: 32, label: "Calm, elevated view" }, { x: 70, y: 48, label: "Bold, purposeful front", side: "left" }, { x: 41, y: 68, label: "Assured, capable stance" } ],
+      stats: [ { value: "Signature", label: "Collection" }, { value: "Long days", label: "Ideal for executive & airport travel" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
+      features: [
+        { title: "A commanding view", text: "Sit high, settle in and watch the city pass by — or close your eyes and let the journey take care of itself.", x: 32, y: 34, zoom: 1.8 },
+        { title: "Built for the long way", text: "A natural choice for airport runs and journeys beyond the city, where comfort over distance matters most.", x: 65, y: 50, zoom: 1.9 }
+      ] },
+    { id: "range-rover", name: "Range Rover", collection: "Prestige SUVs", word: "RANGE ROVER",
+      image: "assets/images/fleet-range-rover.jpg",
+      alt: "A black Range Rover on a polished forecourt outside a glass-fronted building at sunset, with a city skyline beyond",
+      intro: "Refined and quietly confident, the Range Rover brings a sense of occasion without ever feeling showy. A considered choice for executive engagements, private dinners and arrivals where first impressions matter.",
+      spots: [ { x: 24, y: 30, label: "Serene, refined cabin" }, { x: 70, y: 45, label: "Slim signature lighting", side: "left" }, { x: 40, y: 68, label: "Effortless, composed ride" } ],
+      stats: [ { value: "Prestige", label: "Collection" }, { value: "Executive", label: "Ideal for engagements & dinners" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
+      features: [
+        { title: "Refined, never showy", text: "Clean lines and a calm cabin for arrivals that set the tone without needing to announce themselves.", x: 70, y: 45, zoom: 2 },
+        { title: "Composed at every pace", text: "Smooth through city traffic and relaxed on the open road, so you arrive as composed as you left.", x: 40, y: 68, zoom: 2 }
+      ] },
+    { id: "mercedes-g-class", name: "Mercedes-Benz G-Class", collection: "Prestige SUVs", word: "G-CLASS",
+      image: "assets/images/fleet-g-class.jpg",
+      alt: "A black Mercedes-Benz G-Class under a softly lit arrival canopy at night",
+      intro: "An unmistakable silhouette for occasions that call for presence. The G-Class is a favourite for celebrations, special evenings and statement arrivals — always handled with the discretion and care that define a Westend journey.",
+      spots: [ { x: 28, y: 22, label: "Iconic upright silhouette" }, { x: 56, y: 49, label: "Signature round headlamps", side: "left" }, { x: 43, y: 68, label: "Composed on every surface" } ],
+      stats: [ { value: "Prestige", label: "Collection" }, { value: "Occasions", label: "Ideal for celebrations & arrivals" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
+      features: [
+        { title: "Signature round headlamps", text: "Classic round lamps and an upright stance make every arrival unmistakable — presence without a word being said.", x: 56, y: 49, zoom: 2.2 },
+        { title: "Composed on every surface", text: "Sure-footed on city streets and rougher roads alike, always driven with care and quiet confidence.", x: 43, y: 68, zoom: 2 }
+      ] },
+    { id: "mercedes-suv", name: "Mercedes-Benz SUV", collection: "Prestige SUVs", word: "MERCEDES",
+      image: "assets/images/fleet-mercedes-suv.jpg",
+      alt: "A black Mercedes-Benz SUV beneath a warmly lit residence canopy at dusk, with palms and a waterfront skyline behind",
+      intro: "Spacious, comfortable and composed, our Mercedes-Benz SUVs suit executive days, family travel and airport arrivals. Let us know your plans and we will advise which vehicle in this collection best fits your journey.",
+      spots: [ { x: 22, y: 32, label: "Generous, comfortable cabin" }, { x: 76, y: 53, label: "The three-pointed star", side: "left" }, { x: 41, y: 68, label: "Smooth on longer journeys" } ],
+      stats: [ { value: "Prestige", label: "Collection" }, { value: "Family & airport", label: "Ideal for" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
+      features: [
+        { title: "Room to unwind", text: "A generous, comfortable cabin for families, small groups and long working days on the move.", x: 30, y: 34, zoom: 1.8 },
+        { title: "Mercedes-Benz composure", text: "Smooth and settled over longer journeys, with the reassurance of a marque known for comfort.", x: 76, y: 53, zoom: 2.1 }
+      ] },
+    { id: "mercedes-saloon", name: "Mercedes-Benz luxury saloon", collection: "Executive Saloons", word: "SALOON",
+      image: "assets/images/fleet-mercedes-saloon.jpg",
+      alt: "A chauffeur holding open the rear door of a black Mercedes-Benz luxury saloon at an evening venue, revealing a tan leather interior",
+      intro: "A Mercedes-Benz luxury saloon for executive travel, evening engagements and journeys where understated elegance is preferred. Quiet, composed and beautifully presented — a natural choice when you would rather arrive without announcement.",
+      spots: [ { x: 12, y: 60, label: "Understated elegance" }, { x: 66, y: 42, label: "Spacious rear cabin", side: "left" }, { x: 93, y: 24, label: "Your door, held open", side: "left" } ],
+      stats: [ { value: "Executive", label: "Collection" }, { value: "Evenings", label: "Ideal for business & engagements" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
+      features: [
+        { title: "The rear cabin", text: "Settle into a quiet, beautifully finished rear seat — space to work, take a call or simply rest between engagements.", x: 66, y: 45, zoom: 2 },
+        { title: "Your door, held open", text: "A chauffeur who is there before you are, door open and ready — the small courtesies that make the difference.", x: 86, y: 40, zoom: 1.8 }
+      ] }
+  ];
+</script>
 
 <!-- Pinned, compatible dependencies (the page remains fully usable if these fail to load) -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1466,31 +1644,105 @@ document.addEventListener('DOMContentLoaded', function () {
     goToForm(carried.length ? 'Carried over from your quick enquiry: ' + carried.join(' · ') + '.' : '');
   });
 
-  /* ---------- Vehicle dialog ---------- */
+  /* ---------- Vehicle detail view ---------- */
   var dialog = $('#vehicle-dialog');
-  var lastTrigger = null, returnFocusOnClose = true;
-  function openVehicle(card, trigger) {
-    var img = card.querySelector('img');
-    $('#vd-img').src = img.getAttribute('src');
-    $('#vd-img').alt = img.alt;
-    $('#vd-collection').textContent = card.getAttribute('data-collection');
-    $('#vd-title').textContent = card.getAttribute('data-name');
-    $('#vd-desc').textContent = card.getAttribute('data-detail');
-    $('#vd-enquire').setAttribute('data-enquire-vehicle', card.getAttribute('data-vehicle'));
+  var vdScroll = $('#vd-scroll');
+  var vehicles = window.WESTEND_VEHICLES || [];
+  var current = 0, lastTrigger = null, returnFocusOnClose = true, featureObserver = null;
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function renderVehicle(index) {
+    current = (index + vehicles.length) % vehicles.length;
+    var v = vehicles[current], next = vehicles[(current + 1) % vehicles.length];
+    $('#vd-collection').textContent = v.collection;
+    $('#vd-eyebrow').textContent = v.collection;
+    $('#vd-index').textContent = pad(current + 1) + ' / ' + pad(vehicles.length);
+    $('#vd-word').textContent = v.word;
+    $('#vd-title').textContent = v.name;
+    $('#vd-desc').textContent = v.intro;
+    $('#vd-img').src = v.image; $('#vd-img').alt = v.alt;
+    $('#vd-enquire').setAttribute('data-enquire-vehicle', v.id);
+    $('#vd-enquire-2').setAttribute('data-enquire-vehicle', v.id);
+    $('#vd-cta-title').textContent = 'Request the ' + v.name.replace(/^Mercedes-Benz luxury saloon$/, 'Mercedes-Benz saloon') + ' for your next journey.';
+    $('#vd-next-2').textContent = 'Next: ' + next.name + ' →';
+
+    var spots = $('#vd-spots'); spots.innerHTML = '';
+    v.spots.forEach(function (sp, k) {
+      var li = el('li', 'vd-spot' + (sp.side === 'left' ? ' vd-spot--left' : ''));
+      li.style.setProperty('--x', sp.x + '%'); li.style.setProperty('--y', sp.y + '%');
+      li.style.transitionDelay = (0.55 + k * 0.14) + 's';
+      li.appendChild(el('span', 'vd-spot__dot')); li.appendChild(el('span', 'vd-spot__label', sp.label));
+      spots.appendChild(li);
+    });
+
+    var stats = $('#vd-stats'); stats.innerHTML = '';
+    v.stats.forEach(function (st, k) {
+      var d = el('div', 'vd-stat');
+      var dt = el('dt', 'vd-stat__label', st.label), dd = el('dd', 'vd-stat__value', st.value);
+      dd.style.margin = '0';
+      [dd, dt].forEach(function (n, m) { n.style.transitionDelay = (0.7 + k * 0.1 + m * 0.05) + 's'; });
+      d.appendChild(dd); d.appendChild(dt); stats.appendChild(d);
+    });
+
+    var feats = $('#vd-features'); feats.innerHTML = '';
+    v.features.forEach(function (f, k) {
+      var sec = el('section', 'vd-feature');
+      var text = el('div', 'vd-feature__text');
+      text.appendChild(el('span', 'vd-feature__num', pad(k + 1)));
+      text.appendChild(el('h3', 'vd-feature__title', f.title));
+      text.appendChild(el('p', null, f.text));
+      var fig = el('figure', 'vd-feature__media');
+      var img = el('img'); img.src = v.image; img.alt = ''; img.loading = 'lazy';
+      img.style.objectPosition = f.x + '% ' + f.y + '%';
+      img.style.transformOrigin = f.x + '% ' + f.y + '%';
+      img.style.setProperty('--zoom', f.zoom || 2);
+      fig.appendChild(img);
+      sec.appendChild(text); sec.appendChild(fig); feats.appendChild(sec);
+    });
+
+    // Entrance: hero elements and feature markers pop in; feature sections reveal as they scroll in.
+    vdScroll.scrollTop = 0;
+    var animate = !prefersReduced;
+    dialog.classList.toggle('has-motion', animate);
+    if (featureObserver) featureObserver.disconnect();
+    if (animate && 'IntersectionObserver' in window) {
+      dialog.classList.add('no-trans', 'is-animating');
+      void dialog.offsetWidth;
+      dialog.classList.remove('no-trans');
+      requestAnimationFrame(function () { requestAnimationFrame(function () { dialog.classList.remove('is-animating'); }); });
+      featureObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); featureObserver.unobserve(en.target); } });
+      }, { root: vdScroll, threshold: .25 });
+      $$('.vd-feature', feats).forEach(function (f) { featureObserver.observe(f); });
+    } else {
+      dialog.classList.remove('has-motion', 'is-animating');
+    }
+  }
+
+  function openVehicle(id, trigger) {
+    var idx = vehicles.map(function (v) { return v.id; }).indexOf(id);
+    if (idx < 0) return;
     lastTrigger = trigger; returnFocusOnClose = true;
-    dialog.showModal();
-    lockScroll();
+    renderVehicle(idx);
+    if (!dialog.open) { dialog.showModal(); lockScroll(); }
     $('#vd-close').focus();
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-view-vehicle]');
-    if (b) openVehicle(b.closest('.vehicle'), b);
+    if (b) openVehicle(b.closest('.vehicle').getAttribute('data-vehicle'), b);
   });
   $('#vd-close').addEventListener('click', function () { dialog.close(); });
-  $('#vd-back').addEventListener('click', function () { dialog.close(); });
-  dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
+  $('#vd-prev').addEventListener('click', function () { renderVehicle(current - 1); });
+  $('#vd-next').addEventListener('click', function () { renderVehicle(current + 1); });
+  $('#vd-next-2').addEventListener('click', function () { renderVehicle(current + 1); $('#vd-title').setAttribute('tabindex', '-1'); $('#vd-title').focus(); });
+  dialog.addEventListener('keydown', function (e) {
+    if (e.target.closest('input, textarea, select')) return;
+    if (e.key === 'ArrowRight') renderVehicle(current + 1);
+    if (e.key === 'ArrowLeft') renderVehicle(current - 1);
+  });
   dialog.addEventListener('close', function () {
     unlockScroll();
+    if (featureObserver) featureObserver.disconnect();
     if (returnFocusOnClose && lastTrigger) lastTrigger.focus({ preventScroll: true });
   });
 
