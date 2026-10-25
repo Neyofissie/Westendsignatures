@@ -49,7 +49,14 @@ assets/images/      demonstration images (placeholders, see below)
 
 ## Hero sequence
 
-The hero pins as you scroll. First the G-Class plays as a frame sequence taken from video (`assets/hero/g-class/frame-002.jpg` to `frame-050.jpg`): the hall lights rise, then the car turns and the hall dims. The frames are drawn to a canvas, so scrolling up plays it in reverse. Then the other cars (`assets/hero/frame-*.webp`) follow as still keyframes with a fade through darkness. With reduced motion, or if scripts fail, the lit `frame-028.jpg` is shown instead. `frame-001.jpg` is not used. To use more videos, export their frames the same way and extend the sequence in `heroSequence()`.
+The hero pins and plays one video of all six cars, exported as still frames (`assets/hero/sequence/002.jpg` to `297.jpg`, 1280×720). The frames are drawn to a canvas as you scroll, so scrolling up plays it in reverse.
+
+- **Loading:** frame 002 loads first; the rest load in order, six at a time.
+- **Phones:** use every second frame (about 3.4 MB instead of 6.7 MB).
+- **"Now presenting" label:** switches at the dark moments between cars. These are set in `SEQ_CARS` in `index.html` (frames 61, 101, 144, 212 and 269); update them if the video changes.
+- **Reduced motion, or scripts failing:** the lit `028.jpg` is shown instead.
+- `001.jpg` is not used.
+- The still keyframes in `assets/hero/frame-*.webp` are still used in the vehicle view and the "Every vehicle, our own." band.
 
 ## Editing vehicles
 

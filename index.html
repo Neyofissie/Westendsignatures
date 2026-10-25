@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#090909">
 <meta property="og:title" content="Westend Signature — Arrive exceptionally.">
 <meta property="og:description" content="Private chauffeur & concierge in Lagos and Abuja.">
-<meta property="og:image" content="assets/hero/g-class/frame-028.jpg">
+<meta property="og:image" content="assets/hero/sequence/028.jpg">
 
 <!-- Progressive enhancement: content is visible by default. Motion only hides the hero copy
      briefly while the entrance animation is being prepared, with a failsafe. -->
@@ -24,7 +24,7 @@
   })(document);
 </script>
 
-<link rel="preload" as="image" href="assets/hero/g-class/frame-002.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="assets/hero/sequence/002.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap">
@@ -275,7 +275,7 @@ figure { margin: 0; }
 .hero__seq.is-ready { opacity: 1; }
 .hero__frame { position: absolute; inset: 0; }
 .hero__frame:not(:first-child) { visibility: hidden; opacity: 0; }
-.hero__dark, .hero__intro-dark { position: absolute; inset: 0; background: #050505; opacity: 0; pointer-events: none; }
+.hero__intro-dark { position: absolute; inset: 0; background: #050505; opacity: 0; pointer-events: none; }
 .motion-pending .hero__intro-dark { opacity: .88; }
 .hero__now { display: flex; gap: .9rem; justify-content: flex-end; font-size: .66rem; letter-spacing: .26em; text-transform: uppercase; color: rgba(243, 239, 230, .65); }
 .hero__now-count { font-family: var(--serif); font-size: .95rem; letter-spacing: .12em; color: var(--gold); }
@@ -983,31 +983,20 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
   <!-- ================================ HERO ================================ -->
   <section class="hero" id="top" aria-labelledby="hero-title">
-    <!-- HERO SEQUENCE: the G-Class is a frame sequence from video (assets/hero/g-class/frame-002 … frame-050),
-         played by scroll: the hall lights rise, then the car turns and the hall dims. The other cars are still
-         keyframes shown with a fade through darkness. Without motion, the lit frame-028 is shown instead. -->
+    <!-- HERO SEQUENCE: one video of all six cars, exported as frames (assets/hero/sequence/002.jpg … 297.jpg)
+         and played on a canvas with the scroll. Phones use every second frame. Without motion, the lit 028.jpg
+         is shown instead. Car changes happen in the dark moments at frames 61, 101, 144, 212 and 269. -->
     <div class="hero__media">
       <div class="hero__media-inner">
-        <div class="hero__frame hero__frame--seq" data-vehicle="mercedes-g-class" data-name="Mercedes-Benz G-Class">
-          <img src="assets/hero/g-class/frame-002.jpg" width="1280" height="720"
-               alt="A black Mercedes-Benz G-Class on a turntable in a dark private arrival hall, lit by warm wall lights"
+        <div class="hero__frame hero__frame--seq">
+          <img src="assets/hero/sequence/002.jpg" width="1280" height="720"
+               alt="Westend's fleet presented one by one on a turntable in a dark private arrival hall, starting with a black Mercedes-Benz G-Class"
                fetchpriority="high" decoding="async">
           <canvas class="hero__seq" width="1280" height="720" aria-hidden="true"></canvas>
         </div>
-        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-2-range-rover.webp" width="1672" height="941" data-vehicle="range-rover" data-name="Range Rover"
-             alt="A black Range Rover on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
-        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-3-mercedes-gls.webp" width="1672" height="941" data-vehicle="mercedes-suv" data-name="Mercedes-Benz SUV"
-             alt="A black Mercedes-Benz SUV on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
-        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-4-land-cruiser.webp" width="1672" height="941" data-vehicle="toyota-land-cruiser" data-name="Toyota Land Cruiser"
-             alt="A black Toyota Land Cruiser on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
-        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-5-prado.webp" width="1672" height="941" data-vehicle="toyota-prado" data-name="Toyota Prado"
-             alt="A black Toyota Prado on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
-        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-6-s-class.webp" width="1672" height="941" data-vehicle="mercedes-saloon" data-name="Mercedes-Benz luxury saloon"
-             alt="A black Mercedes-Benz luxury saloon on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
       </div>
     </div>
     <div class="hero__shade" aria-hidden="true"></div>
-    <div class="hero__dark" aria-hidden="true"></div>
     <div class="hero__intro-dark" aria-hidden="true"></div>
 
     <div class="container hero__content">
@@ -1757,7 +1746,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var motion = hasGsap && !prefersReduced;
   if (!motion) {
     root.classList.remove('motion-pending');
-    var heroStill = $('.hero__frame--seq img'); if (heroStill) heroStill.src = 'assets/hero/g-class/frame-028.jpg';
+    var heroStill = $('.hero__frame--seq img'); if (heroStill) heroStill.src = 'assets/hero/sequence/028.jpg';
   }
 
   var header = $('#site-header');
@@ -2332,17 +2321,27 @@ document.addEventListener('DOMContentLoaded', function () {
     gsap.set(mediaInner, { scale: 1.06 });
     gsap.set('.hero__intro-dark', { opacity: .88 });
 
-    /* G-Class frame sequence (stills extracted from video, drawn to a canvas) */
+    /* Hero frame sequence (stills extracted from video, drawn to a canvas) */
+    var SEQ_FIRST = 2, SEQ_LAST = 297, SEQ_STEP = window.matchMedia('(max-width: 720px)').matches ? 2 : 1;
+    var SEQ_CARS = [   // first frame at which each car is presented (changes happen in darkness)
+      { from: 2, id: 'mercedes-g-class', name: 'Mercedes-Benz G-Class' },
+      { from: 61, id: 'range-rover', name: 'Range Rover' },
+      { from: 101, id: 'mercedes-suv', name: 'Mercedes-Benz SUV' },
+      { from: 144, id: 'toyota-land-cruiser', name: 'Toyota Land Cruiser' },
+      { from: 212, id: 'toyota-prado', name: 'Toyota Prado' },
+      { from: 269, id: 'mercedes-saloon', name: 'Mercedes-Benz luxury saloon' }
+    ];
     var seq = (function () {
       var canvas = $('.hero__seq'); if (!canvas || !canvas.getContext) return null;
       var ctx = canvas.getContext('2d'), imgs = [];
       function load(i) {
-        if (!imgs[i]) { var im = new Image(); im.decoding = 'async'; im.src = 'assets/hero/g-class/frame-' + String(i).padStart(3, '0') + '.jpg'; imgs[i] = im; }
+        if (!imgs[i]) { var im = new Image(); im.decoding = 'async'; im.src = 'assets/hero/sequence/' + String(i).padStart(3, '0') + '.jpg'; imgs[i] = im; }
         return imgs[i];
       }
       function ready(i) { var im = imgs[i]; return !!(im && im.complete && im.naturalWidth); }
       function draw(f, next, mix) {
-        var k = Math.round(f); while (k > 2 && !ready(k)) k--;   // nearest loaded frame
+        var k = SEQ_FIRST + Math.round((f - SEQ_FIRST) / SEQ_STEP) * SEQ_STEP;
+        while (k > SEQ_FIRST && !ready(k)) k -= SEQ_STEP;          // nearest loaded frame
         if (!ready(k)) return;
         ctx.globalAlpha = 1; ctx.drawImage(imgs[k], 0, 0, canvas.width, canvas.height);
         if (next && mix > 0 && ready(next)) { ctx.globalAlpha = mix; ctx.drawImage(imgs[next], 0, 0, canvas.width, canvas.height); ctx.globalAlpha = 1; }
@@ -2351,9 +2350,20 @@ document.addEventListener('DOMContentLoaded', function () {
       return { load: load, ready: ready, draw: draw };
     })();
     if (seq) {
-      // Start on frame 002; load the rest of the sequence right after.
-      seq.load(2).addEventListener('load', function () { seq.draw(2); });
-      for (var fi = 3; fi <= 50; fi++) seq.load(fi);
+      // Start on the first frame; load the rest in order, a few at a time, so early frames arrive first.
+      seq.load(SEQ_FIRST).addEventListener('load', function () { seq.draw(SEQ_FIRST); });
+      (function queue() {
+        var next = SEQ_FIRST + SEQ_STEP, inflight = 0;
+        function pump() {
+          while (inflight < 6 && next <= SEQ_LAST) {
+            var im = seq.load(next); next += SEQ_STEP;
+            if (im.complete) continue;
+            inflight++; im.addEventListener('load', done); im.addEventListener('error', done);
+          }
+        }
+        function done() { inflight--; pump(); }
+        pump();
+      })();
     }
     gsap.timeline({ defaults: { ease: 'power3.out' } })
       .to(mediaInner, { scale: 1, duration: 1.5, ease: 'power2.out' }, 0)
@@ -2366,64 +2376,36 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Hero sequence: the pinned hero steps through the fleet keyframes as you scroll.
        Each change is a deliberate fade through darkness between still frames (no morphing). */
     (function heroSequence() {
-      var frames = $$('.hero__frame');
-      var dark = $('.hero__dark'), nameEl = $('.hero__now-name'), countEl = $('.hero__now-count');
+      if (!seq) return;
+      var nameEl = $('.hero__now-name'), countEl = $('.hero__now-count');
       var link = $('.hero__now-link'), bar = $('.hero__progress span');
-      var n = frames.length, shown = 0;
-      if (n < 2) return;
+      var n = SEQ_CARS.length, shown = 0;
       ScrollTrigger.config({ ignoreMobileResize: true });
-
-      var loaded = false;
-      function loadFrames() {
-        if (loaded) return; loaded = true;
-        frames.forEach(function (f) { var src = f.getAttribute('data-src'); if (src) f.src = src; });
-      }
-      if (document.readyState === 'complete') setTimeout(loadFrames, 250);
-      else window.addEventListener('load', function () { setTimeout(loadFrames, 250); });
-
       function show(i) {
         if (i === shown) return; shown = i;
-        nameEl.textContent = frames[i].getAttribute('data-name');
+        nameEl.textContent = SEQ_CARS[i].name;
         countEl.textContent = pad(i + 1) + ' / ' + pad(n);
-        link.setAttribute('data-vehicle-id', frames[i].getAttribute('data-vehicle'));
+        link.setAttribute('data-vehicle-id', SEQ_CARS[i].id);
       }
       countEl.textContent = '01 / ' + pad(n);
-
       var mobile = window.matchMedia('(max-width: 720px)').matches;
-      var per = mobile ? .5 : .62;   // viewport heights of scroll per vehicle change
-      var seqDur = seq ? 2.4 : 0;      // timeline time given to the G-Class sequence (frames 002–050)
-      var seqVh = seq ? (mobile ? 1.1 : 1.5) : 0;
-      var tl = gsap.timeline({
-        defaults: { ease: 'none' },
+      var vh = mobile ? 4.5 : 6;     // viewport heights of scroll for the whole sequence
+      var play = { f: SEQ_FIRST };
+      gsap.to(play, {
+        f: SEQ_LAST, ease: 'none',
         scrollTrigger: {
           trigger: '.hero', start: 'top top',
-          end: function () { return '+=' + Math.round(window.innerHeight * (per * (n - 1 + .4) + seqVh)); },
-          pin: true, scrub: .5, anticipatePin: 1, invalidateOnRefresh: true,
-          onUpdate: function () { loadFrames(); }
+          end: function () { return '+=' + Math.round(window.innerHeight * vh); },
+          pin: true, scrub: .4, anticipatePin: 1, invalidateOnRefresh: true
         },
-        // Follow the smoothed timeline (not the raw scroll) so the label always matches the car on screen.
+        // Follow the smoothed value (not the raw scroll) so the label always matches the car on screen.
         onUpdate: function () {
-          var t = tl.time();
-          bar.style.transform = 'scaleX(' + tl.progress().toFixed(4) + ')';
-          var u = t - seqDur;
-          show(u < .55 ? 0 : Math.min(n - 1, Math.floor(u - .55) + 1));
+          seq.draw(play.f);
+          bar.style.transform = 'scaleX(' + ((play.f - SEQ_FIRST) / (SEQ_LAST - SEQ_FIRST)).toFixed(4) + ')';
+          var i = 0; for (var k = 0; k < n; k++) if (play.f >= SEQ_CARS[k].from) i = k;
+          show(i);
         }
       });
-      if (seq) {
-        // Lights rise on the G-Class, then it turns and the hall dims, frame by frame with the scroll.
-        var turn = { f: 2 };
-        tl.to(turn, { f: 50, duration: seqDur, onUpdate: function () { seq.draw(turn.f); } }, 0);
-      }
-      for (var i = 0; i < n - 1; i++) {
-        var t = seqDur + .2 + i;
-        tl.to(dark, { opacity: .96, duration: .35, ease: 'power1.in' }, t)
-          .to(frames[i], { scale: 1.025, duration: .35 }, t)
-          .set(frames[i], { autoAlpha: 0 }, t + .35)
-          .set(frames[i + 1], { autoAlpha: 1, scale: 1.025 }, t + .35)
-          .to(frames[i + 1], { scale: 1, duration: .45, ease: 'power1.out' }, t + .35)
-          .to(dark, { opacity: 0, duration: .45, ease: 'power1.out' }, t + .35);
-      }
-      tl.to({}, { duration: .4 });
     })();
 
     /* Section reveals: 24px rise + fade, 80ms stagger */
@@ -2648,7 +2630,7 @@ document.addEventListener('DOMContentLoaded', function () {
     root.classList.remove('motion-pending');
     try {
       ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
-      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content, .hero__frame, .hero__dark, .hero__intro-dark, .word-inner, .hero h1 .char, [data-clip], .manifesto__word, .reveal-band__frame, .reveal-band__copy > *, [data-rise], .exp__media, .exp__media img, .exp__text, .exp__rule', { clearProps: 'all' });
+      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content, .hero__frame, .hero__intro-dark, .word-inner, .hero h1 .char, [data-clip], .manifesto__word, .reveal-band__frame, .reveal-band__copy > *, [data-rise], .exp__media, .exp__media img, .exp__text, .exp__rule', { clearProps: 'all' });
       $$('.manifesto').forEach(function (m) { m.classList.remove('is-scrub'); });
     } catch (e2) {}
   }
