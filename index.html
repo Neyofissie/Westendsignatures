@@ -273,7 +273,7 @@ figure { margin: 0; }
   position: absolute; inset: 0;
   background:
     linear-gradient(180deg, rgba(9,9,9,.55) 0%, rgba(9,9,9,0) 22%, rgba(9,9,9,0) 45%, rgba(9,9,9,.82) 100%),
-    linear-gradient(90deg, rgba(9,9,9,.55) 0%, rgba(9,9,9,0) 60%);
+    linear-gradient(90deg, rgba(9,9,9,.72) 0%, rgba(9,9,9,.35) 40%, rgba(9,9,9,0) 68%);
 }
 .hero__word {
   position: absolute; left: 50%; top: 34%; transform: translate(-50%, -50%);
@@ -313,6 +313,8 @@ figure { margin: 0; }
   .hero__content { grid-template-columns: 1fr; }
   .hero__aside { display: none; }
   .hero__word { top: 30%; font-size: 34vw; }
+  .hero__media img { object-position: 74% 60%; }
+  .hero__shade { background: linear-gradient(180deg, rgba(9,9,9,.5) 0%, rgba(9,9,9,.1) 30%, rgba(9,9,9,.55) 55%, rgba(9,9,9,.9) 100%); }
   .hero__actions .btn { flex: 1 1 auto; }
 }
 
@@ -697,9 +699,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="hero__media">
       <div class="hero__media-inner">
-        <!-- IMAGE: replace assets/images/hero-g-class.jpg (2400×1350) -->
-        <img src="assets/images/hero-g-class.jpg" width="2400" height="1350"
-             alt="A black Mercedes-Benz G-Class waiting at the entrance of an elegant hotel at dusk"
+        <!-- IMAGE: replace assets/images/hero-g-class.jpg (1672×941) -->
+        <img src="assets/images/hero-g-class.jpg" width="1672" height="941"
+             alt="A black Mercedes-Benz G-Class parked on a rain-glossed driveway beneath a warmly lit hotel entrance at dusk, with palm trees and a waterfront skyline behind"
              fetchpriority="high" decoding="async">
       </div>
     </div>
@@ -800,9 +802,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                   data-vehicle="toyota-prado" data-name="Toyota Prado" data-collection="Signature SUVs"
                   data-detail="A composed, capable SUV that suits everyday city journeys as comfortably as longer road travel. Presented immaculately and driven with care, it is a dependable choice for families, small groups and business travellers who value a calm, unhurried ride.">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
-                    <!-- IMAGE: replace assets/images/fleet-prado.jpg (1600×1200) -->
-                    <img src="assets/images/fleet-prado.jpg" width="1600" height="1200" loading="lazy" decoding="async"
-                         alt="A dark Toyota Prado parked on a quiet city street in the evening">
+                    <!-- IMAGE: replace assets/images/fleet-prado.jpg (1448×1086) -->
+                    <img src="assets/images/fleet-prado.jpg" width="1448" height="1086" loading="lazy" decoding="async"
+                         alt="A black Toyota Prado parked on a quiet, tree-lined residential street in the evening">
                   </div></figure>
                   <div data-panel-text>
                     <h4 class="vehicle__name">Toyota Prado</h4>
@@ -818,9 +820,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                   data-vehicle="toyota-land-cruiser" data-name="Toyota Land Cruiser" data-collection="Signature SUVs"
                   data-detail="Assured presence and a calm, settled ride. The Land Cruiser is well suited to executive movements, airport transfers and journeys beyond the city, with your chauffeur attending to the details so you can rest, work or simply take in the view.">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
-                    <!-- IMAGE: replace assets/images/fleet-land-cruiser.jpg (1600×1200) -->
-                    <img src="assets/images/fleet-land-cruiser.jpg" width="1600" height="1200" loading="lazy" decoding="async"
-                         alt="A black Toyota Land Cruiser at a private driveway entrance">
+                    <!-- IMAGE: replace assets/images/fleet-land-cruiser.jpg (1448×1086) -->
+                    <img src="assets/images/fleet-land-cruiser.jpg" width="1448" height="1086" loading="lazy" decoding="async"
+                         alt="A black Toyota Land Cruiser in front of a modern villa entrance at blue hour, lit by warm wall lights">
                   </div></figure>
                   <div data-panel-text>
                     <h4 class="vehicle__name">Toyota Land Cruiser</h4>
@@ -849,9 +851,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                   data-vehicle="range-rover" data-name="Range Rover" data-collection="Prestige SUVs"
                   data-detail="Refined and quietly confident, the Range Rover brings a sense of occasion without ever feeling showy. A considered choice for executive engagements, private dinners and arrivals where first impressions matter.">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
-                    <!-- IMAGE: replace assets/images/fleet-range-rover.jpg (1600×1200) -->
-                    <img src="assets/images/fleet-range-rover.jpg" width="1600" height="1200" loading="lazy" decoding="async"
-                         alt="A dark Range Rover outside a contemporary building at dusk">
+                    <!-- IMAGE: replace assets/images/fleet-range-rover.jpg (1448×1086) -->
+                    <img src="assets/images/fleet-range-rover.jpg" width="1448" height="1086" loading="lazy" decoding="async"
+                         alt="A black Range Rover on a polished forecourt outside a glass-fronted building at sunset, with a city skyline beyond">
                   </div></figure>
                   <div data-panel-text>
                     <h4 class="vehicle__name">Range Rover</h4>
@@ -867,9 +869,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                   data-vehicle="mercedes-g-class" data-name="Mercedes-Benz G-Class" data-collection="Prestige SUVs"
                   data-detail="An unmistakable silhouette for occasions that call for presence. The G-Class is a favourite for celebrations, special evenings and statement arrivals — always handled with the discretion and care that define a Westend journey.">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
-                    <!-- IMAGE: replace assets/images/fleet-g-class.jpg (1600×1200) -->
-                    <img src="assets/images/fleet-g-class.jpg" width="1600" height="1200" loading="lazy" decoding="async"
-                         alt="A black Mercedes-Benz G-Class photographed from the front three-quarter angle at night">
+                    <!-- IMAGE: replace assets/images/fleet-g-class.jpg (1448×1086) -->
+                    <img src="assets/images/fleet-g-class.jpg" width="1448" height="1086" loading="lazy" decoding="async"
+                         alt="A black Mercedes-Benz G-Class under a softly lit arrival canopy at night">
                   </div></figure>
                   <div data-panel-text>
                     <h4 class="vehicle__name">Mercedes-Benz G-Class</h4>
@@ -885,9 +887,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                   data-vehicle="mercedes-suv" data-name="Mercedes-Benz SUV" data-collection="Prestige SUVs"
                   data-detail="Spacious, comfortable and composed, our Mercedes-Benz SUVs suit executive days, family travel and airport arrivals. Let us know your plans and we will advise which vehicle in this collection best fits your journey.">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
-                    <!-- IMAGE: replace assets/images/fleet-mercedes-suv.jpg (1600×1200) -->
-                    <img src="assets/images/fleet-mercedes-suv.jpg" width="1600" height="1200" loading="lazy" decoding="async"
-                         alt="A dark Mercedes-Benz SUV parked beneath soft architectural lighting">
+                    <!-- IMAGE: replace assets/images/fleet-mercedes-suv.jpg (1448×1086) -->
+                    <img src="assets/images/fleet-mercedes-suv.jpg" width="1448" height="1086" loading="lazy" decoding="async"
+                         alt="A black Mercedes-Benz SUV beneath a warmly lit residence canopy at dusk, with palms and a waterfront skyline behind">
                   </div></figure>
                   <div data-panel-text>
                     <h4 class="vehicle__name">Mercedes-Benz SUVs</h4>
@@ -916,9 +918,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                   data-vehicle="mercedes-saloon" data-name="Mercedes-Benz Luxury Saloon" data-collection="Executive Saloons"
                   data-detail="A Mercedes-Benz luxury saloon for executive travel, evening engagements and journeys where understated elegance is preferred. Quiet, composed and beautifully presented — a natural choice when you would rather arrive without announcement.">
                   <figure class="vehicle__media"><div class="vehicle__zoom">
-                    <!-- IMAGE: replace assets/images/fleet-mercedes-saloon.jpg (1600×1200) -->
-                    <img src="assets/images/fleet-mercedes-saloon.jpg" width="1600" height="1200" loading="lazy" decoding="async"
-                         alt="A black Mercedes-Benz luxury saloon with its rear door held open at an evening venue">
+                    <!-- IMAGE: replace assets/images/fleet-mercedes-saloon.jpg (1448×1086) -->
+                    <img src="assets/images/fleet-mercedes-saloon.jpg" width="1448" height="1086" loading="lazy" decoding="async"
+                         alt="A chauffeur holding open the rear door of a black Mercedes-Benz luxury saloon at an evening venue, revealing a tan leather interior">
                   </div></figure>
                   <div data-panel-text>
                     <h4 class="vehicle__name">Mercedes-Benz luxury saloon</h4>
@@ -953,9 +955,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       <div class="exp-list">
         <article class="exp exp--a">
           <figure class="exp__media" data-parallax data-reveal>
-            <!-- IMAGE: replace assets/images/exp-airport.jpg (1600×2000) -->
-            <img src="assets/images/exp-airport.jpg" width="1600" height="2000" loading="lazy" decoding="async"
-                 alt="A chauffeur waiting beside a dark SUV at an airport arrivals kerb">
+            <!-- IMAGE: replace assets/images/exp-airport.jpg (1122×1402) -->
+            <img src="assets/images/exp-airport.jpg" width="1122" height="1402" loading="lazy" decoding="async"
+                 alt="A chauffeur in a dark suit waiting with luggage beside a black SUV at an airport arrivals kerb at dusk">
           </figure>
           <div class="exp__text">
             <span class="exp__num" data-reveal>01</span>
@@ -973,18 +975,18 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
             <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Executive chauffeur" data-reveal>Arrange a chauffeur</a>
           </div>
           <figure class="exp__media" data-parallax data-reveal>
-            <!-- IMAGE: replace assets/images/exp-executive.jpg (2000×1333) -->
-            <img src="assets/images/exp-executive.jpg" width="2000" height="1333" loading="lazy" decoding="async"
-                 alt="A black executive saloon moving through a business district at dusk">
+            <!-- IMAGE: replace assets/images/exp-executive.jpg (1536×1024) -->
+            <img src="assets/images/exp-executive.jpg" width="1536" height="1024" loading="lazy" decoding="async"
+                 alt="A black Mercedes-Benz saloon driving along a palm-lined city boulevard between glass towers at sunset">
           </figure>
         </article>
 
         <div class="exp-pair">
           <article class="exp exp--c">
             <figure class="exp__media" data-reveal>
-              <!-- IMAGE: replace assets/images/exp-weddings.jpg (1600×2000) -->
-              <img src="assets/images/exp-weddings.jpg" width="1600" height="2000" loading="lazy" decoding="async"
-                   alt="A luxury vehicle waiting at a decorated wedding venue entrance">
+              <!-- IMAGE: replace assets/images/exp-weddings.jpg (1122×1402) -->
+              <img src="assets/images/exp-weddings.jpg" width="1122" height="1402" loading="lazy" decoding="async"
+                   alt="A black Mercedes-Benz saloon with a white floral arrangement on the bonnet, waiting at a candlelit wedding venue entrance at sunset">
             </figure>
             <div class="exp__text">
               <span class="exp__num" data-reveal>03</span>
@@ -995,9 +997,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
           </article>
           <article class="exp exp--d">
             <figure class="exp__media" data-parallax data-reveal>
-              <!-- IMAGE: replace assets/images/exp-city.jpg (2000×1333) -->
-              <img src="assets/images/exp-city.jpg" width="2000" height="1333" loading="lazy" decoding="async"
-                   alt="City lights reflected on a dark SUV during an evening drive">
+              <!-- IMAGE: replace assets/images/exp-city.jpg (1536×1024) -->
+              <img src="assets/images/exp-city.jpg" width="1536" height="1024" loading="lazy" decoding="async"
+                   alt="City lights and an illuminated cable-stayed bridge reflected in the glossy black side of a vehicle at night">
             </figure>
             <div class="exp__text">
               <span class="exp__num" data-reveal>04</span>
@@ -1016,9 +1018,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
             <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Concierge assistance" data-reveal>Speak to our concierge</a>
           </div>
           <figure class="exp__media" data-parallax data-reveal>
-            <!-- IMAGE: replace assets/images/exp-concierge.jpg (1600×2000) -->
-            <img src="assets/images/exp-concierge.jpg" width="1600" height="2000" loading="lazy" decoding="async"
-                 alt="A chauffeur holding a rear passenger door open beneath a hotel canopy">
+            <!-- IMAGE: replace assets/images/exp-concierge.jpg (1122×1402) -->
+            <img src="assets/images/exp-concierge.jpg" width="1122" height="1402" loading="lazy" decoding="async"
+                 alt="A white-gloved chauffeur holding open the rear door of a black saloon beneath a hotel canopy at night">
           </figure>
         </article>
       </div>
@@ -1030,9 +1032,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     <div class="standard__grid">
       <div class="standard__visual">
         <figure class="standard__figure">
-          <!-- IMAGE: replace assets/images/standard-interior.jpg (1600×2000) -->
-          <img src="assets/images/standard-interior.jpg" width="1600" height="2000" loading="lazy" decoding="async"
-               alt="The rear cabin of a luxury vehicle with soft leather seats and warm ambient lighting">
+          <!-- IMAGE: replace assets/images/standard-interior.jpg (1122×1402) -->
+          <img src="assets/images/standard-interior.jpg" width="1122" height="1402" loading="lazy" decoding="async"
+               alt="The rear cabin of a luxury saloon with quilted cream leather seats, a centre armrest and warm ambient lighting, the city at dusk beyond the window">
           <figcaption><span>The Westend Standard</span><span class="standard__counter" aria-hidden="true">01 / 04</span></figcaption>
         </figure>
       </div>
