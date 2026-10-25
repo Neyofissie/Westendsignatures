@@ -277,11 +277,20 @@ figure { margin: 0; }
 .hero__frame:not(:first-child) { visibility: hidden; opacity: 0; }
 .hero__intro-dark { position: absolute; inset: 0; background: #050505; opacity: 0; pointer-events: none; }
 .motion-pending .hero__intro-dark { opacity: .88; }
-.hero__now { display: flex; gap: .9rem; justify-content: flex-end; font-size: .66rem; letter-spacing: .26em; text-transform: uppercase; color: rgba(243, 239, 230, .65); }
-.hero__now-count { font-family: var(--serif); font-size: .95rem; letter-spacing: .12em; color: var(--gold); }
-.hero__now-name { font-family: var(--serif); font-size: clamp(1.4rem, 1rem + 1vw, 2rem); line-height: 1.1; }
-.hero__progress { width: 180px; height: 1px; background: rgba(243, 239, 230, .2); }
-.hero__progress span { display: block; height: 100%; background: var(--gold); transform-origin: right; transform: scaleX(0); }
+.hero__headlines, .hero__support { display: grid; }
+.hero__headline, .hero__support-item { grid-area: 1 / 1; display: block; }
+.hero__headline:not(.is-active), .hero__support-item:not(.is-active) { visibility: hidden; opacity: 0; }
+.hero__support-item { max-width: 32rem; }
+/* Index rail: large current number, vertical progress, total; model name and Explore beneath */
+.hero__aside { display: grid; justify-items: end; gap: 1.6rem; text-align: right; padding-bottom: .5rem; }
+.hero__index { display: grid; justify-items: center; gap: .7rem; font-family: var(--serif); line-height: 1; }
+.hero__index-cur { display: block; overflow: hidden; text-shadow: 0 2px 18px rgba(0, 0, 0, .6); font-size: clamp(2.6rem, 1.8rem + 2vw, 4rem); font-weight: 300; color: var(--ivory); padding-bottom: .06em; }
+.hero__index-digits { display: block; }
+.hero__index-track { width: 1px; height: clamp(70px, 12vh, 120px); background: rgba(243, 239, 230, .22); position: relative; }
+.hero__index-fill { position: absolute; inset: 0; background: var(--gold); transform-origin: top; transform: scaleY(0); }
+.hero__index-total { font-size: 1rem; letter-spacing: .12em; color: var(--stone); }
+.hero__model { display: grid; justify-items: end; gap: .2rem; }
+.hero__model-name { font-size: .68rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: rgba(243, 239, 230, .78); }
 .hero__now-link { min-height: 36px; }
 .hero__shade {
   position: absolute; inset: 0;
@@ -304,10 +313,6 @@ figure { margin: 0; }
 .hero h1 em { font-style: italic; }
 .hero__support { font-size: clamp(1.05rem, 1rem + .4vw, 1.3rem); color: rgba(243, 239, 230, .86); font-weight: 300; letter-spacing: .01em; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: .9rem 1.6rem; align-items: center; margin-top: 2.2rem; }
-.hero__aside { display: grid; gap: .8rem; justify-items: end; text-align: right; padding-bottom: .5rem; }
-.hero__aside .cities { color: rgba(243, 239, 230, .7); }
-.scroll-cue { display: inline-flex; align-items: center; gap: .8rem; font-size: .66rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(243, 239, 230, .6); }
-.scroll-cue::after { content: ""; width: 1px; height: 46px; background: linear-gradient(var(--gold), transparent); }
 
 /* Motion-pending: only the hero copy waits for its entrance animation */
 .motion-pending .hero .line-inner { transform: translateY(110%); }
@@ -333,15 +338,25 @@ figure { margin: 0; }
   .hero__support { margin-top: auto; }
   .hero__actions { margin-top: 1.2rem; }
   .hero__actions .btn { flex: 1 1 auto; }
-  .hero__aside { order: -1; align-self: flex-start; display: flex; flex-direction: column; align-items: flex-start; gap: .25rem; text-align: left; padding: 0; margin-bottom: .9rem; }
-  .hero__now { justify-content: flex-start; }
-  .hero__aside .scroll-cue, .hero__now-link, .hero__progress { display: none; }
-  .hero__now-name { font-size: 1.05rem; }
+  /* Index sits just under the car: number, short progress, total — then the model and Explore */
+  .hero__aside {
+    position: absolute; left: var(--gutter); right: var(--gutter); top: calc(53% + 36vw - 1.25rem);
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0; text-align: left;
+  }
+  .hero__index { display: flex; align-items: center; gap: .6rem; }
+  .hero__index-cur { font-size: 1.5rem; }
+  .hero__index-track { width: 44px; height: 1px; }
+  .hero__index-fill { transform-origin: left; }
+  .hero__index-total { font-size: .8rem; }
+  .hero__model { justify-items: end; text-align: right; gap: 0; }
+  .hero__model-name { font-size: .58rem; letter-spacing: .2em; }
+  .hero__now-link { min-height: 44px; font-size: .62rem; margin-block: -6px; }
 }
 @media (max-width: 720px) and (max-height: 700px) {
   .hero__content { padding-top: calc(var(--header-h) + .75rem); }
   .hero h1 { font-size: 2.4rem; }
   .hero__media { height: 62vw; top: calc(52% - 31vw); }
+  .hero__aside { top: calc(52% + 31vw - 1.25rem); }
   .hero__actions { flex-wrap: nowrap; gap: .6rem; margin-top: .9rem; }
   .hero__actions .btn { padding-inline: .7rem; font-size: .64rem; letter-spacing: .12em; }
   .hero__actions .btn .arrow { display: none; }
@@ -1002,22 +1017,56 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     <div class="container hero__content">
       <div>
         <p class="eyebrow" data-hero-fade>Private chauffeur &amp; concierge</p>
-        <h1 id="hero-title">
-          <span class="line"><span class="line-inner">Arrive</span></span>
-          <span class="line"><span class="line-inner"><em>exceptionally.</em></span></span>
+        <!-- One headline and supporting line per car; they change with the hero sequence (SEQ_CARS). -->
+        <h1 id="hero-title" class="hero__headlines">
+          <span class="hero__headline is-active" data-slide="0">
+            <span class="line"><span class="line-inner">Arrive</span></span>
+            <span class="line"><span class="line-inner"><em>exceptionally.</em></span></span>
+          </span>
+          <span class="hero__headline" data-slide="1" aria-hidden="true">
+            <span class="line"><span class="line-inner">Quietly</span></span>
+            <span class="line"><span class="line-inner"><em>commanding.</em></span></span>
+          </span>
+          <span class="hero__headline" data-slide="2" aria-hidden="true">
+            <span class="line"><span class="line-inner">Room for</span></span>
+            <span class="line"><span class="line-inner"><em>everyone.</em></span></span>
+          </span>
+          <span class="hero__headline" data-slide="3" aria-hidden="true">
+            <span class="line"><span class="line-inner">Every road,</span></span>
+            <span class="line"><span class="line-inner"><em>assured.</em></span></span>
+          </span>
+          <span class="hero__headline" data-slide="4" aria-hidden="true">
+            <span class="line"><span class="line-inner">Calm,</span></span>
+            <span class="line"><span class="line-inner"><em>every day.</em></span></span>
+          </span>
+          <span class="hero__headline" data-slide="5" aria-hidden="true">
+            <span class="line"><span class="line-inner">The art of</span></span>
+            <span class="line"><span class="line-inner"><em>arriving.</em></span></span>
+          </span>
         </h1>
-        <p class="hero__support" data-hero-fade>Your city. Your pace. Our signature.</p>
+        <p class="hero__support" data-hero-fade>
+          <span class="hero__support-item is-active" data-slide="0">Your city. Your pace. Our signature.</span>
+          <span class="hero__support-item" data-slide="1" aria-hidden="true">Composed comfort for the engagements where first impressions matter.</span>
+          <span class="hero__support-item" data-slide="2" aria-hidden="true">Three rows of calm for family, guests and luggage alike.</span>
+          <span class="hero__support-item" data-slide="3" aria-hidden="true">Long days, airport runs and journeys beyond the city.</span>
+          <span class="hero__support-item" data-slide="4" aria-hidden="true">Dependable comfort, presented with care on every journey.</span>
+          <span class="hero__support-item" data-slide="5" aria-hidden="true">Understated elegance for executive days and evenings.</span>
+        </p>
         <div class="hero__actions">
           <a class="btn btn--solid" href="#fleet" data-hero-fade>Explore the fleet <span class="arrow" aria-hidden="true"></span></a>
           <a class="btn" href="#enquiry" data-goto-form data-hero-fade>Plan your journey</a>
         </div>
       </div>
       <div class="hero__aside" data-hero-fade>
-        <p class="hero__now"><span>Now presenting</span> <span class="hero__now-count">01 / 06</span></p>
-        <p class="hero__now-name">Mercedes-Benz G-Class</p>
-        <div class="hero__progress" aria-hidden="true"><span></span></div>
-        <button type="button" class="text-link text-link--gold hero__now-link" data-view-vehicle data-vehicle-id="mercedes-g-class">Explore this vehicle</button>
-        <span class="scroll-cue" aria-hidden="true">Scroll</span>
+        <div class="hero__index" aria-hidden="true">
+          <span class="hero__index-cur"><span class="hero__index-digits">01</span></span>
+          <span class="hero__index-track"><span class="hero__index-fill"></span></span>
+          <span class="hero__index-total">06</span>
+        </div>
+        <div class="hero__model">
+          <p class="hero__model-name">Mercedes-Benz G-Class</p>
+          <button type="button" class="text-link text-link--gold hero__now-link" data-view-vehicle data-vehicle-id="mercedes-g-class">Explore this vehicle</button>
+        </div>
       </div>
     </div>
   </section>
@@ -2300,16 +2349,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* Hero entrance (~1.5s, timed) */
-    var lines = $$('.hero .line-inner');
+    var lines = $$('.hero__headline[data-slide="0"] .line-inner');
     var fades = $$('.hero [data-hero-fade]');
     var mediaInner = $('.hero__media-inner');
     // Remove the CSS pending state first so GSAP doesn't read it as an existing transform
     // (same task, so nothing is painted in between).
     root.classList.remove('motion-pending');
-    // "exceptionally." rises letter by letter from a soft blur; screen readers keep the whole headline.
-    var h1 = $('#hero-title');
-    h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
-    var em = $('.hero h1 .line:nth-child(2) em');
+    // "exceptionally." rises letter by letter from a soft blur; screen readers read a plain copy of the word.
+    var em = $('.hero__headline[data-slide="0"] .line:nth-child(2) em');
+    var emText = document.createElement('span'); emText.className = 'sr-only'; emText.textContent = em.textContent;
+    em.parentNode.appendChild(emText);
     var chars = em.textContent.split('').map(function (c) { var sp = document.createElement('span'); sp.className = 'char'; sp.textContent = c; return sp; });
     em.textContent = ''; chars.forEach(function (c) { em.appendChild(c); });
     em.setAttribute('aria-hidden', 'true');
@@ -2377,17 +2426,38 @@ document.addEventListener('DOMContentLoaded', function () {
        Each change is a deliberate fade through darkness between still frames (no morphing). */
     (function heroSequence() {
       if (!seq) return;
-      var nameEl = $('.hero__now-name'), countEl = $('.hero__now-count');
-      var link = $('.hero__now-link'), bar = $('.hero__progress span');
+      var nameEl = $('.hero__model-name'), digits = $('.hero__index-digits');
+      var link = $('.hero__now-link'), fill = $('.hero__index-fill');
+      var heads = $$('.hero__headline'), sups = $$('.hero__support-item');
       var n = SEQ_CARS.length, shown = 0;
+      var vertical = !window.matchMedia('(max-width: 720px)').matches;
       ScrollTrigger.config({ ignoreMobileResize: true });
-      function show(i) {
-        if (i === shown) return; shown = i;
-        nameEl.textContent = SEQ_CARS[i].name;
-        countEl.textContent = pad(i + 1) + ' / ' + pad(n);
-        link.setAttribute('data-vehicle-id', SEQ_CARS[i].id);
+      $('.hero__index-total').textContent = pad(n);
+      function swap(list, i, isHead) {
+        list.forEach(function (el, k) {
+          if (k === i || !el.classList.contains('is-active')) return;
+          el.classList.remove('is-active'); el.setAttribute('aria-hidden', 'true');
+          var out = isHead ? $$('.line-inner', el) : [el];
+          gsap.killTweensOf(out);
+          gsap.fromTo(out, { yPercent: 0, opacity: 1 }, { yPercent: isHead ? -110 : -40, opacity: isHead ? 1 : 0, duration: .5, stagger: .05, ease: 'power3.in',
+            onStart: function () { gsap.set(el, { autoAlpha: 1 }); }, onComplete: function () { gsap.set(el, { clearProps: 'visibility,opacity' }); gsap.set(out, { clearProps: 'all' }); } });
+        });
+        var el = list[i]; if (!el) return;
+        el.classList.add('is-active'); el.removeAttribute('aria-hidden');
+        var inn = isHead ? $$('.line-inner', el) : [el];
+        gsap.killTweensOf(inn);
+        gsap.fromTo(inn, { yPercent: isHead ? 110 : 40, opacity: isHead ? 1 : 0 }, { yPercent: 0, opacity: 1, duration: isHead ? .9 : .7, delay: isHead ? .35 : .5, stagger: .09, ease: 'power3.out' });
       }
-      countEl.textContent = '01 / ' + pad(n);
+      function show(i) {
+        if (i === shown) return;
+        var dir = i > shown ? 1 : -1; shown = i;
+        swap(heads, i, true); swap(sups, i, false);
+        link.setAttribute('data-vehicle-id', SEQ_CARS[i].id);
+        gsap.timeline()
+          .to([digits, nameEl], { yPercent: -100 * dir, opacity: 0, duration: .25, ease: 'power2.in' })
+          .add(function () { digits.textContent = pad(i + 1); nameEl.textContent = SEQ_CARS[i].name; })
+          .fromTo([digits, nameEl], { yPercent: 100 * dir, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .45, ease: 'power3.out' });
+      }
       var mobile = window.matchMedia('(max-width: 720px)').matches;
       var vh = mobile ? 4.5 : 6;     // viewport heights of scroll for the whole sequence
       var play = { f: SEQ_FIRST };
@@ -2401,7 +2471,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Follow the smoothed value (not the raw scroll) so the label always matches the car on screen.
         onUpdate: function () {
           seq.draw(play.f);
-          bar.style.transform = 'scaleX(' + ((play.f - SEQ_FIRST) / (SEQ_LAST - SEQ_FIRST)).toFixed(4) + ')';
+          fill.style.transform = (vertical ? 'scaleY(' : 'scaleX(') + ((play.f - SEQ_FIRST) / (SEQ_LAST - SEQ_FIRST)).toFixed(4) + ')';
           var i = 0; for (var k = 0; k < n; k++) if (play.f >= SEQ_CARS[k].from) i = k;
           show(i);
         }

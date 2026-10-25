@@ -53,7 +53,7 @@ The hero pins and plays one video of all six cars, exported as still frames (`as
 
 - **Loading:** frame 002 loads first; the rest load in order, six at a time.
 - **Phones:** use every second frame (about 3.4 MB instead of 6.7 MB).
-- **"Now presenting" label:** switches at the dark moments between cars. These are set in `SEQ_CARS` in `index.html` (frames 61, 101, 144, 212 and 269); update them if the video changes.
+- **Copy per car:** each car has its own headline and supporting line (`.hero__headline` and `.hero__support-item`, one per `data-slide`). They switch, along with the index number, model name and Explore link, at the dark moments between cars. Those moments are set in `SEQ_CARS` in `index.html` (frames 61, 101, 144, 212 and 269); update them if the video changes.
 - **Reduced motion, or scripts failing:** the lit `028.jpg` is shown instead.
 - `001.jpg` is not used.
 - The still keyframes in `assets/hero/frame-*.webp` are still used in the vehicle view and the "Every vehicle, our own." band.
