@@ -49,7 +49,7 @@ assets/images/      demonstration images (placeholders, see below)
 
 ## Hero sequence
 
-The hero pins and steps through still keyframes as you scroll, with a deliberate fade through darkness between cars (no morphing or fake rotation). Frames live in `assets/hero/` (see `assets/hero/TRANSITIONS.md`) and are listed as `.hero__frame` images in `index.html`, each with `data-vehicle` and `data-name`. The first frame is a stand-in G-Class photo until the turntable G-Class frames (0 silhouette, 1 lit) are supplied: add them at the top of the list. Only the first frame loads with the page; the rest load after it. When rendered transition videos are ready, they can replace the still-frame fades.
+The hero pins as you scroll. First the G-Class plays as a frame sequence taken from video (`assets/hero/g-class/frame-002.jpg` to `frame-050.jpg`): the hall lights rise, then the car turns and the hall dims. The frames are drawn to a canvas, so scrolling up plays it in reverse. Then the other cars (`assets/hero/frame-*.webp`) follow as still keyframes with a fade through darkness. With reduced motion, or if scripts fail, the lit `frame-028.jpg` is shown instead. `frame-001.jpg` is not used. To use more videos, export their frames the same way and extend the sequence in `heroSequence()`.
 
 ## Editing vehicles
 
