@@ -1708,12 +1708,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var mm = gsap.matchMedia();
 
-    /* Gentle parallax on selected photographs (not on small screens) */
-    mm.add('(min-width: 861px)', function () {
+    /* Gentle parallax on selected photographs (smaller travel on phones) */
+    mm.add({ wide: '(min-width: 861px)', narrow: '(max-width: 860px)' }, function (ctx) {
+      var amt = ctx.conditions.wide ? 5 : 4;
       $$('[data-parallax]').forEach(function (fig) {
         fig.classList.add('is-parallax');
-        gsap.fromTo(fig.querySelector('img'), { yPercent: -5 }, {
-          yPercent: 5, ease: 'none',
+        gsap.fromTo(fig.querySelector('img'), { yPercent: -amt }, {
+          yPercent: amt, ease: 'none',
           scrollTrigger: { trigger: fig, start: 'top bottom', end: 'bottom top', scrub: true }
         });
       });
@@ -1760,6 +1761,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     mm.add('(max-width: 1023px), (max-height: 619px)', function () {
       batchReveal($$('[data-reveal-stack]'));
+      // Stacked cards: each photograph settles from 1.1 to 1 as it scrolls into view.
+      $$('.vehicle__zoom').forEach(function (z) {
+        gsap.fromTo(z, { scale: 1.1 }, {
+          scale: 1, ease: 'none',
+          scrollTrigger: { trigger: z.parentNode, start: 'top bottom', end: 'center 45%', scrub: true }
+        });
+      });
     });
 
     labels.forEach(function (l) {
@@ -1794,6 +1802,9 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       gsap.fromTo('.standard__figure img', { scale: 1.08 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: standard, start: 'top bottom', end: 'bottom bottom', scrub: true } });
       return function () { standard.classList.remove('is-scrolly'); statements.forEach(function (x) { x.classList.remove('is-active'); }); };
+    });
+    mm.add('(max-width: 1023px)', function () {
+      gsap.fromTo('.standard__figure img', { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.standard__figure', start: 'top bottom', end: 'bottom 30%', scrub: true } });
     });
 
     /* Nav highlighting */
