@@ -64,7 +64,7 @@ Each fleet card is an `<article class="vehicle">`. Its `data-vehicle` id must ma
 
 Content is in the `VEHICLE DETAILS` script near the end of `index.html`:
 
-- `WESTEND_VEHICLES`: name, collection, background word, image, one-sentence description.
+- `WESTEND_VEHICLES`: name, collection, image, one-sentence description.
 - `tiles`: the four tiles (icon, short value, label). Icons: drive, frame, seat, star, engine, gear, wave, screen, design, lock, light, voice.
 - `stats`: the features list (feature, category, one-line detail). These are published model features checked against public sources in October 2026. Trims and markets vary, so confirm each against Westend's own vehicles.
 - `WESTEND_SERVICE_STATS`: the fallback features for a vehicle without `stats`.

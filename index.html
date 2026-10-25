@@ -275,9 +275,6 @@ figure { margin: 0; }
 .hero__frame:not(:first-child) { visibility: hidden; opacity: 0; }
 .hero__dark, .hero__intro-dark { position: absolute; inset: 0; background: #050505; opacity: 0; pointer-events: none; }
 .motion-pending .hero__intro-dark { opacity: .88; }
-.hero__word-inner { position: relative; display: block; }
-.hero__word-item { display: block; }
-.hero__word-item + .hero__word-item { position: absolute; left: 50%; top: 0; transform: translateX(-50%); opacity: 0; visibility: hidden; }
 .hero__now { display: flex; gap: .9rem; justify-content: flex-end; font-size: .66rem; letter-spacing: .26em; text-transform: uppercase; color: rgba(243, 239, 230, .65); }
 .hero__now-count { font-family: var(--serif); font-size: .95rem; letter-spacing: .12em; color: var(--gold); }
 .hero__now-name { font-family: var(--serif); font-size: clamp(1.4rem, 1rem + 1vw, 2rem); line-height: 1.1; }
@@ -290,14 +287,6 @@ figure { margin: 0; }
     linear-gradient(180deg, rgba(9,9,9,.55) 0%, rgba(9,9,9,0) 22%, rgba(9,9,9,0) 45%, rgba(9,9,9,.82) 100%),
     linear-gradient(90deg, rgba(9,9,9,.72) 0%, rgba(9,9,9,.35) 40%, rgba(9,9,9,0) 68%);
 }
-.hero__word {
-  position: absolute; left: 50%; top: 34%; transform: translate(-50%, -50%);
-  margin: 0; pointer-events: none; user-select: none;
-  font-family: var(--serif); font-weight: 300; line-height: .8; letter-spacing: .04em;
-  font-size: clamp(6rem, 25vw, 26rem); white-space: nowrap;
-  color: rgba(243, 239, 230, .075);
-}
-.hero__word-inner { display: block; will-change: transform; }
 .hero__content {
   position: relative; z-index: 2; width: 100%;
   padding-bottom: clamp(3rem, 7vh, 5.5rem);
@@ -334,7 +323,6 @@ figure { margin: 0; }
   .hero__media img { object-position: 88% 50%; }
   .hero__media .hero__frame:first-child { object-position: 100% 60%; }
   .hero__shade { background: linear-gradient(180deg, rgba(9,9,9,.6) 0%, rgba(9,9,9,0) 30%, rgba(9,9,9,0) 70%, rgba(9,9,9,.6) 100%); }
-  .hero__word { top: calc(53% - 36vw); font-size: 25vw; }
   .hero__content {
     height: 100%; display: flex; flex-direction: column; align-items: stretch; gap: 0;
     padding-top: calc(var(--header-h) + 1.25rem); padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
@@ -353,7 +341,6 @@ figure { margin: 0; }
   .hero__content { padding-top: calc(var(--header-h) + .75rem); }
   .hero h1 { font-size: 2.4rem; }
   .hero__media { height: 62vw; top: calc(52% - 31vw); }
-  .hero__word { top: calc(52% - 31vw); }
   .hero__actions { flex-wrap: nowrap; gap: .6rem; margin-top: .9rem; }
   .hero__actions .btn { padding-inline: .7rem; font-size: .64rem; letter-spacing: .12em; }
   .hero__actions .btn .arrow { display: none; }
@@ -584,11 +571,6 @@ figure { margin: 0; }
   mask-image: radial-gradient(ellipse 36% 40% at 50% 50%, #000 55%, transparent 100%);
   transition: transform 900ms var(--ease), opacity 700ms var(--ease);
 }
-.vd__word {
-  position: absolute; left: 50%; top: 4%; transform: translateX(-50%); margin: 0; pointer-events: none; user-select: none; white-space: nowrap;
-  font-family: var(--serif); font-weight: 300; line-height: .8; letter-spacing: .04em; font-size: clamp(4rem, 11vw, 11rem); color: rgba(243, 239, 230, .07);
-  transition: opacity 900ms var(--ease);
-}
 .vd__dark { position: absolute; inset: 0; background: #050505; opacity: 0; pointer-events: none; transition: opacity 380ms var(--ease); }
 
 .vd__panels { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 1rem; transition: opacity 600ms var(--ease), transform 700ms var(--ease); }
@@ -638,7 +620,6 @@ figure { margin: 0; }
 
 /* Entrance and switching */
 .vd.is-entering .vd__img { opacity: 0; transform: scale(1.04); }
-.vd.is-entering .vd__word { opacity: 0; }
 .vd.is-entering .vd-tile { opacity: 0; transform: translateY(14px); }
 .vd.is-entering .vd__panels { opacity: 0; transform: translateY(16px); }
 .vd.is-switching .vd__dark { opacity: 1; }
@@ -676,7 +657,6 @@ figure { margin: 0; }
   .vd__car { order: -1; height: min(62vw, 46vh); min-height: 200px; margin: 0 calc(var(--gutter) * -1); }
   .vd__head { order: -2; }
   .vd__img { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 82% 55% !important; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); }
-  .vd__word { font-size: 22vw; top: 2%; }
   .vd__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem .75rem; }
   .vd-tile__icon { width: 52px; height: 52px; margin-bottom: .35rem; }
   .vd-tile__value { font-size: 1.6rem; }
@@ -691,8 +671,7 @@ figure { margin: 0; }
 }
 
 /* ---------- Vehicle view micro-interactions (motion only when the visitor allows it) ---------- */
-.vd__img, .vd__word { translate: var(--px, 0px) var(--py, 0px); }
-.vd__word { translate: calc(var(--px, 0px) * -.6) 0; }
+.vd__img { translate: var(--px, 0px) var(--py, 0px); }
 .vd__icon svg, .vd-car svg, .vd-tile__icon svg { transition: transform 220ms var(--ease), color 220ms var(--ease); }
 @keyframes vd-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes pill-pop { 50% { transform: scale(1.08); } }
@@ -700,7 +679,6 @@ figure { margin: 0; }
 @keyframes bell { 20% { transform: rotate(-14deg); } 40% { transform: rotate(10deg); } 60% { transform: rotate(-6deg); } 80% { transform: rotate(3deg); } }
 @media (prefers-reduced-motion: no-preference) {
   .vd__img { transition: transform 900ms var(--ease), opacity 700ms var(--ease), translate 700ms cubic-bezier(.22, .61, .36, 1); }
-  .vd__word { transition: opacity 900ms var(--ease), translate 900ms cubic-bezier(.22, .61, .36, 1); }
   /* Collection list: gold rail grows in, icon nudges forward, active car glows */
   .vd-car { position: relative; }
   .vd-car::before { content: ""; position: absolute; left: -1px; top: 24%; bottom: 24%; width: 2px; border-radius: 2px; background: var(--gold); transform: scaleY(0); transition: transform 220ms var(--ease); }
@@ -1025,7 +1003,6 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     <div class="hero__shade" aria-hidden="true"></div>
     <div class="hero__dark" aria-hidden="true"></div>
     <div class="hero__intro-dark" aria-hidden="true"></div>
-    <p class="hero__word" aria-hidden="true"><span class="hero__word-inner"><span class="hero__word-item">WESTEND</span><span class="hero__word-item">RANGE ROVER</span><span class="hero__word-item">MERCEDES</span><span class="hero__word-item">LAND CRUISER</span><span class="hero__word-item">PRADO</span><span class="hero__word-item">SALOON</span></span></p>
 
     <div class="container hero__content">
       <div>
@@ -1642,7 +1619,6 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     <dl class="vd__tiles" id="vd-tiles" aria-label="At a glance"></dl>
 
     <div class="vd__car" id="vd-stage">
-      <p class="vd__word" id="vd-word" aria-hidden="true"></p>
       <img class="vd__img" id="vd-img" src="" alt="">
       <div class="vd__dark" aria-hidden="true"></div>
     </div>
@@ -1695,7 +1671,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     { value: "Airport arrivals", label: "Chauffeur service", detail: "Met on arrival, onward journey arranged." }
   ];
   window.WESTEND_VEHICLES = [
-    { id: "toyota-prado", name: "Toyota Prado", collection: "Signature SUVs", word: "PRADO",
+    { id: "toyota-prado", name: "Toyota Prado", collection: "Signature SUVs",
       image: "assets/hero/frame-5-prado.webp", focus: "62% 55%",
       alt: "A black Toyota Prado on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "A calm, comfortable ride for everyday city travel and longer journeys alike.",
@@ -1705,7 +1681,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "Ladder-frame build", label: "Construction", detail: "A traditional body-on-frame chassis \u2014 a large part of the Prado's reputation for durability." },
         { value: "Four-wheel drive with low range", label: "Capability", detail: "A two-speed transfer case gives extra control on rough or unmade roads." }
       ] },
-    { id: "toyota-land-cruiser", name: "Toyota Land Cruiser", collection: "Signature SUVs", word: "LAND CRUISER",
+    { id: "toyota-land-cruiser", name: "Toyota Land Cruiser", collection: "Signature SUVs",
       image: "assets/hero/frame-4-land-cruiser.webp", focus: "62% 55%",
       alt: "A black Toyota Land Cruiser on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "A settled, elevated ride for long days, airport runs and journeys beyond the city.",
@@ -1715,7 +1691,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "Twin-turbo V6", label: "Engine", detail: "Both petrol and diesel versions use a twin-turbocharged V6 for smooth, unhurried pace." },
         { value: "Four-wheel drive", label: "Capability", detail: "Four-wheel drive paired with a 10-speed automatic for composed progress on every surface." }
       ] },
-    { id: "range-rover", name: "Range Rover", collection: "Prestige SUVs", word: "RANGE ROVER",
+    { id: "range-rover", name: "Range Rover", collection: "Prestige SUVs",
       image: "assets/hero/frame-2-range-rover.webp", focus: "62% 55%",
       alt: "A black Range Rover on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Quietly confident comfort for engagements where first impressions matter.",
@@ -1725,7 +1701,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "Flush door handles", label: "Design", detail: "Deployable handles sit flush with the body, keeping the Range Rover's lines clean and quiet." },
         { value: "Electronic air suspension", label: "Comfort", detail: "Air suspension smooths the road for a calm, gliding ride." }
       ] },
-    { id: "mercedes-g-class", name: "Mercedes-Benz G-Class", collection: "Prestige SUVs", word: "G-CLASS",
+    { id: "mercedes-g-class", name: "Mercedes-Benz G-Class", collection: "Prestige SUVs",
       image: "assets/images/fleet-g-class.jpg", focus: "50% 60%",
       alt: "A black Mercedes-Benz G-Class under a softly lit arrival canopy at night",
       sentence: "An unmistakable arrival for celebrations, evenings and statement occasions.",
@@ -1735,7 +1711,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "Round LED headlamps", label: "Lighting", detail: "Signature round LED headlamps with daytime running lights." },
         { value: "Three locking differentials", label: "Capability", detail: "Full-time four-wheel drive with three locking differentials and low-range gearing." }
       ] },
-    { id: "mercedes-suv", name: "Mercedes-Benz SUV", collection: "Prestige SUVs", word: "MERCEDES",
+    { id: "mercedes-suv", name: "Mercedes-Benz SUV", collection: "Prestige SUVs",
       image: "assets/hero/frame-3-mercedes-gls.webp", focus: "62% 55%",
       alt: "A black Mercedes-Benz SUV on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Generous, composed comfort for families, small groups and airport arrivals.",
@@ -1745,7 +1721,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "Twin 12.3-inch displays", label: "Technology", detail: "Two widescreen MBUX displays span the dashboard for navigation and media." },
         { value: "4MATIC all-wheel drive", label: "Capability", detail: "Mercedes-Benz all-wheel drive for sure-footed travel in all conditions." }
       ] },
-    { id: "mercedes-saloon", name: "Mercedes-Benz luxury saloon", collection: "Executive Saloons", word: "SALOON",
+    { id: "mercedes-saloon", name: "Mercedes-Benz luxury saloon", collection: "Executive Saloons",
       image: "assets/hero/frame-6-s-class.webp", focus: "62% 55%",
       alt: "A black Mercedes-Benz luxury saloon on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Understated elegance and a quiet rear cabin for executive days and evenings.",
@@ -1993,7 +1969,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var v = vehicles[current], feats = v.stats || serviceStats;
     $('#vd-collection').textContent = v.collection;
     $('#vd-title').textContent = v.name;
-    $('#vd-word').textContent = v.word;
     $('#vd-index').textContent = pad(current + 1) + ' / ' + pad(vehicles.length);
     $('#vd-sentence').textContent = v.sentence;
     vdImg.style.objectPosition = v.focus || '50% 55%';
@@ -2358,7 +2333,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Hero sequence: the pinned hero steps through the fleet keyframes as you scroll.
        Each change is a deliberate fade through darkness between still frames (no morphing). */
     (function heroSequence() {
-      var frames = $$('.hero__frame'), words = $$('.hero__word-item');
+      var frames = $$('.hero__frame');
       var dark = $('.hero__dark'), nameEl = $('.hero__now-name'), countEl = $('.hero__now-count');
       var link = $('.hero__now-link'), bar = $('.hero__progress span');
       var n = frames.length, shown = 0;
@@ -2402,12 +2377,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var t = .2 + i;
         tl.to(dark, { opacity: .96, duration: .35, ease: 'power1.in' }, t)
           .to(frames[i], { scale: 1.025, duration: .35 }, t)
-          .to(words[i], { autoAlpha: 0, yPercent: -12, duration: .3 }, t + .02)
           .set(frames[i], { autoAlpha: 0 }, t + .35)
           .set(frames[i + 1], { autoAlpha: 1, scale: 1.025 }, t + .35)
           .to(frames[i + 1], { scale: 1, duration: .45, ease: 'power1.out' }, t + .35)
-          .to(dark, { opacity: 0, duration: .45, ease: 'power1.out' }, t + .35)
-          .fromTo(words[i + 1], { autoAlpha: 0, yPercent: 12 }, { autoAlpha: 1, yPercent: 0, duration: .4, immediateRender: false }, t + .4);
+          .to(dark, { opacity: 0, duration: .45, ease: 'power1.out' }, t + .35);
       }
       tl.to({}, { duration: .4 });
     })();
@@ -2614,7 +2587,7 @@ document.addEventListener('DOMContentLoaded', function () {
     root.classList.remove('motion-pending');
     try {
       ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
-      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content, .hero__frame, .hero__dark, .hero__intro-dark, .hero__word-item, .word-inner, .hero h1 .char, [data-clip], .manifesto__word, .reveal-band__frame, .reveal-band__copy > *', { clearProps: 'all' });
+      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content, .hero__frame, .hero__dark, .hero__intro-dark, .word-inner, .hero h1 .char, [data-clip], .manifesto__word, .reveal-band__frame, .reveal-band__copy > *', { clearProps: 'all' });
       $$('.manifesto').forEach(function (m) { m.classList.remove('is-scrub'); });
     } catch (e2) {}
   }
