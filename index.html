@@ -321,17 +321,40 @@ figure { margin: 0; }
 .motion-pending .hero [data-hero-fade] { opacity: 0; }
 .motion-pending .hero__media-inner { transform: scale(1.06); }
 
+/* Phones: title at the top, the whole car in a band across the middle, actions at the bottom */
 @media (max-width: 720px) {
-  .hero { height: 92svh; min-height: 560px; }
-  .hero__content { grid-template-columns: 1fr; }
-  .hero__aside { order: -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .8rem; justify-items: start; text-align: left; padding: 0; margin-bottom: -.5rem; }
+  .hero { height: 100svh; min-height: 600px; align-items: stretch; }
+  .hero__media {
+    inset: auto 0; top: calc(53% - 36vw); height: 72vw;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+  }
+  .hero__media img { object-position: 88% 50%; }
+  .hero__media .hero__frame:first-child { object-position: 100% 60%; }
+  .hero__shade { background: linear-gradient(180deg, rgba(9,9,9,.6) 0%, rgba(9,9,9,0) 30%, rgba(9,9,9,0) 70%, rgba(9,9,9,.6) 100%); }
+  .hero__word { top: calc(53% - 36vw); font-size: 25vw; }
+  .hero__content {
+    height: 100%; display: flex; flex-direction: column; align-items: stretch; gap: 0;
+    padding-top: calc(var(--header-h) + 1.25rem); padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+  .hero__content > div:first-child { flex: 1; display: flex; flex-direction: column; }
+  .hero h1 { font-size: clamp(2.6rem, 11.5vw, 3.6rem); margin: .8rem 0 0; }
+  .hero__support { margin-top: auto; }
+  .hero__actions { margin-top: 1.2rem; }
+  .hero__actions .btn { flex: 1 1 auto; }
+  .hero__aside { order: -1; align-self: flex-start; display: flex; flex-direction: column; align-items: flex-start; gap: .25rem; text-align: left; padding: 0; margin-bottom: .9rem; }
+  .hero__now { justify-content: flex-start; }
   .hero__aside .scroll-cue, .hero__now-link, .hero__progress { display: none; }
   .hero__now-name { font-size: 1.05rem; }
-  .hero__frame--turntable { object-position: 64% 60% !important; }
-  .hero__word { top: 30%; font-size: 34vw; }
-  .hero__media img { object-position: 74% 60%; }
-  .hero__shade { background: linear-gradient(180deg, rgba(9,9,9,.5) 0%, rgba(9,9,9,.1) 30%, rgba(9,9,9,.55) 55%, rgba(9,9,9,.9) 100%); }
-  .hero__actions .btn { flex: 1 1 auto; }
+}
+@media (max-width: 720px) and (max-height: 700px) {
+  .hero__content { padding-top: calc(var(--header-h) + .75rem); }
+  .hero h1 { font-size: 2.4rem; }
+  .hero__media { height: 62vw; top: calc(52% - 31vw); }
+  .hero__word { top: calc(52% - 31vw); }
+  .hero__actions { flex-wrap: nowrap; gap: .6rem; margin-top: .9rem; }
+  .hero__actions .btn { padding-inline: .7rem; font-size: .64rem; letter-spacing: .12em; }
+  .hero__actions .btn .arrow { display: none; }
 }
 
 /* =========================================================================
@@ -2068,12 +2091,13 @@ document.addEventListener('DOMContentLoaded', function () {
           trigger: '.hero', start: 'top top',
           end: function () { return '+=' + Math.round(window.innerHeight * per * (n - 1 + .4)); },
           pin: true, scrub: .5, anticipatePin: 1, invalidateOnRefresh: true,
-          onUpdate: function (self) {
-            loadFrames();
-            bar.style.transform = 'scaleX(' + self.progress.toFixed(4) + ')';
-            var t = tl.time();
-            show(t < .55 ? 0 : Math.min(n - 1, Math.floor(t - .55) + 1));
-          }
+          onUpdate: function () { loadFrames(); }
+        },
+        // Follow the smoothed timeline (not the raw scroll) so the label always matches the car on screen.
+        onUpdate: function () {
+          var t = tl.time();
+          bar.style.transform = 'scaleX(' + tl.progress().toFixed(4) + ')';
+          show(t < .55 ? 0 : Math.min(n - 1, Math.floor(t - .55) + 1));
         }
       });
       for (var i = 0; i < n - 1; i++) {
