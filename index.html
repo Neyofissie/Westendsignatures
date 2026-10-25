@@ -582,6 +582,27 @@ figure { margin: 0; }
   .vd-card__label, .vd-card__detail { grid-column: 1 / -1; }
   .vd-card__label { display: none; font-size: .5rem; letter-spacing: .18em; }
   .vd-card[aria-expanded="true"] .vd-card__label { display: block; }
+  /* An opened card becomes a frosted glass panel over the car */
+  .vd__cards::before { content: ""; position: absolute; inset: 0; background: rgba(9, 9, 9, .35); opacity: 0; transition: opacity 300ms var(--ease); pointer-events: none; }
+  .vd__stage.has-open .vd__cards { pointer-events: auto; }
+  .vd__stage.has-open .vd__cards::before { opacity: 1; }
+  .vd__stage.has-open .vd__lines { opacity: 0; }
+  .vd__stage.has-open .vd-card:not([aria-expanded="true"]) { opacity: .35; }
+  .vd-card[aria-expanded="true"] {
+    top: 50% !important; bottom: auto !important; left: var(--gutter) !important; right: var(--gutter) !important;
+    max-width: none; z-index: 5; transform: translateY(-50%); padding: 1.15rem 1.25rem 1.25rem; gap: .25rem; border-radius: 18px;
+    background-color: rgba(20, 18, 15, .34); border-color: rgba(201, 170, 115, .55);
+    -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%);
+    box-shadow: inset 0 1px 0 rgba(201, 170, 115, .6), 0 30px 60px -20px rgba(0, 0, 0, .8);
+    animation: glass-in 320ms cubic-bezier(.34, 1.4, .64, 1);
+  }
+  .vd-card[aria-expanded="true"] .vd-card__value { font-size: 1.5rem; }
+  .vd-card[aria-expanded="true"] .vd-card__label { font-size: .58rem; margin-top: .15rem; }
+  .vd-card[aria-expanded="true"] .vd-card__detail { font-size: .9rem; max-height: 8rem; margin-top: .5rem; }
+  .vd-card[aria-expanded="true"]::after { content: "Tap to close"; grid-column: 1 / -1; margin-top: .6rem; font-size: .55rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(243, 239, 230, .55); }
+  @keyframes glass-in { from { opacity: 0; transform: translateY(-46%) scale(.96); } to { opacity: 1; transform: translateY(-50%) scale(1); } }
+  .vd__dots { pointer-events: none; }
+  .vd-dot { pointer-events: auto; cursor: pointer; }
   .vd-card__detail { font-size: .76rem; }
   .vd-card[aria-expanded="true"] .vd-card__detail { margin-top: .2rem; }
   .vd-card--0 { top: .5rem; right: var(--gutter); }
@@ -1480,7 +1501,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
   <div class="vd__bottom">
     <div>
       <p class="vd__sentence" id="vd-sentence"></p>
-      <p class="vd__note">Photography is illustrative. The exact vehicle is confirmed with your enquiry.</p>
+      <p class="vd__note">Photography is illustrative. Features describe the model; your vehicle and its specification are confirmed with your enquiry.</p>
     </div>
     <a class="btn btn--solid" href="#enquiry" id="vd-enquire" data-enquire-vehicle="">Request this vehicle <span class="arrow" aria-hidden="true"></span></a>
   </div>
@@ -1492,9 +1513,10 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
      id must match the fleet card's data-vehicle and the enquiry form option.
      points: where the three detail cards attach on the photo, as x/y percentages
              (rear cabin → card top right, front → card left, wheel → card below).
-     stats:  optional, per vehicle. Add verified figures only, e.g.
-             { value: "4", label: "Passengers", detail: "Confirmed for Westend's vehicle." }
-             Until then every vehicle shows WESTEND_SERVICE_STATS.
+     stats:  the three detail cards (feature, category, one-line detail), in point order.
+             These are published model features checked against public sources (Oct 2026);
+             trims and markets vary, so confirm them against Westend's own vehicles.
+             A vehicle without stats falls back to WESTEND_SERVICE_STATS.
      ===================================================================== -->
 <script>
   window.WESTEND_SERVICE_STATS = [
@@ -1507,32 +1529,62 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       image: "assets/hero/frame-5-prado.webp", focus: "62% 55%",
       alt: "A black Toyota Prado on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "A calm, comfortable ride for everyday city travel and longer journeys alike.",
-      points: [ { x: 79, y: 30 }, { x: 48, y: 43 }, { x: 58, y: 63 } ] },
+      points: [ { x: 79, y: 30 }, { x: 48, y: 43 }, { x: 58, y: 63 } ],
+      stats: [
+        { value: "Third-row seating", label: "Space", detail: "Seven-seat versions of the Prado add a third row. We confirm the layout of your vehicle when we reply." },
+        { value: "Ladder-frame build", label: "Construction", detail: "A traditional body-on-frame chassis \u2014 a large part of the Prado's reputation for durability." },
+        { value: "Four-wheel drive with low range", label: "Capability", detail: "A two-speed transfer case gives extra control on rough or unmade roads." }
+      ] },
     { id: "toyota-land-cruiser", name: "Toyota Land Cruiser", collection: "Signature SUVs", word: "LAND CRUISER",
       image: "assets/hero/frame-4-land-cruiser.webp", focus: "62% 55%",
       alt: "A black Toyota Land Cruiser on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "A settled, elevated ride for long days, airport runs and journeys beyond the city.",
-      points: [ { x: 79, y: 29 }, { x: 47, y: 41 }, { x: 57, y: 63 } ] },
+      points: [ { x: 79, y: 29 }, { x: 47, y: 41 }, { x: 57, y: 63 } ],
+      stats: [
+        { value: "Body-on-frame strength", label: "Construction", detail: "Built on Toyota's GA-F platform, the 300 Series keeps a separate frame while shedding weight over its predecessor." },
+        { value: "Twin-turbo V6", label: "Engine", detail: "Both petrol and diesel versions use a twin-turbocharged V6 for smooth, unhurried pace." },
+        { value: "Four-wheel drive", label: "Capability", detail: "Four-wheel drive paired with a 10-speed automatic for composed progress on every surface." }
+      ] },
     { id: "range-rover", name: "Range Rover", collection: "Prestige SUVs", word: "RANGE ROVER",
       image: "assets/hero/frame-2-range-rover.webp", focus: "62% 55%",
       alt: "A black Range Rover on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Quietly confident comfort for engagements where first impressions matter.",
-      points: [ { x: 79, y: 29 }, { x: 46, y: 40 }, { x: 56, y: 62 } ] },
+      points: [ { x: 79, y: 29 }, { x: 46, y: 40 }, { x: 56, y: 62 } ],
+      stats: [
+        { value: "Pivi Pro infotainment", label: "Technology", detail: "Connected navigation with wireless Apple CarPlay and Android Auto keeps the journey effortless." },
+        { value: "Flush door handles", label: "Design", detail: "Deployable handles sit flush with the body, keeping the Range Rover's lines clean and quiet." },
+        { value: "Electronic air suspension", label: "Comfort", detail: "Air suspension smooths the road for a calm, gliding ride." }
+      ] },
     { id: "mercedes-g-class", name: "Mercedes-Benz G-Class", collection: "Prestige SUVs", word: "G-CLASS",
       image: "assets/images/fleet-g-class.jpg", focus: "50% 60%",
       alt: "A black Mercedes-Benz G-Class under a softly lit arrival canopy at night",
       sentence: "An unmistakable arrival for celebrations, evenings and statement occasions.",
-      points: [ { x: 24, y: 35 }, { x: 56, y: 49 }, { x: 43, y: 68 } ] },
+      points: [ { x: 24, y: 35 }, { x: 56, y: 49 }, { x: 43, y: 68 } ],
+      stats: [
+        { value: "Iconic upright design", label: "Design", detail: "The upright, unmistakable silhouette that has defined the G-Class for decades." },
+        { value: "Round LED headlamps", label: "Lighting", detail: "Signature round LED headlamps with daytime running lights." },
+        { value: "Three locking differentials", label: "Capability", detail: "Full-time four-wheel drive with three locking differentials and low-range gearing." }
+      ] },
     { id: "mercedes-suv", name: "Mercedes-Benz SUV", collection: "Prestige SUVs", word: "MERCEDES",
       image: "assets/hero/frame-3-mercedes-gls.webp", focus: "62% 55%",
       alt: "A black Mercedes-Benz SUV on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Generous, composed comfort for families, small groups and airport arrivals.",
-      points: [ { x: 79, y: 29 }, { x: 47, y: 44 }, { x: 57, y: 63 } ] },
+      points: [ { x: 79, y: 29 }, { x: 47, y: 44 }, { x: 57, y: 63 } ],
+      stats: [
+        { value: "Three rows of seating", label: "Space", detail: "The GLS seats passengers across three rows \u2014 room for families and small groups." },
+        { value: "Twin 12.3-inch displays", label: "Technology", detail: "Two widescreen MBUX displays span the dashboard for navigation and media." },
+        { value: "4MATIC all-wheel drive", label: "Capability", detail: "Mercedes-Benz all-wheel drive for sure-footed travel in all conditions." }
+      ] },
     { id: "mercedes-saloon", name: "Mercedes-Benz luxury saloon", collection: "Executive Saloons", word: "SALOON",
       image: "assets/hero/frame-6-s-class.webp", focus: "62% 55%",
       alt: "A black Mercedes-Benz luxury saloon on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Understated elegance and a quiet rear cabin for executive days and evenings.",
-      points: [ { x: 78, y: 35 }, { x: 47, y: 48 }, { x: 57, y: 62 } ] }
+      points: [ { x: 78, y: 35 }, { x: 47, y: 48 }, { x: 57, y: 62 } ],
+      stats: [
+        { value: "Active ambient lighting", label: "Interior", detail: "Around 250 LEDs bathe the cabin in soft, adjustable light \u2014 calm on evening journeys." },
+        { value: "MBUX voice assistant", label: "Technology", detail: "Second-generation MBUX responds to natural speech for climate, media and more." },
+        { value: "AIRMATIC air suspension", label: "Comfort", detail: "Standard air springs deliver the S-Class's famously smooth, quiet ride." }
+      ] }
   ];
 </script>
 
@@ -1735,6 +1787,7 @@ document.addEventListener('DOMContentLoaded', function () {
     vdImg.style.objectPosition = v.focus || '50% 55%';
     vdImg.alt = v.alt; vdImg.src = v.image;
     vdDots.innerHTML = ''; vdCards.innerHTML = ''; vdLines.innerHTML = '';
+    $('#vd-stage').classList.remove('has-open');
     v.points.forEach(function (pt, k) {
       var dot = el('span', 'vd-dot', String(k + 1)); vdDots.appendChild(dot);
       var st = stats[k] || {};
@@ -1841,24 +1894,32 @@ document.addEventListener('DOMContentLoaded', function () {
   function announce() { $('#vd-status').textContent = vehicles[current].name + ', ' + (current + 1) + ' of ' + vehicles.length; }
   function collapseCards(except) {
     $$('.vd-card', vdCards).forEach(function (c) { if (c !== except) c.setAttribute('aria-expanded', 'false'); });
+    syncOpen();
   }
+  function syncOpen() { $('#vd-stage').classList.toggle('has-open', !!$('.vd-card[aria-expanded="true"]', vdCards)); }
 
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-view-vehicle]');
     if (b) openVehicle(b.getAttribute('data-vehicle-id') || b.closest('.vehicle').getAttribute('data-vehicle'), b);
   });
   vdCards.addEventListener('click', function (e) {
-    var c = e.target.closest('.vd-card'); if (!c) return;
+    var c = e.target.closest('.vd-card');
+    if (!c) { collapseCards(); return; }                      // tap outside the open panel closes it
     var open = c.getAttribute('aria-expanded') !== 'true';
-    collapseCards(c); c.setAttribute('aria-expanded', String(open));
+    collapseCards(c); c.setAttribute('aria-expanded', String(open)); syncOpen();
     setTimeout(function () { layoutVehicle(true); }, 320);   // keep lines attached as the card grows
+  });
+  vdDots.addEventListener('click', function (e) {            // tapping a marker opens its card
+    var d = e.target.closest('.vd-dot'); if (!d) return;
+    var c = $$('.vd-card', vdCards)[$$('.vd-dot', vdDots).indexOf(d)];
+    if (c) { c.click(); c.focus({ preventScroll: true }); }
   });
   $('#vd-close').addEventListener('click', function () { dialog.close(); });
   $('#vd-prev').addEventListener('click', function () { switchVehicle(-1); });
   $('#vd-next').addEventListener('click', function () { switchVehicle(1); });
   dialog.addEventListener('cancel', function (e) {          // Escape collapses an open card first
     var openCard = $('.vd-card[aria-expanded="true"]', vdCards);
-    if (openCard) { e.preventDefault(); openCard.setAttribute('aria-expanded', 'false'); openCard.focus(); }
+    if (openCard) { e.preventDefault(); openCard.setAttribute('aria-expanded', 'false'); syncOpen(); openCard.focus(); }
   });
   dialog.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowRight') { e.preventDefault(); switchVehicle(1); }

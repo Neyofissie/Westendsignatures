@@ -58,8 +58,9 @@ Each fleet card is an `<article class="vehicle">`. Its `data-vehicle` id must ma
 "Explore this vehicle" opens a one-screen vehicle view: the car in the arrival hall, its model name behind it, and three glass detail cards joined to points on the car by dotted lines. Each card expands on click, tap or keyboard, and Escape collapses it. Previous/next, the arrow keys and swiping switch cars through a fade to darkness. "Request this vehicle" opens the booking form with the car preselected. Content is in the `VEHICLE DETAILS` script near the end of `index.html`:
 
 - `WESTEND_VEHICLES`: name, collection, background word, image, one-sentence description and `points` (x/y % on the photo where each card attaches: rear cabin, front, wheel).
-- `WESTEND_SERVICE_STATS`: what the cards show by default (Executive travel, Private occasions, Airport arrivals).
-- Add a `stats` array to a vehicle only with verified figures for Westend's own car (for example `{ value: "4", label: "Passengers", detail: "..." }`).
+- `stats`: each vehicle's three feature cards (feature, category, one-line detail). These are published model features checked against public sources in October 2026. Trims and markets vary, so confirm each one against Westend's own vehicles and edit or remove any that don't apply.
+- `WESTEND_SERVICE_STATS`: the fallback for a vehicle without `stats` (Executive travel, Private occasions, Airport arrivals).
+- On phones, tapping a card or its marker opens it as a frosted glass panel over the car; tap outside, tap again or press Escape to close.
 
 No prices, capacities, model years, specifications or availability are stated, by design.
 
