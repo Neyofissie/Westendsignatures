@@ -47,17 +47,21 @@ assets/images/      demonstration images (placeholders, see below)
 
 4. **Complete `privacy.html` and `terms.html`** and have them legally reviewed.
 
+## Hero sequence
+
+The hero pins and steps through still keyframes as you scroll, with a deliberate fade through darkness between cars (no morphing or fake rotation). Frames live in `assets/hero/` (see `assets/hero/TRANSITIONS.md`) and are listed as `.hero__frame` images in `index.html`, each with `data-vehicle` and `data-name`. The first frame is a stand-in G-Class photo until the turntable G-Class frames (0 silhouette, 1 lit) are supplied: add them at the top of the list. Only the first frame loads with the page; the rest load after it. When rendered transition videos are ready, they can replace the still-frame fades.
+
 ## Editing vehicles
 
-Each fleet card is an `<article class="vehicle">` in the Fleet section, and its `data-vehicle` id must match an `<option value>` in the enquiry form's "Preferred vehicle" select.
+Each fleet card is an `<article class="vehicle">`. Its `data-vehicle` id must match an `<option value>` in the enquiry form's "Preferred vehicle" select.
 
-"View vehicle" opens a full-screen vehicle page with the large model name, feature markers on the photo, an "at a glance" row, two feature sections (close-up crops of the same photo) and an enquiry button. Its content lives in `window.WESTEND_VEHICLES` (the `VEHICLE DETAILS` script near the end of `index.html`):
+"Explore this vehicle" opens a one-screen vehicle view: the car in the arrival hall, its model name behind it, and three glass detail cards joined to points on the car by dotted lines. Each card expands on click, tap or keyboard, and Escape collapses it. Previous/next, the arrow keys and swiping switch cars through a fade to darkness. "Request this vehicle" opens the booking form with the car preselected. Content is in the `VEHICLE DETAILS` script near the end of `index.html`:
 
-- `spots`: feature markers; `x`/`y` are percentages on the 4:3 photo, `side: "left"` puts the label on the left.
-- `stats`: the at-a-glance row. It currently shows collection, ideal use and ownership, because no seating, luggage or other figures have been confirmed. Replace them with real figures for Westend's own vehicles when available (e.g. `{ value: "5", label: "Seats" }`).
-- `features`: title, text and the crop point (`x`, `y`, `zoom`) on the photo.
+- `WESTEND_VEHICLES`: name, collection, background word, image, one-sentence description and `points` (x/y % on the photo where each card attaches: rear cabin, front, wheel).
+- `WESTEND_SERVICE_STATS`: what the cards show by default (Executive travel, Private occasions, Airport arrivals).
+- Add a `stats` array to a vehicle only with verified figures for Westend's own car (for example `{ value: "4", label: "Passengers", detail: "..." }`).
 
-No prices, capacities, model years or availability are stated, by design.
+No prices, capacities, model years, specifications or availability are stated, by design.
 
 ## Motion and accessibility
 

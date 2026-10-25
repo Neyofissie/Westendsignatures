@@ -269,6 +269,19 @@ figure { margin: 0; }
 .hero__media, .hero__media-inner { position: absolute; inset: 0; }
 .hero__media { transform-origin: 50% 60%; will-change: transform; }
 .hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; }
+.hero__frame { position: absolute; inset: 0; }
+.hero__frame:not(:first-child) { visibility: hidden; opacity: 0; }
+.hero__dark, .hero__intro-dark { position: absolute; inset: 0; background: #050505; opacity: 0; pointer-events: none; }
+.motion-pending .hero__intro-dark { opacity: .88; }
+.hero__word-inner { position: relative; display: block; }
+.hero__word-item { display: block; }
+.hero__word-item + .hero__word-item { position: absolute; left: 50%; top: 0; transform: translateX(-50%); opacity: 0; visibility: hidden; }
+.hero__now { display: flex; gap: .9rem; justify-content: flex-end; font-size: .66rem; letter-spacing: .26em; text-transform: uppercase; color: rgba(243, 239, 230, .65); }
+.hero__now-count { font-family: var(--serif); font-size: .95rem; letter-spacing: .12em; color: var(--gold); }
+.hero__now-name { font-family: var(--serif); font-size: clamp(1.4rem, 1rem + 1vw, 2rem); line-height: 1.1; }
+.hero__progress { width: 180px; height: 1px; background: rgba(243, 239, 230, .2); }
+.hero__progress span { display: block; height: 100%; background: var(--gold); transform-origin: right; transform: scaleX(0); }
+.hero__now-link { min-height: 36px; }
 .hero__shade {
   position: absolute; inset: 0;
   background:
@@ -298,7 +311,7 @@ figure { margin: 0; }
 .hero h1 em { font-style: italic; }
 .hero__support { font-size: clamp(1.05rem, 1rem + .4vw, 1.3rem); color: rgba(243, 239, 230, .86); font-weight: 300; letter-spacing: .01em; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: .9rem 1.6rem; align-items: center; margin-top: 2.2rem; }
-.hero__aside { display: grid; gap: 1.2rem; justify-items: end; text-align: right; padding-bottom: .5rem; }
+.hero__aside { display: grid; gap: .8rem; justify-items: end; text-align: right; padding-bottom: .5rem; }
 .hero__aside .cities { color: rgba(243, 239, 230, .7); }
 .scroll-cue { display: inline-flex; align-items: center; gap: .8rem; font-size: .66rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(243, 239, 230, .6); }
 .scroll-cue::after { content: ""; width: 1px; height: 46px; background: linear-gradient(var(--gold), transparent); }
@@ -311,7 +324,10 @@ figure { margin: 0; }
 @media (max-width: 720px) {
   .hero { height: 92svh; min-height: 560px; }
   .hero__content { grid-template-columns: 1fr; }
-  .hero__aside { display: none; }
+  .hero__aside { order: -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .8rem; justify-items: start; text-align: left; padding: 0; margin-bottom: -.5rem; }
+  .hero__aside .scroll-cue, .hero__now-link, .hero__progress { display: none; }
+  .hero__now-name { font-size: 1.05rem; }
+  .hero__frame--turntable { object-position: 64% 60% !important; }
   .hero__word { top: 30%; font-size: 34vw; }
   .hero__media img { object-position: 74% 60%; }
   .hero__shade { background: linear-gradient(180deg, rgba(9,9,9,.5) 0%, rgba(9,9,9,.1) 30%, rgba(9,9,9,.55) 55%, rgba(9,9,9,.9) 100%); }
@@ -420,26 +436,53 @@ figure { margin: 0; }
 .fleet.is-pinned .fleet__note { padding-top: 0; }
 
 /* =========================================================================
-   Vehicle detail view (full-screen dialog)
+   Vehicle detail view — one screen, glass detail cards around the car
    ========================================================================= */
 .vd {
   width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
   background: var(--obsidian); color: var(--ivory); overflow: hidden;
 }
 .vd::backdrop { background: var(--obsidian); }
-.vd[open] { animation: fade-in 360ms var(--ease); }
+.vd[open] { animation: fade-in 400ms var(--ease); }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-.vd__scroll { height: 100%; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-.vd__bar {
-  position: sticky; top: 0; z-index: 5; height: var(--header-h);
-  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  background: var(--obsidian); border-bottom: 1px solid var(--line-dark);
+.vd.no-trans, .vd.no-trans * { transition: none !important; }
+
+.vd__stage { position: absolute; inset: 0; overflow: hidden; }
+.vd__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease); }
+.vd__shade {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 34% 12% at 58% 80%, rgba(201, 170, 115, .16), transparent 70%),
+    linear-gradient(180deg, rgba(9, 9, 9, .78) 0%, rgba(9, 9, 9, 0) 28%, rgba(9, 9, 9, 0) 60%, rgba(9, 9, 9, .88) 100%);
 }
-.vd .vd__bar { max-width: none; }
-.vd.no-trans * { transition: none !important; }
-.vd__crumb { font-size: .7rem; letter-spacing: .24em; text-transform: uppercase; color: var(--stone); }
-.vd__crumb strong { color: var(--ivory); font-weight: 500; }
-.vd__controls { margin-left: auto; display: flex; align-items: center; gap: .25rem; }
+.vd__word {
+  position: absolute; left: 50%; top: 13%; transform: translateX(-50%); margin: 0; pointer-events: none; user-select: none;
+  font-family: var(--serif); font-weight: 300; line-height: .8; letter-spacing: .04em; white-space: nowrap;
+  font-size: clamp(5rem, 15vw, 16rem); color: rgba(243, 239, 230, .07);
+  transition: transform 900ms var(--ease), opacity 900ms var(--ease);
+}
+.vd__dark { position: absolute; inset: 0; background: #050505; opacity: 0; pointer-events: none; transition: opacity 380ms var(--ease); }
+.vd__lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; transition: opacity 250ms var(--ease); }
+.vd__lines line { stroke: var(--gold); stroke-width: 1.6; stroke-dasharray: 1.5 5; stroke-linecap: round; }
+.vd__dots { position: absolute; inset: 0; pointer-events: none; }
+.vd-dot {
+  position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 0 4px rgba(201, 170, 115, .28);
+  transform: scale(0); transition: transform 380ms cubic-bezier(.34, 1.56, .64, 1), opacity 250ms var(--ease);
+  display: grid; place-items: center; font-size: 0; color: var(--obsidian); font-weight: 600;
+}
+.vd-dot.is-in { transform: scale(1); }
+.vd-dot::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--gold); animation: spot-pulse 2.2s var(--ease) infinite; }
+@keyframes spot-pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
+
+.vd__top {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 3;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem;
+  padding: clamp(1.25rem, 3vh, 2rem) var(--gutter) 0;
+}
+.vd__heading { display: grid; gap: .7rem; }
+.vd__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.6rem); line-height: 1; }
+.vd__controls { display: flex; align-items: center; gap: .25rem; flex: none; }
 .vd__index { font-family: var(--serif); letter-spacing: .12em; color: var(--gold); margin: 0 .5rem; min-width: 4.5rem; text-align: center; }
 .vd__icon {
   width: 48px; height: 48px; display: inline-grid; place-items: center; background: none;
@@ -449,95 +492,69 @@ figure { margin: 0; }
 .vd__icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.2; }
 .vd__close { margin-left: .75rem; }
 
-.vd__hero { position: relative; padding-block: clamp(5rem, 13vh, 8.5rem) 0; overflow: hidden; }
-.vd__word {
-  position: absolute; left: 50%; top: clamp(.75rem, 3vh, 2rem); transform: translateX(-50%); margin: 0;
-  font-family: var(--serif); font-weight: 300; line-height: .8; white-space: nowrap; letter-spacing: .04em;
-  font-size: clamp(4.5rem, 12.5vw, 13rem); color: rgba(243, 239, 230, .08); pointer-events: none; user-select: none;
+/* Glass detail cards */
+.vd__cards { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.vd-card {
+  position: absolute; pointer-events: auto; width: 15.5rem; text-align: left; font: inherit;
+  display: grid; gap: .35rem; padding: 1.05rem 1.25rem 1.1rem; color: var(--ivory);
+  background: rgba(9, 9, 9, .42); border: 1px solid rgba(243, 239, 230, .18); border-radius: 0;
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 0 rgba(201, 170, 115, .55), 0 24px 48px -24px rgba(0, 0, 0, .7);
+  opacity: 0; transform: scale(.94) translateY(6px);
+  transition: opacity 380ms var(--ease), transform 420ms cubic-bezier(.34, 1.4, .64, 1), border-color var(--t-hover) var(--ease), background-color var(--t-hover) var(--ease);
 }
-.vd__hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 2rem clamp(2rem, 4vw, 4rem); align-items: center; }
-.vd__intro { display: grid; gap: 1.2rem; align-content: center; }
-.vd__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2.6rem, 1.6rem + 3vw, 4.8rem); line-height: .98; }
-.vd__desc { color: rgba(243, 239, 230, .8); max-width: 30rem; }
-.vd__intro .btn { justify-self: start; margin-top: .5rem; }
-.vd__media { position: relative; aspect-ratio: 4 / 3; }
-.vd__media img { width: 100%; height: 100%; object-fit: cover; box-shadow: 0 50px 90px -40px rgba(0, 0, 0, .9); }
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) { .vd-card { background: rgba(9, 9, 9, .8); } }
+.vd-card.is-in { opacity: 1; transform: none; }
+.vd-card:hover, .vd-card[aria-expanded="true"] { border-color: rgba(201, 170, 115, .6); background-color: rgba(9, 9, 9, .55); }
+.vd-card__num { font-family: var(--serif); font-size: .85rem; letter-spacing: .14em; color: var(--gold); }
+.vd-card__value { font-family: var(--serif); font-size: 1.55rem; line-height: 1.1; }
+.vd-card__label { font-size: .62rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: rgba(243, 239, 230, .72); }
+.vd-card__detail { max-height: 0; overflow: hidden; opacity: 0; font-size: .86rem; line-height: 1.5; color: rgba(243, 239, 230, .88); transition: max-height 300ms var(--ease), opacity 300ms var(--ease), margin 300ms var(--ease); }
+.vd-card[aria-expanded="true"] .vd-card__detail { max-height: 6rem; opacity: 1; margin-top: .35rem; }
+.vd-card--0 { top: 14%; right: var(--gutter); }
+.vd-card--1 { top: 42%; left: var(--gutter); }
+.vd-card--2 { bottom: 15%; left: 46%; }
 
-/* Feature markers on the photograph */
-.vd__spots { position: absolute; inset: 0; }
-.vd-spot { position: absolute; left: var(--x); top: var(--y); }
-.vd-spot__dot { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(201, 170, 115, .28); }
-.vd-spot__dot::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--gold); animation: spot-pulse 2.2s var(--ease) infinite; }
-@keyframes spot-pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
-.vd-spot__label {
-  position: absolute; bottom: 24px; left: -8px; white-space: nowrap; padding: .55rem .8rem;
-  background: rgba(9, 9, 9, .82); border: 1px solid rgba(201, 170, 115, .5);
-  font-size: .66rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+.vd__bottom {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem;
+  padding: 0 var(--gutter) clamp(1.5rem, 4vh, 2.5rem);
 }
-.vd-spot__label::before { content: ""; position: absolute; left: 7px; top: 100%; height: 18px; border-left: 1px dashed var(--gold); }
-.vd-spot--left .vd-spot__label { left: auto; right: -8px; }
-.vd-spot--left .vd-spot__label::before { left: auto; right: 7px; }
+.vd__sentence { max-width: 30rem; font-size: 1.02rem; color: rgba(243, 239, 230, .88); }
+.vd__note { margin-top: .5rem; font-size: .72rem; color: var(--stone); }
+.vd__bottom .btn { flex: none; }
 
-/* At-a-glance row */
-.vd__stats { margin-top: clamp(2.5rem, 6vh, 4rem); background: var(--charcoal); border-block: 1px solid var(--line-dark); }
-.vd__stats-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.vd-stat { position: relative; padding: clamp(2.5rem, 5vw, 4rem) clamp(1rem, 3vw, 2.5rem); border-left: 1px solid var(--line-dark); text-align: center; }
-.vd-stat:first-child { border-left: 0; }
-.vd-stat::before { content: ""; position: absolute; left: 50%; top: -28px; height: 52px; border-left: 1px dashed rgba(201, 170, 115, .7); }
-.vd-stat::after { content: ""; position: absolute; left: 50%; top: -31px; width: 7px; height: 7px; margin-left: -3px; border-radius: 50%; background: var(--gold); }
-.vd-stat__value { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.3rem + 2vw, 3.4rem); line-height: 1.05; }
-.vd-stat__label { margin-top: .9rem; font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--stone); }
-.vd__stats-note { padding-block: 0 2rem; font-size: .78rem; color: var(--stone); text-align: center; }
+/* Entrance and vehicle-switch states */
+.vd.is-entering .vd__img { transform: scale(1.04); }
+.vd.is-entering .vd__word { opacity: 0; transform: translate(-46%, 0); }
+.vd.is-switching .vd-card, .vd.is-switching .vd-dot, .vd.is-switching .vd__lines { opacity: 0; transition-duration: 250ms; }
+.vd.is-switching .vd__dark { opacity: 1; }
 
-/* Feature sections */
-.vd-feature { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: min(70vh, 640px); }
-.vd-feature:nth-child(even) .vd-feature__text { order: 2; }
-.vd-feature:nth-child(odd) { background: var(--charcoal); }
-.vd-feature__text { display: grid; align-content: center; gap: 1.1rem; padding: clamp(2.5rem, 6vw, 6rem) clamp(1.25rem, 5vw, 5rem); }
-.vd-feature__num { display: flex; align-items: center; gap: 1rem; font-family: var(--serif); color: var(--gold); letter-spacing: .14em; }
-.vd-feature__num::after { content: ""; width: 5rem; border-top: 1px dashed rgba(201, 170, 115, .6); }
-.vd-feature__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.4rem + 2vw, 3.4rem); line-height: 1.02; }
-.vd-feature__text p { color: var(--stone); max-width: 30rem; }
-.vd-feature__media { position: relative; overflow: hidden; min-height: 320px; background: var(--charcoal); }
-.vd-feature__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(var(--zoom, 2)); }
-
-.vd__cta { padding-block: clamp(4rem, 9vw, 7rem); text-align: center; display: grid; justify-items: center; gap: 1.5rem; }
-.vd__cta h3 { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.4rem + 2vw, 3.2rem); line-height: 1.05; }
-.vd__cta-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 1.5rem; align-items: center; }
-.vd__note { font-size: .78rem; color: var(--stone); max-width: 34rem; }
-
-/* Entrance states (applied only when motion is allowed) */
-.vd.is-animating .vd__word { opacity: 0; transform: translate(-46%, 0); }
-.vd.is-animating .vd__media img { opacity: 0; transform: scale(1.05); }
-.vd.is-animating .vd__intro > * { opacity: 0; transform: translateY(20px); }
-.vd.is-animating .vd-spot { opacity: 0; transform: scale(.6); }
-.vd.is-animating .vd-stat__value, .vd.is-animating .vd-stat__label { opacity: 0; transform: translateY(18px); }
-.vd .vd__word, .vd .vd__media img, .vd .vd__intro > *, .vd .vd-spot, .vd .vd-stat__value, .vd .vd-stat__label {
-  transition: opacity 700ms var(--ease), transform 800ms var(--ease);
+/* Phones: car on top, glass cards in a swipeable row beneath */
+@media (max-width: 760px) {
+  .vd[open] { display: flex; flex-direction: column; }
+  .vd__top { position: relative; order: 0; padding-top: 1rem; align-items: center; }
+  .vd__heading { gap: .4rem; }
+  .vd__title { font-size: 1.7rem; }
+  .vd__controls .vd__index { display: none; }
+  .vd__close { margin-left: .25rem; }
+  .vd__stage { position: relative; order: 1; flex: 1 1 auto; min-height: 32vh; }
+  .vd__img { object-position: 64% 55% !important; }
+  .vd__word { top: 6%; font-size: 24vw; }
+  .vd__lines { display: none; }
+  .vd-dot { width: 18px; height: 18px; margin: -9px 0 0 -9px; font-size: .6rem; }
+  .vd__cards {
+    position: relative; order: 2; inset: auto; pointer-events: auto;
+    display: flex; gap: .75rem; overflow-x: auto; overscroll-behavior-x: contain;
+    padding: 1.4rem var(--gutter) .75rem; scroll-padding: var(--gutter);
+  }
+  .vd-card { position: relative; inset: auto !important; flex: 0 0 72%; width: auto; }
+  .vd-card::before { content: ""; position: absolute; left: 1.25rem; bottom: 100%; height: 1.1rem; border-left: 1px dashed rgba(201, 170, 115, .8); }
+  .vd__bottom { position: relative; order: 3; flex-direction: column; align-items: stretch; gap: 1rem; padding-top: .5rem; }
+  .vd__sentence { font-size: .95rem; }
+  .vd__bottom .btn { width: 100%; }
 }
-.vd .vd-spot { transition-duration: 380ms; transition-timing-function: cubic-bezier(.34, 1.56, .64, 1); }
-.vd .vd-feature__text > *, .vd .vd-feature__media { transition: opacity 700ms var(--ease), transform 800ms var(--ease); }
-.vd.has-motion .vd-feature:not(.is-in) .vd-feature__text > * { opacity: 0; transform: translateY(24px); }
-.vd.has-motion .vd-feature:not(.is-in) .vd-feature__media { opacity: 0; }
-
-@media (max-width: 900px) {
-  .vd__hero-grid { grid-template-columns: 1fr; }
-  .vd__media { order: -1; }
-  .vd__hero { padding-top: clamp(3.5rem, 9vh, 5rem); }
-  .vd__word { top: .5rem; font-size: 22vw; }
-  .vd-spot__label { font-size: .56rem; letter-spacing: .12em; padding: .4rem .55rem; bottom: 18px; }
-  .vd-spot__label::before { height: 12px; }
-  .vd-feature { grid-template-columns: 1fr; min-height: 0; }
-  .vd-feature:nth-child(even) .vd-feature__text { order: 0; }
-  .vd-feature__media { aspect-ratio: 4 / 3; min-height: 0; order: -1; }
-}
-@media (max-width: 560px) {
-  .vd__crumb { display: none; }
-  .vd__stats-grid { grid-template-columns: 1fr; }
-  .vd-stat { border-left: 0; border-top: 1px solid var(--line-dark); padding-block: 2rem; }
-  .vd-stat:first-child { border-top: 0; }
-  .vd-stat::before, .vd-stat::after { display: none; }
-}
+@media (max-width: 760px) and (max-height: 700px) { .vd__note { display: none; } }
 
 /* =========================================================================
    Experiences
@@ -781,16 +798,30 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
   <!-- ================================ HERO ================================ -->
   <section class="hero" id="top" aria-labelledby="hero-title">
+    <!-- HERO SEQUENCE: still keyframes shown one at a time, with a fade through darkness between them
+         as you scroll (see assets/hero/TRANSITIONS.md). The first frame is a stand-in G-Class photo until
+         the turntable G-Class frames (0 silhouette, 1 lit) are supplied; add them here in order. -->
     <div class="hero__media">
       <div class="hero__media-inner">
-        <!-- IMAGE: replace assets/images/hero-g-class.jpg (1672×941) -->
-        <img src="assets/images/hero-g-class.jpg" width="1672" height="941"
+        <img class="hero__frame" src="assets/images/hero-g-class.jpg" width="1672" height="941" data-vehicle="mercedes-g-class" data-name="Mercedes-Benz G-Class"
              alt="A black Mercedes-Benz G-Class parked on a rain-glossed driveway beneath a warmly lit hotel entrance at dusk, with palm trees and a waterfront skyline behind"
              fetchpriority="high" decoding="async">
+        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-2-range-rover.webp" width="1672" height="941" data-vehicle="range-rover" data-name="Range Rover"
+             alt="A black Range Rover on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
+        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-3-mercedes-gls.webp" width="1672" height="941" data-vehicle="mercedes-suv" data-name="Mercedes-Benz SUV"
+             alt="A black Mercedes-Benz SUV on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
+        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-4-land-cruiser.webp" width="1672" height="941" data-vehicle="toyota-land-cruiser" data-name="Toyota Land Cruiser"
+             alt="A black Toyota Land Cruiser on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
+        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-5-prado.webp" width="1672" height="941" data-vehicle="toyota-prado" data-name="Toyota Prado"
+             alt="A black Toyota Prado on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
+        <img class="hero__frame hero__frame--turntable" data-src="assets/hero/frame-6-s-class.webp" width="1672" height="941" data-vehicle="mercedes-saloon" data-name="Mercedes-Benz luxury saloon"
+             alt="A black Mercedes-Benz luxury saloon on a turntable in a dark private arrival hall, lit by warm wall lights" decoding="async">
       </div>
     </div>
     <div class="hero__shade" aria-hidden="true"></div>
-    <p class="hero__word" aria-hidden="true"><span class="hero__word-inner">WESTEND</span></p>
+    <div class="hero__dark" aria-hidden="true"></div>
+    <div class="hero__intro-dark" aria-hidden="true"></div>
+    <p class="hero__word" aria-hidden="true"><span class="hero__word-inner"><span class="hero__word-item">WESTEND</span><span class="hero__word-item">RANGE ROVER</span><span class="hero__word-item">MERCEDES</span><span class="hero__word-item">LAND CRUISER</span><span class="hero__word-item">PRADO</span><span class="hero__word-item">SALOON</span></span></p>
 
     <div class="container hero__content">
       <div>
@@ -806,7 +837,10 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         </div>
       </div>
       <div class="hero__aside" data-hero-fade>
-        <span class="cities">Lagos · Abuja</span>
+        <p class="hero__now"><span>Now presenting</span> <span class="hero__now-count">01 / 06</span></p>
+        <p class="hero__now-name">Mercedes-Benz G-Class</p>
+        <div class="hero__progress" aria-hidden="true"><span></span></div>
+        <button type="button" class="text-link text-link--gold hero__now-link" data-view-vehicle data-vehicle-id="mercedes-g-class">Explore this vehicle</button>
         <span class="scroll-cue" aria-hidden="true">Scroll</span>
       </div>
     </div>
@@ -893,8 +927,8 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                     <h4 class="vehicle__name">Toyota Prado</h4>
                     <p class="vehicle__desc">Composed and dependable, for everyday city travel and longer journeys alike.</p>
                     <div class="vehicle__actions">
-                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Toyota Prado</span></button>
-                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="toyota-prado">Enquire about this vehicle<span class="sr-only">: Toyota Prado</span></a>
+                      <button type="button" class="text-link" data-view-vehicle>Explore this vehicle<span class="sr-only">: Toyota Prado</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="toyota-prado">Request this vehicle<span class="sr-only">: Toyota Prado</span></a>
                     </div>
                   </div>
                 </article>
@@ -910,8 +944,8 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                     <h4 class="vehicle__name">Toyota Land Cruiser</h4>
                     <p class="vehicle__desc">Assured presence and a calm ride for executive days and airport transfers.</p>
                     <div class="vehicle__actions">
-                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Toyota Land Cruiser</span></button>
-                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="toyota-land-cruiser">Enquire about this vehicle<span class="sr-only">: Toyota Land Cruiser</span></a>
+                      <button type="button" class="text-link" data-view-vehicle>Explore this vehicle<span class="sr-only">: Toyota Land Cruiser</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="toyota-land-cruiser">Request this vehicle<span class="sr-only">: Toyota Land Cruiser</span></a>
                     </div>
                   </div>
                 </article>
@@ -940,8 +974,8 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                     <h4 class="vehicle__name">Range Rover</h4>
                     <p class="vehicle__desc">Refined and quietly confident, for arrivals that set the tone.</p>
                     <div class="vehicle__actions">
-                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Range Rover</span></button>
-                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="range-rover">Enquire<span class="sr-only"> about the Range Rover</span></a>
+                      <button type="button" class="text-link" data-view-vehicle>Explore this vehicle<span class="sr-only">: Range Rover</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="range-rover">Request<span class="sr-only"> the Range Rover</span></a>
                     </div>
                   </div>
                 </article>
@@ -957,8 +991,8 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                     <h4 class="vehicle__name">Mercedes-Benz G-Class</h4>
                     <p class="vehicle__desc">An unmistakable presence for occasions that deserve one.</p>
                     <div class="vehicle__actions">
-                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Mercedes-Benz G-Class</span></button>
-                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="mercedes-g-class">Enquire<span class="sr-only"> about the Mercedes-Benz G-Class</span></a>
+                      <button type="button" class="text-link" data-view-vehicle>Explore this vehicle<span class="sr-only">: Mercedes-Benz G-Class</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="mercedes-g-class">Request<span class="sr-only"> the Mercedes-Benz G-Class</span></a>
                     </div>
                   </div>
                 </article>
@@ -974,8 +1008,8 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                     <h4 class="vehicle__name">Mercedes-Benz SUVs</h4>
                     <p class="vehicle__desc">Spacious comfort for executive days, family travel and arrivals.</p>
                     <div class="vehicle__actions">
-                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Mercedes-Benz SUVs</span></button>
-                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="mercedes-suv">Enquire<span class="sr-only"> about Mercedes-Benz SUVs</span></a>
+                      <button type="button" class="text-link" data-view-vehicle>Explore this vehicle<span class="sr-only">: Mercedes-Benz SUVs</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="mercedes-suv">Request<span class="sr-only"> Mercedes-Benz SUVs</span></a>
                     </div>
                   </div>
                 </article>
@@ -1004,8 +1038,8 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
                     <h4 class="vehicle__name">Mercedes-Benz luxury saloon</h4>
                     <p class="vehicle__desc">Quiet, composed and beautifully presented — for executive travel and evenings where you would rather arrive without announcement.</p>
                     <div class="vehicle__actions">
-                      <button type="button" class="text-link" data-view-vehicle>View vehicle<span class="sr-only">: Mercedes-Benz luxury saloon</span></button>
-                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="mercedes-saloon">Enquire about this vehicle<span class="sr-only">: Mercedes-Benz luxury saloon</span></a>
+                      <button type="button" class="text-link" data-view-vehicle>Explore this vehicle<span class="sr-only">: Mercedes-Benz luxury saloon</span></button>
+                      <a class="text-link text-link--gold" href="#enquiry" data-enquire-vehicle="mercedes-saloon">Request this vehicle<span class="sr-only">: Mercedes-Benz luxury saloon</span></a>
                     </div>
                   </div>
                 </article>
@@ -1349,120 +1383,87 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 </footer>
 
 <!-- ========================== VEHICLE DETAIL VIEW ========================== -->
-<dialog class="vd" id="vehicle-dialog" aria-labelledby="vd-title" data-lenis-prevent>
-  <div class="vd__scroll" id="vd-scroll">
-    <div class="vd__bar container">
-      <p class="vd__crumb">Fleet · <strong id="vd-collection"></strong></p>
-      <div class="vd__controls">
-        <button type="button" class="vd__icon" id="vd-prev" aria-label="Previous vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-        <span class="vd__index" id="vd-index" aria-live="polite"></span>
-        <button type="button" class="vd__icon" id="vd-next" aria-label="Next vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
-        <button type="button" class="vd__icon vd__close" id="vd-close" aria-label="Close vehicle details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
-      </div>
-    </div>
-
-    <section class="vd__hero">
-      <p class="vd__word" id="vd-word" aria-hidden="true"></p>
-      <div class="container vd__hero-grid">
-        <figure class="vd__media">
-          <img id="vd-img" src="" alt="" width="1448" height="1086">
-          <ul class="vd__spots" id="vd-spots" aria-hidden="true"></ul>
-        </figure>
-        <div class="vd__intro">
-          <p class="eyebrow" id="vd-eyebrow"></p>
-          <h2 class="vd__title" id="vd-title"></h2>
-          <p class="vd__desc" id="vd-desc"></p>
-          <a class="btn btn--solid" href="#enquiry" id="vd-enquire" data-enquire-vehicle="">Enquire about this vehicle <span class="arrow" aria-hidden="true"></span></a>
-        </div>
-      </div>
-      <div class="vd__stats">
-        <dl class="container vd__stats-grid" id="vd-stats"></dl>
-        <p class="container vd__stats-note">Seating, luggage space and the exact specification are confirmed personally with your enquiry.</p>
-      </div>
-    </section>
-
-    <div class="vd__features" id="vd-features"></div>
-
-    <section class="container vd__cta">
-      <h3 id="vd-cta-title"></h3>
-      <div class="vd__cta-actions">
-        <a class="btn btn--solid" href="#enquiry" id="vd-enquire-2" data-enquire-vehicle="">Enquire about this vehicle <span class="arrow" aria-hidden="true"></span></a>
-        <button type="button" class="text-link" id="vd-next-2"></button>
-      </div>
-      <p class="vd__note">Photography is illustrative. Availability and the specific vehicle are confirmed personally when we reply to your enquiry.</p>
-    </section>
+<dialog class="vd" id="vehicle-dialog" aria-labelledby="vd-title" aria-describedby="vd-sentence" data-lenis-prevent>
+  <div class="vd__stage" id="vd-stage">
+    <img class="vd__img" id="vd-img" src="" alt="">
+    <div class="vd__shade" aria-hidden="true"></div>
+    <p class="vd__word" id="vd-word" aria-hidden="true"></p>
+    <svg class="vd__lines" id="vd-lines" aria-hidden="true"></svg>
+    <div class="vd__dots" id="vd-dots" aria-hidden="true"></div>
+    <div class="vd__dark" aria-hidden="true"></div>
   </div>
+
+  <div class="vd__top">
+    <div class="vd__heading">
+      <p class="eyebrow" id="vd-collection"></p>
+      <h2 class="vd__title" id="vd-title"></h2>
+    </div>
+    <div class="vd__controls">
+      <button type="button" class="vd__icon" id="vd-prev" aria-label="Previous vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <span class="vd__index" id="vd-index"></span>
+      <button type="button" class="vd__icon" id="vd-next" aria-label="Next vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      <button type="button" class="vd__icon vd__close" id="vd-close" aria-label="Close vehicle details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    </div>
+  </div>
+
+  <div class="vd__cards" id="vd-cards" role="group" aria-label="Vehicle details"></div>
+
+  <div class="vd__bottom">
+    <div>
+      <p class="vd__sentence" id="vd-sentence"></p>
+      <p class="vd__note">Photography is illustrative. The exact vehicle is confirmed with your enquiry.</p>
+    </div>
+    <a class="btn btn--solid" href="#enquiry" id="vd-enquire" data-enquire-vehicle="">Request this vehicle <span class="arrow" aria-hidden="true"></span></a>
+  </div>
+  <p class="sr-only" id="vd-status" aria-live="polite"></p>
 </dialog>
 
 <!-- =====================================================================
-     VEHICLE DETAILS — content for the "View vehicle" screen.
-     id must match the card's data-vehicle and the enquiry form option.
-     spots: x/y are positions on the 4:3 photo (%); side "left" puts the label left of the marker.
-     stats: short "at a glance" items. Add real figures (e.g. { value: "5", label: "Seats" })
-     only once confirmed for Westend's own vehicles.
+     VEHICLE DETAILS — content for the "Explore this vehicle" screen.
+     id must match the fleet card's data-vehicle and the enquiry form option.
+     points: where the three detail cards attach on the photo, as x/y percentages
+             (rear cabin → card top right, front → card left, wheel → card below).
+     stats:  optional, per vehicle. Add verified figures only, e.g.
+             { value: "4", label: "Passengers", detail: "Confirmed for Westend's vehicle." }
+             Until then every vehicle shows WESTEND_SERVICE_STATS.
      ===================================================================== -->
 <script>
+  window.WESTEND_SERVICE_STATS = [
+    { value: "Executive travel", label: "Chauffeur service", detail: "Full days, kept to schedule." },
+    { value: "Private occasions", label: "Chauffeur service", detail: "Weddings, celebrations and evenings out." },
+    { value: "Airport arrivals", label: "Chauffeur service", detail: "Met on arrival, onward journey arranged." }
+  ];
   window.WESTEND_VEHICLES = [
     { id: "toyota-prado", name: "Toyota Prado", collection: "Signature SUVs", word: "PRADO",
-      image: "assets/images/fleet-prado.jpg",
-      alt: "A black Toyota Prado parked on a quiet, tree-lined residential street in the evening",
-      intro: "A composed, capable SUV that suits everyday city journeys as comfortably as longer road travel. Presented immaculately and driven with care, it is a dependable choice for families, small groups and business travellers who value a calm, unhurried ride.",
-      spots: [ { x: 18, y: 32, label: "Dependable everyday comfort" }, { x: 72, y: 47, label: "Smart, understated presence", side: "left" }, { x: 40, y: 68, label: "Confident on any road" } ],
-      stats: [ { value: "Signature", label: "Collection" }, { value: "Everyday", label: "Ideal for city & road travel" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
-      features: [
-        { title: "Comfort, every day", text: "A calm, comfortable cabin for school runs, errands and full days in the city — with a chauffeur who knows the roads.", x: 30, y: 35, zoom: 1.8 },
-        { title: "Quietly capable", text: "Equally at ease on smooth city streets and longer road journeys, so plans can change without changing cars.", x: 40, y: 68, zoom: 2 }
-      ] },
+      image: "assets/hero/frame-5-prado.webp", focus: "62% 55%",
+      alt: "A black Toyota Prado on a turntable in a dark private arrival hall, lit by warm wall lights",
+      sentence: "A calm, comfortable ride for everyday city travel and longer journeys alike.",
+      points: [ { x: 79, y: 30 }, { x: 48, y: 43 }, { x: 58, y: 63 } ] },
     { id: "toyota-land-cruiser", name: "Toyota Land Cruiser", collection: "Signature SUVs", word: "LAND CRUISER",
-      image: "assets/images/fleet-land-cruiser.jpg",
-      alt: "A black Toyota Land Cruiser in front of a modern villa entrance at blue hour, lit by warm wall lights",
-      intro: "Assured presence and a calm, settled ride. The Land Cruiser is well suited to executive movements, airport transfers and journeys beyond the city, with your chauffeur attending to the details so you can rest, work or simply take in the view.",
-      spots: [ { x: 27, y: 32, label: "Calm, elevated view" }, { x: 70, y: 48, label: "Bold, purposeful front", side: "left" }, { x: 41, y: 68, label: "Assured, capable stance" } ],
-      stats: [ { value: "Signature", label: "Collection" }, { value: "Long days", label: "Ideal for executive & airport travel" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
-      features: [
-        { title: "A commanding view", text: "Sit high, settle in and watch the city pass by — or close your eyes and let the journey take care of itself.", x: 32, y: 34, zoom: 1.8 },
-        { title: "Built for the long way", text: "A natural choice for airport runs and journeys beyond the city, where comfort over distance matters most.", x: 65, y: 50, zoom: 1.9 }
-      ] },
+      image: "assets/hero/frame-4-land-cruiser.webp", focus: "62% 55%",
+      alt: "A black Toyota Land Cruiser on a turntable in a dark private arrival hall, lit by warm wall lights",
+      sentence: "A settled, elevated ride for long days, airport runs and journeys beyond the city.",
+      points: [ { x: 79, y: 29 }, { x: 47, y: 41 }, { x: 57, y: 63 } ] },
     { id: "range-rover", name: "Range Rover", collection: "Prestige SUVs", word: "RANGE ROVER",
-      image: "assets/images/fleet-range-rover.jpg",
-      alt: "A black Range Rover on a polished forecourt outside a glass-fronted building at sunset, with a city skyline beyond",
-      intro: "Refined and quietly confident, the Range Rover brings a sense of occasion without ever feeling showy. A considered choice for executive engagements, private dinners and arrivals where first impressions matter.",
-      spots: [ { x: 24, y: 30, label: "Serene, refined cabin" }, { x: 70, y: 45, label: "Slim signature lighting", side: "left" }, { x: 40, y: 68, label: "Effortless, composed ride" } ],
-      stats: [ { value: "Prestige", label: "Collection" }, { value: "Executive", label: "Ideal for engagements & dinners" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
-      features: [
-        { title: "Refined, never showy", text: "Clean lines and a calm cabin for arrivals that set the tone without needing to announce themselves.", x: 70, y: 45, zoom: 2 },
-        { title: "Composed at every pace", text: "Smooth through city traffic and relaxed on the open road, so you arrive as composed as you left.", x: 40, y: 68, zoom: 2 }
-      ] },
+      image: "assets/hero/frame-2-range-rover.webp", focus: "62% 55%",
+      alt: "A black Range Rover on a turntable in a dark private arrival hall, lit by warm wall lights",
+      sentence: "Quietly confident comfort for engagements where first impressions matter.",
+      points: [ { x: 79, y: 29 }, { x: 46, y: 40 }, { x: 56, y: 62 } ] },
     { id: "mercedes-g-class", name: "Mercedes-Benz G-Class", collection: "Prestige SUVs", word: "G-CLASS",
-      image: "assets/images/fleet-g-class.jpg",
+      image: "assets/images/fleet-g-class.jpg", focus: "50% 60%",
       alt: "A black Mercedes-Benz G-Class under a softly lit arrival canopy at night",
-      intro: "An unmistakable silhouette for occasions that call for presence. The G-Class is a favourite for celebrations, special evenings and statement arrivals — always handled with the discretion and care that define a Westend journey.",
-      spots: [ { x: 28, y: 22, label: "Iconic upright silhouette" }, { x: 56, y: 49, label: "Signature round headlamps", side: "left" }, { x: 43, y: 68, label: "Composed on every surface" } ],
-      stats: [ { value: "Prestige", label: "Collection" }, { value: "Occasions", label: "Ideal for celebrations & arrivals" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
-      features: [
-        { title: "Signature round headlamps", text: "Classic round lamps and an upright stance make every arrival unmistakable — presence without a word being said.", x: 56, y: 49, zoom: 2.2 },
-        { title: "Composed on every surface", text: "Sure-footed on city streets and rougher roads alike, always driven with care and quiet confidence.", x: 43, y: 68, zoom: 2 }
-      ] },
+      sentence: "An unmistakable arrival for celebrations, evenings and statement occasions.",
+      points: [ { x: 24, y: 35 }, { x: 56, y: 49 }, { x: 43, y: 68 } ] },
     { id: "mercedes-suv", name: "Mercedes-Benz SUV", collection: "Prestige SUVs", word: "MERCEDES",
-      image: "assets/images/fleet-mercedes-suv.jpg",
-      alt: "A black Mercedes-Benz SUV beneath a warmly lit residence canopy at dusk, with palms and a waterfront skyline behind",
-      intro: "Spacious, comfortable and composed, our Mercedes-Benz SUVs suit executive days, family travel and airport arrivals. Let us know your plans and we will advise which vehicle in this collection best fits your journey.",
-      spots: [ { x: 22, y: 32, label: "Generous, comfortable cabin" }, { x: 76, y: 53, label: "The three-pointed star", side: "left" }, { x: 41, y: 68, label: "Smooth on longer journeys" } ],
-      stats: [ { value: "Prestige", label: "Collection" }, { value: "Family & airport", label: "Ideal for" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
-      features: [
-        { title: "Room to unwind", text: "A generous, comfortable cabin for families, small groups and long working days on the move.", x: 30, y: 34, zoom: 1.8 },
-        { title: "Mercedes-Benz composure", text: "Smooth and settled over longer journeys, with the reassurance of a marque known for comfort.", x: 76, y: 53, zoom: 2.1 }
-      ] },
+      image: "assets/hero/frame-3-mercedes-gls.webp", focus: "62% 55%",
+      alt: "A black Mercedes-Benz SUV on a turntable in a dark private arrival hall, lit by warm wall lights",
+      sentence: "Generous, composed comfort for families, small groups and airport arrivals.",
+      points: [ { x: 79, y: 29 }, { x: 47, y: 44 }, { x: 57, y: 63 } ] },
     { id: "mercedes-saloon", name: "Mercedes-Benz luxury saloon", collection: "Executive Saloons", word: "SALOON",
-      image: "assets/images/fleet-mercedes-saloon.jpg",
-      alt: "A chauffeur holding open the rear door of a black Mercedes-Benz luxury saloon at an evening venue, revealing a tan leather interior",
-      intro: "A Mercedes-Benz luxury saloon for executive travel, evening engagements and journeys where understated elegance is preferred. Quiet, composed and beautifully presented — a natural choice when you would rather arrive without announcement.",
-      spots: [ { x: 12, y: 60, label: "Understated elegance" }, { x: 66, y: 42, label: "Spacious rear cabin", side: "left" }, { x: 93, y: 24, label: "Your door, held open", side: "left" } ],
-      stats: [ { value: "Executive", label: "Collection" }, { value: "Evenings", label: "Ideal for business & engagements" }, { value: "Owned", label: "Westend fleet · maintained & presented by us" } ],
-      features: [
-        { title: "The rear cabin", text: "Settle into a quiet, beautifully finished rear seat — space to work, take a call or simply rest between engagements.", x: 66, y: 45, zoom: 2 },
-        { title: "Your door, held open", text: "A chauffeur who is there before you are, door open and ready — the small courtesies that make the difference.", x: 86, y: 40, zoom: 1.8 }
-      ] }
+      image: "assets/hero/frame-6-s-class.webp", focus: "62% 55%",
+      alt: "A black Mercedes-Benz luxury saloon on a turntable in a dark private arrival hall, lit by warm wall lights",
+      sentence: "Understated elegance and a quiet rear cabin for executive days and evenings.",
+      points: [ { x: 78, y: 35 }, { x: 47, y: 48 }, { x: 57, y: 62 } ] }
   ];
 </script>
 
@@ -1644,105 +1645,170 @@ document.addEventListener('DOMContentLoaded', function () {
     goToForm(carried.length ? 'Carried over from your quick enquiry: ' + carried.join(' · ') + '.' : '');
   });
 
-  /* ---------- Vehicle detail view ---------- */
+  /* ---------- Vehicle detail view (one screen, glass cards) ---------- */
   var dialog = $('#vehicle-dialog');
-  var vdScroll = $('#vd-scroll');
-  var vehicles = window.WESTEND_VEHICLES || [];
-  var current = 0, lastTrigger = null, returnFocusOnClose = true, featureObserver = null;
+  var vehicles = window.WESTEND_VEHICLES || [], serviceStats = window.WESTEND_SERVICE_STATS || [];
+  var vdImg = $('#vd-img'), vdLines = $('#vd-lines'), vdDots = $('#vd-dots'), vdCards = $('#vd-cards');
+  var current = 0, lastTrigger = null, returnFocusOnClose = true, switching = false, drawTimers = [];
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function narrow() { return window.matchMedia('(max-width: 760px)').matches; }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function clearDraw() { drawTimers.forEach(clearTimeout); drawTimers = []; }
 
-  function renderVehicle(index) {
+  function fillVehicle(index) {
     current = (index + vehicles.length) % vehicles.length;
-    var v = vehicles[current], next = vehicles[(current + 1) % vehicles.length];
+    var v = vehicles[current], stats = v.stats || serviceStats;
     $('#vd-collection').textContent = v.collection;
-    $('#vd-eyebrow').textContent = v.collection;
-    $('#vd-index').textContent = pad(current + 1) + ' / ' + pad(vehicles.length);
-    $('#vd-word').textContent = v.word;
     $('#vd-title').textContent = v.name;
-    $('#vd-desc').textContent = v.intro;
-    $('#vd-img').src = v.image; $('#vd-img').alt = v.alt;
+    $('#vd-word').textContent = v.word;
+    $('#vd-index').textContent = pad(current + 1) + ' / ' + pad(vehicles.length);
+    $('#vd-sentence').textContent = v.sentence;
     $('#vd-enquire').setAttribute('data-enquire-vehicle', v.id);
-    $('#vd-enquire-2').setAttribute('data-enquire-vehicle', v.id);
-    $('#vd-cta-title').textContent = 'Request the ' + v.name.replace(/^Mercedes-Benz luxury saloon$/, 'Mercedes-Benz saloon') + ' for your next journey.';
-    $('#vd-next-2').textContent = 'Next: ' + next.name + ' →';
-
-    var spots = $('#vd-spots'); spots.innerHTML = '';
-    v.spots.forEach(function (sp, k) {
-      var li = el('li', 'vd-spot' + (sp.side === 'left' ? ' vd-spot--left' : ''));
-      li.style.setProperty('--x', sp.x + '%'); li.style.setProperty('--y', sp.y + '%');
-      li.style.transitionDelay = (0.55 + k * 0.14) + 's';
-      li.appendChild(el('span', 'vd-spot__dot')); li.appendChild(el('span', 'vd-spot__label', sp.label));
-      spots.appendChild(li);
+    vdImg.style.objectPosition = v.focus || '50% 55%';
+    vdImg.alt = v.alt; vdImg.src = v.image;
+    vdDots.innerHTML = ''; vdCards.innerHTML = ''; vdLines.innerHTML = '';
+    v.points.forEach(function (pt, k) {
+      var dot = el('span', 'vd-dot', String(k + 1)); vdDots.appendChild(dot);
+      var st = stats[k] || {};
+      var card = el('button', 'vd-card vd-card--' + k);
+      card.type = 'button';
+      card.setAttribute('aria-expanded', 'false');
+      card.setAttribute('aria-controls', 'vd-detail-' + k);
+      card.appendChild(el('span', 'vd-card__num', pad(k + 1)));
+      card.appendChild(el('span', 'vd-card__value', st.value));
+      card.appendChild(el('span', 'vd-card__label', st.label));
+      var det = el('span', 'vd-card__detail', st.detail); det.id = 'vd-detail-' + k;
+      card.appendChild(det);
+      vdCards.appendChild(card);
+      var line = document.createElementNS(SVGNS, 'line'); vdLines.appendChild(line);
     });
+  }
 
-    var stats = $('#vd-stats'); stats.innerHTML = '';
-    v.stats.forEach(function (st, k) {
-      var d = el('div', 'vd-stat');
-      var dt = el('dt', 'vd-stat__label', st.label), dd = el('dd', 'vd-stat__value', st.value);
-      dd.style.margin = '0';
-      [dd, dt].forEach(function (n, m) { n.style.transitionDelay = (0.7 + k * 0.1 + m * 0.05) + 's'; });
-      d.appendChild(dd); d.appendChild(dt); stats.appendChild(d);
+  // Map a point on the photo (x/y %) to the screen, accounting for object-fit: cover.
+  function photoPoint(pt) {
+    var r = vdImg.getBoundingClientRect(), d = $('#vd-stage').getBoundingClientRect();
+    var nw = vdImg.naturalWidth || 16, nh = vdImg.naturalHeight || 9;
+    var sc = Math.max(r.width / nw, r.height / nh), w = nw * sc, h = nh * sc;
+    var pos = getComputedStyle(vdImg).objectPosition.split(' ');
+    var ox = (r.width - w) * (parseFloat(pos[0]) / 100), oy = (r.height - h) * (parseFloat(pos[1] || '50') / 100);
+    return { x: r.left - d.left + ox + w * pt.x / 100, y: r.top - d.top + oy + h * pt.y / 100 };
+  }
+  var targets = [];
+  function layoutVehicle(drawn) {
+    var v = vehicles[current], d = $('#vd-stage').getBoundingClientRect();
+    var dots = $$('.vd-dot', vdDots), cards = $$('.vd-card', vdCards), lines = $$('line', vdLines);
+    targets = [];
+    v.points.forEach(function (pt, k) {
+      var p = photoPoint(pt);
+      dots[k].style.left = p.x + 'px'; dots[k].style.top = p.y + 'px';
+      var c = cards[k].getBoundingClientRect();
+      var cx = Math.max(c.left - d.left, Math.min(p.x, c.right - d.left));
+      var cy = Math.max(c.top - d.top, Math.min(p.y, c.bottom - d.top));
+      targets.push({ x1: p.x, y1: p.y, x2: cx, y2: cy });
+      var L = lines[k];
+      L.setAttribute('x1', p.x); L.setAttribute('y1', p.y);
+      L.setAttribute('x2', drawn ? cx : p.x); L.setAttribute('y2', drawn ? cy : p.y);
     });
-
-    var feats = $('#vd-features'); feats.innerHTML = '';
-    v.features.forEach(function (f, k) {
-      var sec = el('section', 'vd-feature');
-      var text = el('div', 'vd-feature__text');
-      text.appendChild(el('span', 'vd-feature__num', pad(k + 1)));
-      text.appendChild(el('h3', 'vd-feature__title', f.title));
-      text.appendChild(el('p', null, f.text));
-      var fig = el('figure', 'vd-feature__media');
-      var img = el('img'); img.src = v.image; img.alt = ''; img.loading = 'lazy';
-      img.style.objectPosition = f.x + '% ' + f.y + '%';
-      img.style.transformOrigin = f.x + '% ' + f.y + '%';
-      img.style.setProperty('--zoom', f.zoom || 2);
-      fig.appendChild(img);
-      sec.appendChild(text); sec.appendChild(fig); feats.appendChild(sec);
+  }
+  // Dots appear, the dotted lines draw outward, then each glass card pops in (≈120 ms apart).
+  function revealDetails(instant) {
+    clearDraw();
+    var dots = $$('.vd-dot', vdDots), cards = $$('.vd-card', vdCards), lines = $$('line', vdLines);
+    if (instant) { layoutVehicle(true); dots.concat(cards).forEach(function (n) { n.classList.add('is-in'); }); return; }
+    layoutVehicle(false);
+    targets.forEach(function (t, k) {
+      drawTimers.push(setTimeout(function () {
+        dots[k].classList.add('is-in');
+        var start = performance.now(), dur = narrow() ? 0 : 420;
+        (function step(now) {
+          var q = dur ? Math.min(1, (now - start) / dur) : 1, e = 1 - Math.pow(1 - q, 3);
+          lines[k].setAttribute('x2', t.x1 + (t.x2 - t.x1) * e);
+          lines[k].setAttribute('y2', t.y1 + (t.y2 - t.y1) * e);
+          if (q < 1) requestAnimationFrame(step); else cards[k].classList.add('is-in');
+        })(start);
+      }, k * 120 + (narrow() ? 0 : k * 160)));
     });
-
-    // Entrance: hero elements and feature markers pop in; feature sections reveal as they scroll in.
-    vdScroll.scrollTop = 0;
-    var animate = !prefersReduced;
-    dialog.classList.toggle('has-motion', animate);
-    if (featureObserver) featureObserver.disconnect();
-    if (animate && 'IntersectionObserver' in window) {
-      dialog.classList.add('no-trans', 'is-animating');
-      void dialog.offsetWidth;
-      dialog.classList.remove('no-trans');
-      requestAnimationFrame(function () { requestAnimationFrame(function () { dialog.classList.remove('is-animating'); }); });
-      featureObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); featureObserver.unobserve(en.target); } });
-      }, { root: vdScroll, threshold: .25 });
-      $$('.vd-feature', feats).forEach(function (f) { featureObserver.observe(f); });
-    } else {
-      dialog.classList.remove('has-motion', 'is-animating');
-    }
+  }
+  function whenImageReady(cb) {
+    var done = false, finish = function () { if (!done) { done = true; cb(); } };
+    if (vdImg.complete && vdImg.naturalWidth) return finish();
+    vdImg.addEventListener('load', finish, { once: true });
+    vdImg.addEventListener('error', finish, { once: true });
+    setTimeout(finish, 1500);
   }
 
   function openVehicle(id, trigger) {
     var idx = vehicles.map(function (v) { return v.id; }).indexOf(id);
     if (idx < 0) return;
     lastTrigger = trigger; returnFocusOnClose = true;
-    renderVehicle(idx);
-    if (!dialog.open) { dialog.showModal(); lockScroll(); }
+    dialog.classList.add('no-trans');
+    if (!prefersReduced) dialog.classList.add('is-entering');
+    fillVehicle(idx);
+    dialog.showModal(); lockScroll();
     $('#vd-close').focus();
+    void dialog.offsetWidth; dialog.classList.remove('no-trans');
+    whenImageReady(function () {
+      if (prefersReduced) { revealDetails(true); return; }
+      requestAnimationFrame(function () { dialog.classList.remove('is-entering'); });
+      drawTimers.push(setTimeout(function () { revealDetails(false); }, 450));
+    });
   }
+  function switchVehicle(step) {
+    if (switching || !dialog.open) return;
+    collapseCards();
+    if (prefersReduced) { fillVehicle(current + step); whenImageReady(function () { revealDetails(true); }); announce(); return; }
+    switching = true; clearDraw();
+    dialog.classList.add('is-switching');                 // details fade, the hall falls into darkness
+    setTimeout(function () {
+      dialog.classList.add('no-trans', 'is-entering');
+      fillVehicle(current + step);
+      void dialog.offsetWidth; dialog.classList.remove('no-trans');
+      whenImageReady(function () {
+        dialog.classList.remove('is-switching', 'is-entering');  // the next car emerges from darkness
+        switching = false; announce();
+        drawTimers.push(setTimeout(function () { revealDetails(false); }, 420));
+      });
+    }, 400);
+  }
+  function announce() { $('#vd-status').textContent = vehicles[current].name + ', ' + (current + 1) + ' of ' + vehicles.length; }
+  function collapseCards(except) {
+    $$('.vd-card', vdCards).forEach(function (c) { if (c !== except) c.setAttribute('aria-expanded', 'false'); });
+  }
+
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-view-vehicle]');
-    if (b) openVehicle(b.closest('.vehicle').getAttribute('data-vehicle'), b);
+    if (b) openVehicle(b.getAttribute('data-vehicle-id') || b.closest('.vehicle').getAttribute('data-vehicle'), b);
+  });
+  vdCards.addEventListener('click', function (e) {
+    var c = e.target.closest('.vd-card'); if (!c) return;
+    var open = c.getAttribute('aria-expanded') !== 'true';
+    collapseCards(c); c.setAttribute('aria-expanded', String(open));
+    setTimeout(function () { layoutVehicle(true); }, 320);   // keep lines attached as the card grows
   });
   $('#vd-close').addEventListener('click', function () { dialog.close(); });
-  $('#vd-prev').addEventListener('click', function () { renderVehicle(current - 1); });
-  $('#vd-next').addEventListener('click', function () { renderVehicle(current + 1); });
-  $('#vd-next-2').addEventListener('click', function () { renderVehicle(current + 1); $('#vd-title').setAttribute('tabindex', '-1'); $('#vd-title').focus(); });
-  dialog.addEventListener('keydown', function (e) {
-    if (e.target.closest('input, textarea, select')) return;
-    if (e.key === 'ArrowRight') renderVehicle(current + 1);
-    if (e.key === 'ArrowLeft') renderVehicle(current - 1);
+  $('#vd-prev').addEventListener('click', function () { switchVehicle(-1); });
+  $('#vd-next').addEventListener('click', function () { switchVehicle(1); });
+  dialog.addEventListener('cancel', function (e) {          // Escape collapses an open card first
+    var openCard = $('.vd-card[aria-expanded="true"]', vdCards);
+    if (openCard) { e.preventDefault(); openCard.setAttribute('aria-expanded', 'false'); openCard.focus(); }
   });
+  dialog.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); switchVehicle(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); switchVehicle(-1); }
+  });
+  (function swipe() {
+    var sx = 0, sy = 0, stage = $('#vd-stage');
+    stage.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    stage.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) switchVehicle(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  })();
+  window.addEventListener('resize', function () { if (dialog.open && !switching) layoutVehicle(true); });
   dialog.addEventListener('close', function () {
+    clearDraw(); switching = false;
+    dialog.classList.remove('is-switching', 'is-entering');
     unlockScroll();
-    if (featureObserver) featureObserver.disconnect();
     if (returnFocusOnClose && lastTrigger) lastTrigger.focus({ preventScroll: true });
   });
 
@@ -1936,17 +2002,69 @@ document.addEventListener('DOMContentLoaded', function () {
     gsap.set(lines, { yPercent: 110 });
     gsap.set(fades, { opacity: 0, y: 16 });
     gsap.set(mediaInner, { scale: 1.06 });
+    gsap.set('.hero__intro-dark', { opacity: .88 });
     gsap.timeline({ defaults: { ease: 'power3.out' } })
       .to(mediaInner, { scale: 1, duration: 1.5, ease: 'power2.out' }, 0)
+      .to('.hero__intro-dark', { opacity: 0, duration: 1.5, ease: 'power2.inOut' }, 0)
       .to(fades[0], { opacity: 1, y: 0, duration: .7 }, 0)
       .to(lines, { yPercent: 0, duration: .9, stagger: .12, ease: 'power4.out' }, .1)
       .to(fades.slice(1), { opacity: 1, y: 0, duration: .7, stagger: .08 }, .55);
 
-    /* Hero scroll (scrubbed) */
-    gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
-      .to('.hero__media', { scale: 1.08, ease: 'none' }, 0)
-      .to('.hero__word-inner', { yPercent: -45, ease: 'none' }, 0)
-      .to('.hero__content', { opacity: 0, y: -48, ease: 'none', duration: .6 }, 0);
+    /* Hero sequence: the pinned hero steps through the fleet keyframes as you scroll.
+       Each change is a deliberate fade through darkness between still frames (no morphing). */
+    (function heroSequence() {
+      var frames = $$('.hero__frame'), words = $$('.hero__word-item');
+      var dark = $('.hero__dark'), nameEl = $('.hero__now-name'), countEl = $('.hero__now-count');
+      var link = $('.hero__now-link'), bar = $('.hero__progress span');
+      var n = frames.length, shown = 0;
+      if (n < 2) return;
+      ScrollTrigger.config({ ignoreMobileResize: true });
+
+      var loaded = false;
+      function loadFrames() {
+        if (loaded) return; loaded = true;
+        frames.forEach(function (f) { var src = f.getAttribute('data-src'); if (src) f.src = src; });
+      }
+      if (document.readyState === 'complete') setTimeout(loadFrames, 250);
+      else window.addEventListener('load', function () { setTimeout(loadFrames, 250); });
+
+      function show(i) {
+        if (i === shown) return; shown = i;
+        nameEl.textContent = frames[i].getAttribute('data-name');
+        countEl.textContent = pad(i + 1) + ' / ' + pad(n);
+        link.setAttribute('data-vehicle-id', frames[i].getAttribute('data-vehicle'));
+      }
+      countEl.textContent = '01 / ' + pad(n);
+
+      var mobile = window.matchMedia('(max-width: 720px)').matches;
+      var per = mobile ? .5 : .62;   // viewport heights of scroll per vehicle change
+      var tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: '.hero', start: 'top top',
+          end: function () { return '+=' + Math.round(window.innerHeight * per * (n - 1 + .4)); },
+          pin: true, scrub: .5, anticipatePin: 1, invalidateOnRefresh: true,
+          onUpdate: function (self) {
+            loadFrames();
+            bar.style.transform = 'scaleX(' + self.progress.toFixed(4) + ')';
+            var t = tl.time();
+            show(t < .55 ? 0 : Math.min(n - 1, Math.floor(t - .55) + 1));
+          }
+        }
+      });
+      for (var i = 0; i < n - 1; i++) {
+        var t = .2 + i;
+        tl.to(dark, { opacity: .96, duration: .35, ease: 'power1.in' }, t)
+          .to(frames[i], { scale: 1.025, duration: .35 }, t)
+          .to(words[i], { autoAlpha: 0, yPercent: -12, duration: .3 }, t + .02)
+          .set(frames[i], { autoAlpha: 0 }, t + .35)
+          .set(frames[i + 1], { autoAlpha: 1, scale: 1.025 }, t + .35)
+          .to(frames[i + 1], { scale: 1, duration: .45, ease: 'power1.out' }, t + .35)
+          .to(dark, { opacity: 0, duration: .45, ease: 'power1.out' }, t + .35)
+          .fromTo(words[i + 1], { autoAlpha: 0, yPercent: 12 }, { autoAlpha: 1, yPercent: 0, duration: .4, immediateRender: false }, t + .4);
+      }
+      tl.to({}, { duration: .4 });
+    })();
 
     /* Section reveals: 24px rise + fade, 80ms stagger */
     function batchReveal(els) {
@@ -2076,7 +2194,7 @@ document.addEventListener('DOMContentLoaded', function () {
     root.classList.remove('motion-pending');
     try {
       ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
-      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content', { clearProps: 'all' });
+      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content, .hero__frame, .hero__dark, .hero__intro-dark, .hero__word-item', { clearProps: 'all' });
     } catch (e2) {}
   }
 });
