@@ -459,176 +459,180 @@ figure { margin: 0; }
 .fleet.is-pinned .fleet__note { padding-top: 0; }
 
 /* =========================================================================
-   Vehicle detail view — one screen, glass detail cards around the car
+   Vehicle detail view — dashboard: collection sidebar, stat tiles, car, plan + features panels
    ========================================================================= */
 .vd {
   width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
-  background: var(--obsidian); color: var(--ivory); overflow: hidden;
+  background: #050505; color: var(--ivory); overflow: hidden;
 }
-.vd::backdrop { background: var(--obsidian); }
-.vd[open] { animation: fade-in 400ms var(--ease); }
+.vd::backdrop { background: #050505; }
+.vd[open] { display: grid; grid-template-columns: clamp(240px, 21vw, 310px) minmax(0, 1fr); animation: fade-in 400ms var(--ease); }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 .vd.no-trans, .vd.no-trans * { transition: none !important; }
+.vd svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 
-.vd__stage { position: absolute; inset: 0; overflow: hidden; }
-.vd__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease); }
-.vd__shade {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 34% 12% at 58% 80%, rgba(201, 170, 115, .16), transparent 70%),
-    linear-gradient(180deg, rgba(9, 9, 9, .78) 0%, rgba(9, 9, 9, 0) 28%, rgba(9, 9, 9, 0) 60%, rgba(9, 9, 9, .88) 100%);
+/* Sidebar */
+.vd__side { display: flex; flex-direction: column; gap: 2rem; padding: 2rem 1.25rem 1.75rem; background: #0c0c0b; border-right: 1px solid var(--line-dark); overflow-y: auto; }
+.vd__brand { padding: 0 .75rem; display: grid; gap: .35rem; line-height: 1; }
+.vd__brand b { font-family: var(--serif); font-weight: 500; font-size: 1.15rem; letter-spacing: .3em; }
+.vd__brand span { font-size: .5rem; letter-spacing: .6em; color: var(--gold); }
+.vd__side-label { padding: 0 .75rem; font-size: .62rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--stone); margin-bottom: -1.25rem; }
+.vd__list { display: grid; gap: .25rem; }
+.vd-car {
+  display: flex; align-items: center; gap: .9rem; width: 100%; min-height: 58px; padding: .6rem .75rem; text-align: left;
+  background: none; border: 1px solid transparent; border-radius: 14px; color: rgba(243, 239, 230, .62);
+  transition: background-color var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease);
+}
+.vd-car svg { width: 22px; height: 22px; flex: none; }
+.vd-car__text { display: grid; gap: .15rem; min-width: 0; }
+.vd-car__name { font-size: .95rem; color: inherit; }
+.vd-car__meta { font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone); }
+.vd-car:hover { color: var(--ivory); background: rgba(243, 239, 230, .04); }
+.vd-car[aria-current="true"] { color: var(--ivory); background: rgba(243, 239, 230, .07); border-color: rgba(201, 170, 115, .4); }
+.vd-car[aria-current="true"] svg { color: var(--gold); }
+.vd__concierge { margin-top: auto; display: grid; justify-items: center; gap: .8rem; text-align: center; }
+.vd__concierge-btn {
+  width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: none;
+  border: 1px solid rgba(243, 239, 230, .3); color: var(--ivory); transition: border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease);
+}
+.vd__concierge-btn:hover { border-color: var(--gold); color: var(--gold); }
+.vd__concierge-btn svg { width: 24px; height: 24px; }
+.vd__concierge p { font-size: .85rem; color: rgba(243, 239, 230, .7); }
+
+/* Main */
+.vd__main { position: relative; min-width: 0; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: clamp(.75rem, 2vh, 1.4rem); padding: clamp(1.25rem, 3vh, 2rem) clamp(1.25rem, 3vw, 3rem); overflow: hidden; }
+.vd__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; }
+.vd__heading { display: grid; gap: .5rem; min-width: 0; }
+.vd__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.3rem + 2vw, 3.2rem); line-height: 1; }
+.vd__controls { display: flex; align-items: center; gap: .4rem; flex: none; }
+.vd__index { font-family: var(--serif); letter-spacing: .12em; color: var(--gold); margin: 0 .4rem; min-width: 4.2rem; text-align: center; }
+.vd__icon {
+  width: 48px; height: 48px; display: inline-grid; place-items: center; border-radius: 14px;
+  background: rgba(243, 239, 230, .06); border: 1px solid var(--line-dark); color: var(--ivory);
+  transition: border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease), background-color var(--t-hover) var(--ease);
+}
+.vd__icon:hover { border-color: rgba(201, 170, 115, .6); color: var(--gold); }
+.vd__icon svg { width: 18px; height: 18px; }
+.vd__close { margin-left: .4rem; }
+
+.vd__tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; text-align: center; }
+.vd-tile { display: grid; justify-items: center; gap: .3rem; transition: opacity 600ms var(--ease), transform 700ms var(--ease); }
+.vd-tile__icon { width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; margin-bottom: .55rem; background: #151514; border: 1px solid var(--line-dark); color: var(--ivory); }
+.vd-tile__icon svg { width: 24px; height: 24px; }
+.vd-tile__value { font-weight: 300; font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.4rem); line-height: 1.05; letter-spacing: -.01em; }
+.vd-tile__label { font-size: .9rem; color: var(--stone); }
+
+.vd__car { position: relative; min-height: 160px; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); }
+.vd__img {
+  position: absolute; inset: -22% -12%; width: 124%; height: 144%; object-fit: contain; object-position: 50% 50% !important;
+  -webkit-mask-image: radial-gradient(ellipse 46% 40% at 50% 50%, #000 60%, transparent 100%);
+  mask-image: radial-gradient(ellipse 46% 40% at 50% 50%, #000 60%, transparent 100%);
+  transition: transform 900ms var(--ease), opacity 700ms var(--ease);
 }
 .vd__word {
-  position: absolute; left: 50%; top: 13%; transform: translateX(-50%); margin: 0; pointer-events: none; user-select: none;
-  font-family: var(--serif); font-weight: 300; line-height: .8; letter-spacing: .04em; white-space: nowrap;
-  font-size: clamp(5rem, 15vw, 16rem); color: rgba(243, 239, 230, .07);
-  transition: transform 900ms var(--ease), opacity 900ms var(--ease);
+  position: absolute; left: 50%; top: 4%; transform: translateX(-50%); margin: 0; pointer-events: none; user-select: none; white-space: nowrap;
+  font-family: var(--serif); font-weight: 300; line-height: .8; letter-spacing: .04em; font-size: clamp(4rem, 11vw, 11rem); color: rgba(243, 239, 230, .07);
+  transition: opacity 900ms var(--ease);
 }
 .vd__dark { position: absolute; inset: 0; background: #050505; opacity: 0; pointer-events: none; transition: opacity 380ms var(--ease); }
-.vd__lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; transition: opacity 250ms var(--ease); }
-.vd__lines line { stroke: var(--gold); stroke-width: 1.6; stroke-dasharray: 1.5 5; stroke-linecap: round; }
-.vd__dots { position: absolute; inset: 0; pointer-events: none; }
-.vd-dot {
-  position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%;
-  background: var(--gold); box-shadow: 0 0 0 4px rgba(201, 170, 115, .28);
-  transform: scale(0); transition: transform 380ms cubic-bezier(.34, 1.56, .64, 1), opacity 250ms var(--ease);
-  display: grid; place-items: center; font-size: 0; color: var(--obsidian); font-weight: 600;
-}
-.vd-dot.is-in { transform: scale(1); }
-.vd-dot::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--gold); animation: spot-pulse 2.2s var(--ease) infinite; }
-@keyframes spot-pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
 
-.vd__top {
-  position: absolute; top: 0; left: 0; right: 0; z-index: 3;
-  display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem;
-  padding: clamp(1.25rem, 3vh, 2rem) var(--gutter) 0;
-}
-.vd__heading { display: grid; gap: .7rem; }
-.vd__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.3rem + 2.2vw, 3.6rem); line-height: 1; }
-.vd__controls { display: flex; align-items: center; gap: .25rem; flex: none; }
-.vd__index { font-family: var(--serif); letter-spacing: .12em; color: var(--gold); margin: 0 .5rem; min-width: 4.5rem; text-align: center; }
-.vd__icon {
-  width: 48px; height: 48px; display: inline-grid; place-items: center; background: none;
-  border: 1px solid transparent; color: var(--ivory); transition: border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease);
-}
-.vd__icon:hover { border-color: var(--line-dark); color: var(--gold); }
-.vd__icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.2; }
-.vd__close { margin-left: .75rem; }
-
-/* Glass detail cards */
-.vd__cards { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
-.vd-card {
-  position: absolute; pointer-events: auto; width: 15.5rem; text-align: left; font: inherit;
-  display: grid; gap: .35rem; padding: 1.05rem 1.25rem 1.1rem; color: var(--ivory);
-  background: rgba(20, 18, 15, .26); border: 1px solid rgba(243, 239, 230, .2); border-radius: 16px;
+.vd__panels { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 1rem; transition: opacity 600ms var(--ease), transform 700ms var(--ease); }
+.vd-panel { position: relative; overflow: hidden; border-radius: 18px; border: 1px solid var(--line-dark); background: #0c0c0b; padding: 1.1rem 1.25rem 1.2rem; }
+.vd-panel__title { font-size: .62rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--gold); margin-bottom: .75rem; }
+/* Plan panel: frosted card over a blurred copy of the vehicle photograph */
+.vd-plan { padding: .9rem; display: grid; }
+.vd-plan__bg { position: absolute; inset: -30px; background-size: cover; background-position: center; filter: blur(16px) brightness(.45) saturate(1.2); }
+.vd-plan__card {
+  position: relative; display: grid; gap: .7rem; padding: 1rem 1.1rem 1.1rem; border-radius: 14px;
+  background: rgba(243, 239, 230, .1); border: 1px solid rgba(243, 239, 230, .2);
   -webkit-backdrop-filter: blur(18px) saturate(140%); backdrop-filter: blur(18px) saturate(140%);
-  box-shadow: inset 0 1px 0 rgba(201, 170, 115, .55), 0 24px 48px -24px rgba(0, 0, 0, .7);
-  opacity: 0; transform: scale(.94) translateY(6px);
-  transition: opacity 380ms var(--ease), transform 420ms cubic-bezier(.34, 1.4, .64, 1), border-color var(--t-hover) var(--ease), background-color var(--t-hover) var(--ease);
+  box-shadow: inset 0 1px 0 rgba(243, 239, 230, .18);
 }
-@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) { .vd-card { background: rgba(9, 9, 9, .8); } }
-.vd-card.is-in { opacity: 1; transform: none; }
-.vd-card:hover, .vd-card[aria-expanded="true"] { border-color: rgba(201, 170, 115, .6); background-color: rgba(20, 18, 15, .4); }
-.vd-card:focus-visible { outline-offset: 4px; border-radius: 16px; }
-.vd-card__value, .vd-card__label, .vd-card__detail { text-shadow: 0 1px 8px rgba(0, 0, 0, .55); }
-.vd-card__num { font-family: var(--serif); font-size: .85rem; letter-spacing: .14em; color: var(--gold); }
-.vd-card__value { font-family: var(--serif); font-size: 1.55rem; line-height: 1.1; }
-.vd-card__label { font-size: .62rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: rgba(243, 239, 230, .72); }
-.vd-card__detail { max-height: 0; overflow: hidden; opacity: 0; font-size: .86rem; line-height: 1.5; color: rgba(243, 239, 230, .88); transition: max-height 300ms var(--ease), opacity 300ms var(--ease), margin 300ms var(--ease); }
-.vd-card[aria-expanded="true"] .vd-card__detail { max-height: 6rem; opacity: 1; margin-top: .35rem; }
-.vd-card--0 { top: 14%; right: var(--gutter); }
-.vd-card--1 { top: 42%; left: var(--gutter); }
-.vd-card--2 { bottom: 15%; left: 46%; }
-
-.vd__bottom {
-  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
-  display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem;
-  padding: 0 var(--gutter) clamp(1.5rem, 4vh, 2.5rem);
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) { .vd-plan__card { background: rgba(30, 28, 25, .92); } }
+.vd-plan__card h3 { font-family: var(--serif); font-weight: 400; font-size: 1.35rem; line-height: 1.1; }
+.vd-plan__card > p { font-size: .8rem; color: rgba(243, 239, 230, .72); margin-top: -.35rem; }
+.vd-plan__row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+.vd-pill { position: relative; }
+.vd-pill input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.vd-pill span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 1rem; border-radius: 999px; border: 1px solid rgba(243, 239, 230, .3); font-size: .82rem; transition: background-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease); }
+.vd-pill input:checked + span { background: var(--ivory); color: var(--obsidian); border-color: var(--ivory); }
+.vd-pill input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+.vd-plan select {
+  flex: 1 1 10rem; min-height: 40px; border-radius: 999px; padding: 0 2.2rem 0 1rem; font-size: .82rem; color: var(--ivory);
+  background: rgba(9, 9, 9, .35) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23F3EFE6' stroke-width='1.3'/%3E%3C/svg%3E") no-repeat right 1rem center / 10px;
+  border: 1px solid rgba(243, 239, 230, .3); -webkit-appearance: none; appearance: none;
 }
-.vd__sentence { max-width: 30rem; font-size: 1.02rem; color: rgba(243, 239, 230, .88); }
-.vd__note { margin-top: .5rem; font-size: .72rem; color: var(--stone); }
-.vd__bottom .btn { flex: none; }
+.vd-plan select option { color: #090909; }
+.vd-plan .btn { border-radius: 999px; min-height: 44px; }
+/* Features panel */
+.vd-feats { display: grid; }
+.vd-feat {
+  width: 100%; display: grid; grid-template-columns: auto auto 1fr auto; align-items: baseline; gap: .7rem; text-align: left;
+  padding: .7rem 0; background: none; border: 0; border-top: 1px solid var(--line-dark); color: var(--ivory);
+}
+.vd-feats li:first-child .vd-feat { border-top: 0; padding-top: .2rem; }
+.vd-feat__num { font-family: var(--serif); font-size: .8rem; color: var(--gold); letter-spacing: .1em; }
+.vd-feat__value { font-size: .98rem; }
+.vd-feat__label { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--stone); justify-self: start; }
+.vd-feat__chev { width: 14px; height: 14px; color: var(--stone); transition: transform 300ms var(--ease); align-self: center; }
+.vd-feat[aria-expanded="true"] .vd-feat__chev { transform: rotate(180deg); color: var(--gold); }
+.vd-feat:hover .vd-feat__value { color: var(--gold); }
+.vd-feat__detail { max-height: 0; overflow: hidden; opacity: 0; font-size: .84rem; color: rgba(243, 239, 230, .78); transition: max-height 320ms var(--ease), opacity 320ms var(--ease), padding 320ms var(--ease); padding-left: 1.6rem; }
+.vd-feat[aria-expanded="true"] + .vd-feat__detail { max-height: 6rem; opacity: 1; padding-bottom: .7rem; }
+.vd__note { margin-top: .6rem; font-size: .68rem; color: var(--stone); }
 
-/* Entrance and vehicle-switch states */
-.vd.is-entering .vd__img { transform: scale(1.04); }
-.vd.is-entering .vd__word { opacity: 0; transform: translate(-46%, 0); }
-.vd.is-switching .vd-card, .vd.is-switching .vd-dot, .vd.is-switching .vd__lines { opacity: 0; transition-duration: 250ms; }
+/* Entrance and switching */
+.vd.is-entering .vd__img { opacity: 0; transform: scale(1.04); }
+.vd.is-entering .vd__word { opacity: 0; }
+.vd.is-entering .vd-tile { opacity: 0; transform: translateY(14px); }
+.vd.is-entering .vd__panels { opacity: 0; transform: translateY(16px); }
 .vd.is-switching .vd__dark { opacity: 1; }
+.vd.is-switching .vd-tile { opacity: 0; transition-duration: 250ms; }
 
-/* Phones (and short landscape screens): car fills the middle, compact glass cards pop up on it */
+/* Shorter desktop screens */
+@media (min-width: 901px) and (max-height: 820px) {
+  .vd-tile__icon { width: 48px; height: 48px; margin-bottom: .3rem; }
+  .vd-tile__icon svg { width: 20px; height: 20px; }
+  .vd-tile__value { font-size: clamp(1.3rem, 1rem + 1vw, 1.9rem); }
+  .vd-tile__label { font-size: .8rem; }
+  .vd__note { display: none; }
+  .vd__side { gap: 1.4rem; padding-top: 1.5rem; }
+  .vd-car { min-height: 48px; padding: .45rem .75rem; }
+  .vd__concierge-btn { width: 48px; height: 48px; }
+  .vd__concierge p { font-size: .78rem; }
+}
+
+/* Phones, tablets and short landscape screens: one scrolling column, vehicles as a swipeable row */
 @media (max-width: 900px), (max-height: 560px) {
-  .vd[open] { display: flex; flex-direction: column; }
-  .vd__top { position: relative; order: 0; flex: none; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding: max(.85rem, env(safe-area-inset-top)) var(--gutter) .6rem; }
-  .vd__heading { gap: .35rem; flex: 1 1 12rem; min-width: 0; }
-  .vd__heading .eyebrow { font-size: .62rem; letter-spacing: .22em; white-space: nowrap; }
-  .vd__heading .eyebrow::before { width: 1.5rem; }
-  .vd__title { font-size: clamp(1.45rem, 1.1rem + 2vw, 1.9rem); line-height: 1.05; }
-  .vd__controls { margin-left: auto; }
+  .vd[open] { display: block; overflow-y: auto; overscroll-behavior: contain; }
+  .vd__side { flex-direction: column; gap: .9rem; padding: max(1rem, env(safe-area-inset-top)) 0 .25rem; border-right: 0; border-bottom: 1px solid var(--line-dark); overflow: visible; }
+  .vd__brand, .vd__concierge { display: none; }
+  .vd__side-label { padding: 0 var(--gutter); margin: 0; }
+  .vd__list { display: flex; gap: .5rem; overflow-x: auto; padding: 0 var(--gutter) .75rem; scroll-padding: 0 var(--gutter); scrollbar-width: none; }
+  .vd__list::-webkit-scrollbar { display: none; }
+  .vd__list li { flex: none; }
+  .vd-car { min-height: 48px; padding: .5rem .9rem; border-color: var(--line-dark); white-space: nowrap; }
+  .vd-car__meta { display: none; }
+  .vd__main { display: flex; flex-direction: column; gap: 1.25rem; overflow: visible; padding: 1.1rem var(--gutter) max(1.5rem, env(safe-area-inset-bottom)); }
+  .vd__head { align-items: center; }
+  .vd__title { font-size: clamp(1.6rem, 1.2rem + 2vw, 2.2rem); }
   .vd__controls .vd__index { display: none; }
   .vd__icon { width: 44px; height: 44px; }
-  .vd__close { margin-left: .1rem; }
-  .vd__stage { position: relative; order: 1; flex: 1 1 auto; height: auto; min-height: calc(min(78vw, 52vh) + 6.5rem); }
-  .vd__img {
-    inset: auto 0; top: calc(50% - min(39vw, 26vh)); height: min(78vw, 52vh); object-position: 85% 55% !important;
-    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
-    mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
-  }
-  .vd__shade { background: radial-gradient(ellipse 40% 14% at 58% 82%, rgba(201, 170, 115, .16), transparent 70%), linear-gradient(180deg, rgba(9, 9, 9, .45) 0%, rgba(9, 9, 9, 0) 22%, rgba(9, 9, 9, 0) 72%, rgba(9, 9, 9, .9) 100%); }
-  .vd__word { top: calc(50% - min(39vw, 26vh)); font-size: 21vw; }
-  .vd-dot { width: 18px; height: 18px; margin: -9px 0 0 -9px; font-size: .6rem; }
-  .vd-card { width: auto; max-width: 48%; padding: .45rem .7rem .5rem; gap: .05rem; border-radius: 12px; grid-template-columns: auto 1fr; column-gap: .45rem; align-items: baseline; }
-  .vd-card__num { font-size: .68rem; }
-  .vd-card__value { font-size: .98rem; }
-  .vd-card__label, .vd-card__detail { grid-column: 1 / -1; }
-  .vd-card__label { display: none; font-size: .5rem; letter-spacing: .18em; }
-  .vd-card[aria-expanded="true"] .vd-card__label { display: block; }
-  /* An opened card becomes a frosted glass panel over the car */
-  .vd__cards::before { content: ""; position: absolute; inset: 0; background: rgba(9, 9, 9, .35); opacity: 0; transition: opacity 300ms var(--ease); pointer-events: none; }
-  .vd__stage.has-open .vd__cards { pointer-events: auto; }
-  .vd__stage.has-open .vd__cards::before { opacity: 1; }
-  .vd__stage.has-open .vd__lines { opacity: 0; }
-  .vd__stage.has-open .vd-card:not([aria-expanded="true"]) { opacity: .35; }
-  .vd-card[aria-expanded="true"] {
-    top: 50% !important; bottom: auto !important; left: var(--gutter) !important; right: var(--gutter) !important;
-    max-width: none; z-index: 5; transform: translateY(-50%); padding: 1.15rem 1.25rem 1.25rem; gap: .25rem; border-radius: 18px;
-    background-color: rgba(20, 18, 15, .34); border-color: rgba(201, 170, 115, .55);
-    -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%);
-    box-shadow: inset 0 1px 0 rgba(201, 170, 115, .6), 0 30px 60px -20px rgba(0, 0, 0, .8);
-    animation: glass-in 320ms cubic-bezier(.34, 1.4, .64, 1);
-  }
-  .vd-card[aria-expanded="true"] .vd-card__value { font-size: 1.5rem; }
-  .vd-card[aria-expanded="true"] .vd-card__label { font-size: .58rem; margin-top: .15rem; }
-  .vd-card[aria-expanded="true"] .vd-card__detail { font-size: .9rem; max-height: 8rem; margin-top: .5rem; }
-  .vd-card[aria-expanded="true"]::after { content: "Tap to close"; grid-column: 1 / -1; margin-top: .6rem; font-size: .55rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(243, 239, 230, .55); }
-  @keyframes glass-in { from { opacity: 0; transform: translateY(-46%) scale(.96); } to { opacity: 1; transform: translateY(-50%) scale(1); } }
-  .vd__dots { pointer-events: none; }
-  .vd-dot { pointer-events: auto; cursor: pointer; }
-  .vd-card__detail { font-size: .76rem; }
-  .vd-card[aria-expanded="true"] .vd-card__detail { margin-top: .2rem; }
-  .vd-card--0 { top: .5rem; right: var(--gutter); }
-  .vd-card--1 { top: auto; bottom: .5rem; left: var(--gutter); }
-  .vd-card--2 { bottom: .5rem; right: var(--gutter); left: auto; }
-  .vd__bottom { position: relative; order: 3; flex-direction: column; align-items: stretch; gap: .9rem; padding: .75rem var(--gutter) max(1.1rem, env(safe-area-inset-bottom)); }
-  .vd__sentence { font-size: .95rem; }
-  .vd__bottom .btn { width: 100%; }
+  .vd__car { order: -1; height: min(62vw, 46vh); min-height: 200px; margin: 0 calc(var(--gutter) * -1); }
+  .vd__head { order: -2; }
+  .vd__img { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 82% 55% !important; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); }
+  .vd__word { font-size: 22vw; top: 2%; }
+  .vd__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem .75rem; }
+  .vd-tile__icon { width: 52px; height: 52px; margin-bottom: .35rem; }
+  .vd-tile__value { font-size: 1.6rem; }
+  .vd-tile__label { font-size: .8rem; }
+  .vd__panels { grid-template-columns: 1fr; }
 }
-@media (max-width: 900px) and (max-height: 700px) {
-  .vd__note { display: none; }
-  .vd__stage { min-height: calc(min(70vw, 44vh) + 5.5rem); }
-  .vd__img, .vd__word { top: calc(50% - min(35vw, 22vh)); }
-  .vd__img { height: min(70vw, 44vh); }
-}
-/* Landscape phones: car (with its cards) on the left, description and request on the right */
 @media (max-height: 560px) and (min-width: 600px) {
-  .vd[open] { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
-  .vd__top { grid-column: 1 / -1; padding-bottom: .4rem; }
-  .vd__title { font-size: 1.35rem; }
-  .vd__stage { grid-column: 1; grid-row: 2; height: auto; min-height: 0; margin: 0; }
-  .vd__img { top: 0; height: 100%; -webkit-mask-image: none; mask-image: none; }
-  .vd__word { top: 4%; }
-  .vd__bottom { grid-column: 2; grid-row: 2; justify-content: flex-end; padding: .5rem var(--gutter) max(.9rem, env(safe-area-inset-bottom)) 1rem; }
-  .vd__sentence { font-size: .85rem; }
-  .vd__note { display: none; }
+  .vd__car { height: 70vh; }
+  .vd__img { inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 50% !important; }
+  .vd__tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .vd__panels { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
 }
 
 /* =========================================================================
@@ -1475,35 +1479,67 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
 <!-- ========================== VEHICLE DETAIL VIEW ========================== -->
 <dialog class="vd" id="vehicle-dialog" aria-labelledby="vd-title" aria-describedby="vd-sentence" data-lenis-prevent>
-  <div class="vd__stage" id="vd-stage">
-    <img class="vd__img" id="vd-img" src="" alt="">
-    <div class="vd__shade" aria-hidden="true"></div>
-    <p class="vd__word" id="vd-word" aria-hidden="true"></p>
-    <svg class="vd__lines" id="vd-lines" aria-hidden="true"></svg>
-    <div class="vd__dots" id="vd-dots" aria-hidden="true"></div>
-    <div class="vd__cards" id="vd-cards" role="group" aria-label="Vehicle details"></div>
-    <div class="vd__dark" aria-hidden="true"></div>
-  </div>
+  <aside class="vd__side">
+    <p class="vd__brand" aria-hidden="true"><b>WESTEND</b><span>SIGNATURE</span></p>
+    <p class="vd__side-label" id="vd-list-label">The collection</p>
+    <ul class="vd__list" id="vd-list" aria-labelledby="vd-list-label"></ul>
+    <div class="vd__concierge">
+      <button type="button" class="vd__concierge-btn" id="vd-concierge" aria-label="Ask our concierge to advise on a vehicle">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17h14M6.5 17a5.5 5.5 0 0 1 11 0M12 9.5V8M10.5 8h3M4 20h16"/></svg>
+      </button>
+      <p>Not sure which to choose?<br>Our concierge will advise.</p>
+    </div>
+  </aside>
 
-  <div class="vd__top">
-    <div class="vd__heading">
-      <p class="eyebrow" id="vd-collection"></p>
-      <h2 class="vd__title" id="vd-title"></h2>
+  <div class="vd__main">
+    <div class="vd__head">
+      <div class="vd__heading">
+        <p class="eyebrow" id="vd-collection"></p>
+        <h2 class="vd__title" id="vd-title"></h2>
+      </div>
+      <div class="vd__controls">
+        <button type="button" class="vd__icon" id="vd-prev" aria-label="Previous vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <span class="vd__index" id="vd-index"></span>
+        <button type="button" class="vd__icon" id="vd-next" aria-label="Next vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        <button type="button" class="vd__icon vd__close" id="vd-close" aria-label="Close vehicle details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
     </div>
-    <div class="vd__controls">
-      <button type="button" class="vd__icon" id="vd-prev" aria-label="Previous vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <span class="vd__index" id="vd-index"></span>
-      <button type="button" class="vd__icon" id="vd-next" aria-label="Next vehicle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
-      <button type="button" class="vd__icon vd__close" id="vd-close" aria-label="Close vehicle details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
-    </div>
-  </div>
 
-  <div class="vd__bottom">
-    <div>
-      <p class="vd__sentence" id="vd-sentence"></p>
-      <p class="vd__note">Photography is illustrative. Features describe the model; your vehicle and its specification are confirmed with your enquiry.</p>
+    <dl class="vd__tiles" id="vd-tiles" aria-label="At a glance"></dl>
+
+    <div class="vd__car" id="vd-stage">
+      <p class="vd__word" id="vd-word" aria-hidden="true"></p>
+      <img class="vd__img" id="vd-img" src="" alt="">
+      <div class="vd__dark" aria-hidden="true"></div>
     </div>
-    <a class="btn btn--solid" href="#enquiry" id="vd-enquire" data-enquire-vehicle="">Request this vehicle <span class="arrow" aria-hidden="true"></span></a>
+
+    <div class="vd__panels">
+      <div class="vd-panel vd-plan">
+        <div class="vd-plan__bg" id="vd-plan-bg" aria-hidden="true"></div>
+        <form class="vd-plan__card" id="vd-plan" aria-labelledby="vd-plan-title">
+          <h3 id="vd-plan-title">Plan with this vehicle</h3>
+          <p id="vd-sentence"></p>
+          <div class="vd-plan__row" role="radiogroup" aria-label="City">
+            <label class="vd-pill"><input type="radio" name="vd-city" value="Lagos" checked><span>Lagos</span></label>
+            <label class="vd-pill"><input type="radio" name="vd-city" value="Abuja"><span>Abuja</span></label>
+            <select id="vd-service" aria-label="Service type">
+              <option value="">Any service</option>
+              <option>Airport arrivals</option>
+              <option>Executive chauffeur</option>
+              <option>Weddings &amp; occasions</option>
+              <option>Private city travel</option>
+              <option>Concierge assistance</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn--solid" id="vd-enquire">Request this vehicle <span class="arrow" aria-hidden="true"></span></button>
+        </form>
+      </div>
+      <div class="vd-panel">
+        <p class="vd-panel__title" id="vd-feats-title">Features</p>
+        <ul class="vd-feats" id="vd-feats" aria-labelledby="vd-feats-title"></ul>
+        <p class="vd__note">Photography is illustrative. Features describe the model; your vehicle and its specification are confirmed with your enquiry.</p>
+      </div>
+    </div>
   </div>
   <p class="sr-only" id="vd-status" aria-live="polite"></p>
 </dialog>
@@ -1511,9 +1547,9 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 <!-- =====================================================================
      VEHICLE DETAILS — content for the "Explore this vehicle" screen.
      id must match the fleet card's data-vehicle and the enquiry form option.
-     points: where the three detail cards attach on the photo, as x/y percentages
-             (rear cabin → card top right, front → card left, wheel → card below).
-     stats:  the three detail cards (feature, category, one-line detail), in point order.
+     tiles:  the four "at a glance" tiles (icon, short value, label). Icons: drive, frame, seat,
+             star, engine, gear, wave, screen, design, lock, light, voice.
+     stats:  the features list (feature, category, one-line detail).
              These are published model features checked against public sources (Oct 2026);
              trims and markets vary, so confirm them against Westend's own vehicles.
              A vehicle without stats falls back to WESTEND_SERVICE_STATS.
@@ -1529,7 +1565,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       image: "assets/hero/frame-5-prado.webp", focus: "62% 55%",
       alt: "A black Toyota Prado on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "A calm, comfortable ride for everyday city travel and longer journeys alike.",
-      points: [ { x: 79, y: 30 }, { x: 48, y: 43 }, { x: 58, y: 63 } ],
+      tiles: [ { icon: "drive", value: "4WD", label: "With low range" }, { icon: "frame", value: "Ladder", label: "Frame build" }, { icon: "seat", value: "3rd row", label: "On seven-seat versions" }, { icon: "star", value: "Signature", label: "Collection" } ],
       stats: [
         { value: "Third-row seating", label: "Space", detail: "Seven-seat versions of the Prado add a third row. We confirm the layout of your vehicle when we reply." },
         { value: "Ladder-frame build", label: "Construction", detail: "A traditional body-on-frame chassis \u2014 a large part of the Prado's reputation for durability." },
@@ -1539,7 +1575,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       image: "assets/hero/frame-4-land-cruiser.webp", focus: "62% 55%",
       alt: "A black Toyota Land Cruiser on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "A settled, elevated ride for long days, airport runs and journeys beyond the city.",
-      points: [ { x: 79, y: 29 }, { x: 47, y: 41 }, { x: 57, y: 63 } ],
+      tiles: [ { icon: "engine", value: "V6", label: "Twin-turbo" }, { icon: "gear", value: "10", label: "Speed automatic" }, { icon: "drive", value: "4WD", label: "Four-wheel drive" }, { icon: "star", value: "Signature", label: "Collection" } ],
       stats: [
         { value: "Body-on-frame strength", label: "Construction", detail: "Built on Toyota's GA-F platform, the 300 Series keeps a separate frame while shedding weight over its predecessor." },
         { value: "Twin-turbo V6", label: "Engine", detail: "Both petrol and diesel versions use a twin-turbocharged V6 for smooth, unhurried pace." },
@@ -1549,7 +1585,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       image: "assets/hero/frame-2-range-rover.webp", focus: "62% 55%",
       alt: "A black Range Rover on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Quietly confident comfort for engagements where first impressions matter.",
-      points: [ { x: 79, y: 29 }, { x: 46, y: 40 }, { x: 56, y: 62 } ],
+      tiles: [ { icon: "wave", value: "Air", label: "Electronic suspension" }, { icon: "screen", value: "Pivi Pro", label: "Infotainment" }, { icon: "design", value: "Flush", label: "Door handles" }, { icon: "star", value: "Prestige", label: "Collection" } ],
       stats: [
         { value: "Pivi Pro infotainment", label: "Technology", detail: "Connected navigation with wireless Apple CarPlay and Android Auto keeps the journey effortless." },
         { value: "Flush door handles", label: "Design", detail: "Deployable handles sit flush with the body, keeping the Range Rover's lines clean and quiet." },
@@ -1559,7 +1595,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       image: "assets/images/fleet-g-class.jpg", focus: "50% 60%",
       alt: "A black Mercedes-Benz G-Class under a softly lit arrival canopy at night",
       sentence: "An unmistakable arrival for celebrations, evenings and statement occasions.",
-      points: [ { x: 24, y: 35 }, { x: 56, y: 49 }, { x: 43, y: 68 } ],
+      tiles: [ { icon: "lock", value: "3", label: "Locking differentials" }, { icon: "light", value: "LED", label: "Round headlamps" }, { icon: "drive", value: "4×4", label: "Low-range gearing" }, { icon: "star", value: "Prestige", label: "Collection" } ],
       stats: [
         { value: "Iconic upright design", label: "Design", detail: "The upright, unmistakable silhouette that has defined the G-Class for decades." },
         { value: "Round LED headlamps", label: "Lighting", detail: "Signature round LED headlamps with daytime running lights." },
@@ -1569,7 +1605,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       image: "assets/hero/frame-3-mercedes-gls.webp", focus: "62% 55%",
       alt: "A black Mercedes-Benz SUV on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Generous, composed comfort for families, small groups and airport arrivals.",
-      points: [ { x: 79, y: 29 }, { x: 47, y: 44 }, { x: 57, y: 63 } ],
+      tiles: [ { icon: "seat", value: "3", label: "Rows of seating" }, { icon: "screen", value: "2 × 12.3″", label: "MBUX displays" }, { icon: "drive", value: "4MATIC", label: "All-wheel drive" }, { icon: "star", value: "Prestige", label: "Collection" } ],
       stats: [
         { value: "Three rows of seating", label: "Space", detail: "The GLS seats passengers across three rows \u2014 room for families and small groups." },
         { value: "Twin 12.3-inch displays", label: "Technology", detail: "Two widescreen MBUX displays span the dashboard for navigation and media." },
@@ -1579,7 +1615,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       image: "assets/hero/frame-6-s-class.webp", focus: "62% 55%",
       alt: "A black Mercedes-Benz luxury saloon on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Understated elegance and a quiet rear cabin for executive days and evenings.",
-      points: [ { x: 78, y: 35 }, { x: 47, y: 48 }, { x: 57, y: 62 } ],
+      tiles: [ { icon: "light", value: "~250", label: "Ambient-light LEDs" }, { icon: "voice", value: "MBUX", label: "Voice assistant" }, { icon: "wave", value: "AIRMATIC", label: "Air suspension" }, { icon: "star", value: "Executive", label: "Collection" } ],
       stats: [
         { value: "Active ambient lighting", label: "Interior", detail: "Around 250 LEDs bathe the cabin in soft, adjustable light \u2014 calm on evening journeys." },
         { value: "MBUX voice assistant", label: "Technology", detail: "Second-generation MBUX responds to natural speech for climate, media and more." },
@@ -1766,90 +1802,93 @@ document.addEventListener('DOMContentLoaded', function () {
     goToForm(carried.length ? 'Carried over from your quick enquiry: ' + carried.join(' · ') + '.' : '');
   });
 
-  /* ---------- Vehicle detail view (one screen, glass cards) ---------- */
+  /* ---------- Vehicle detail view (dashboard) ---------- */
   var dialog = $('#vehicle-dialog');
   var vehicles = window.WESTEND_VEHICLES || [], serviceStats = window.WESTEND_SERVICE_STATS || [];
-  var vdImg = $('#vd-img'), vdLines = $('#vd-lines'), vdDots = $('#vd-dots'), vdCards = $('#vd-cards');
-  var current = 0, lastTrigger = null, returnFocusOnClose = true, switching = false, drawTimers = [];
-  var SVGNS = 'http://www.w3.org/2000/svg';
+  var vdImg = $('#vd-img'), vdList = $('#vd-list'), vdTiles = $('#vd-tiles'), vdFeats = $('#vd-feats');
+  var current = 0, lastTrigger = null, returnFocusOnClose = true, switching = false;
+  var ICONS = {
+    car: '<path d="M3.5 15.5l1.6-4.3A2 2 0 0 1 7 9.9h10a2 2 0 0 1 1.9 1.3l1.6 4.3V18h-2.2M5.7 18H3.5v-2.5M8.3 18h7.4"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/><path d="M5 12.5h14"/>',
+    drive: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 4v6M5.3 15.7l5-2.6M18.7 15.7l-5-2.6"/>',
+    frame: '<rect x="3.5" y="7" width="17" height="10" rx="1"/><path d="M8 7v10M16 7v10M3.5 12h17"/>',
+    seat: '<path d="M7 4h4a2 2 0 0 1 2 2v7h4a2 2 0 0 1 2 2v3H9a2 2 0 0 1-2-2z"/><path d="M9 18v2.5M17 18v2.5"/>',
+    star: '<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+    engine: '<path d="M4 10h3l2-3h6v3h2.5l1.5-1.5H21v8h-2l-1.5-1.5H15V17H9l-2-2H4z"/><path d="M1.5 12.5H4"/>',
+    gear: '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>',
+    wave: '<path d="M3 13c3 0 3-4 6-4s3 4 6 4 3-4 6-4"/><path d="M3 18h18"/>',
+    screen: '<rect x="3" y="5" width="18" height="12" rx="1.5"/><path d="M9 20.5h6M12 17v3.5"/>',
+    design: '<path d="M6.5 4h11l3.5 5-9 11L3 9z"/><path d="M3 9h18M9.5 4l2.5 5 2.5-5M12 9v11"/>',
+    lock: '<rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 14.5v2"/>',
+    light: '<path d="M9.5 18h5M10.5 21h3"/><path d="M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z"/>',
+    voice: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+    chevron: '<path d="M6 9l6 6 6-6"/>'
+  };
+  function icon(name) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || ICONS.star) + '</svg>'; }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-  function clearDraw() { drawTimers.forEach(clearTimeout); drawTimers = []; }
+
+  // Sidebar: the whole collection, like the reference's main menu
+  vehicles.forEach(function (v, i) {
+    var li = el('li'), b = el('button', 'vd-car');
+    b.type = 'button'; b.setAttribute('data-index', i);
+    b.innerHTML = icon('car');
+    var t = el('span', 'vd-car__text');
+    t.appendChild(el('span', 'vd-car__name', v.name));
+    t.appendChild(el('span', 'vd-car__meta', v.collection));
+    b.appendChild(t); li.appendChild(b); vdList.appendChild(li);
+  });
+  vdList.addEventListener('click', function (e) {
+    var b = e.target.closest('.vd-car'); if (b) switchVehicle(Number(b.getAttribute('data-index')));
+  });
+  vdList.addEventListener('keydown', function (e) {            // up/down (left/right on the phone row) move through the list
+    var keys = { ArrowDown: 1, ArrowUp: -1 };
+    if (!(e.key in keys)) return;
+    e.preventDefault(); e.stopPropagation();
+    var btns = $$('.vd-car', vdList), i = btns.indexOf(document.activeElement);
+    var n = btns[(i + keys[e.key] + btns.length) % btns.length]; n.focus(); n.click();
+  });
 
   function fillVehicle(index) {
     current = (index + vehicles.length) % vehicles.length;
-    var v = vehicles[current], stats = v.stats || serviceStats;
+    var v = vehicles[current], feats = v.stats || serviceStats;
     $('#vd-collection').textContent = v.collection;
     $('#vd-title').textContent = v.name;
     $('#vd-word').textContent = v.word;
     $('#vd-index').textContent = pad(current + 1) + ' / ' + pad(vehicles.length);
     $('#vd-sentence').textContent = v.sentence;
-    $('#vd-enquire').setAttribute('data-enquire-vehicle', v.id);
     vdImg.style.objectPosition = v.focus || '50% 55%';
     vdImg.alt = v.alt; vdImg.src = v.image;
-    vdDots.innerHTML = ''; vdCards.innerHTML = ''; vdLines.innerHTML = '';
-    $('#vd-stage').classList.remove('has-open');
-    v.points.forEach(function (pt, k) {
-      var dot = el('span', 'vd-dot', String(k + 1)); vdDots.appendChild(dot);
-      var st = stats[k] || {};
-      var card = el('button', 'vd-card vd-card--' + k);
-      card.type = 'button';
-      card.setAttribute('aria-expanded', 'false');
-      card.setAttribute('aria-controls', 'vd-detail-' + k);
-      card.appendChild(el('span', 'vd-card__num', pad(k + 1)));
-      card.appendChild(el('span', 'vd-card__value', st.value));
-      card.appendChild(el('span', 'vd-card__label', st.label));
-      var det = el('span', 'vd-card__detail', st.detail); det.id = 'vd-detail-' + k;
-      card.appendChild(det);
-      vdCards.appendChild(card);
-      var line = document.createElementNS(SVGNS, 'line'); vdLines.appendChild(line);
+    $('#vd-plan-bg').style.backgroundImage = 'url("' + v.image + '")';
+    $$('.vd-car', vdList).forEach(function (b, i) {
+      if (i === current) { b.setAttribute('aria-current', 'true'); b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+      else b.removeAttribute('aria-current');
+    });
+    vdTiles.innerHTML = '';
+    (v.tiles || []).forEach(function (t, k) {
+      var d = el('div', 'vd-tile'); d.style.transitionDelay = (0.15 + k * 0.08) + 's';
+      var ic = el('span', 'vd-tile__icon'); ic.innerHTML = icon(t.icon); ic.setAttribute('aria-hidden', 'true');
+      var dd = el('dd', 'vd-tile__value', t.value), dt = el('dt', 'vd-tile__label', t.label);
+      dd.style.margin = '0';
+      d.appendChild(ic); d.appendChild(dd); d.appendChild(dt); vdTiles.appendChild(d);
+    });
+    vdFeats.innerHTML = '';
+    feats.forEach(function (f, k) {
+      var li = el('li'), b = el('button', 'vd-feat');
+      b.type = 'button'; b.setAttribute('aria-expanded', 'false'); b.setAttribute('aria-controls', 'vd-feat-' + k);
+      b.appendChild(el('span', 'vd-feat__num', pad(k + 1)));
+      b.appendChild(el('span', 'vd-feat__value', f.value));
+      b.appendChild(el('span', 'vd-feat__label', f.label));
+      var chev = el('span'); chev.innerHTML = icon('chevron'); chev.firstChild.setAttribute('class', 'vd-feat__chev'); b.appendChild(chev.firstChild);
+      var det = el('p', 'vd-feat__detail', f.detail); det.id = 'vd-feat-' + k;
+      li.appendChild(b); li.appendChild(det); vdFeats.appendChild(li);
     });
   }
+  vdFeats.addEventListener('click', function (e) {
+    var b = e.target.closest('.vd-feat'); if (!b) return;
+    var open = b.getAttribute('aria-expanded') !== 'true';
+    $$('.vd-feat', vdFeats).forEach(function (x) { x.setAttribute('aria-expanded', 'false'); });
+    b.setAttribute('aria-expanded', String(open));
+  });
 
-  // Map a point on the photo (x/y %) to the screen, accounting for object-fit: cover.
-  function photoPoint(pt) {
-    var r = vdImg.getBoundingClientRect(), d = $('#vd-stage').getBoundingClientRect();
-    var nw = vdImg.naturalWidth || 16, nh = vdImg.naturalHeight || 9;
-    var sc = Math.max(r.width / nw, r.height / nh), w = nw * sc, h = nh * sc;
-    var pos = getComputedStyle(vdImg).objectPosition.split(' ');
-    var ox = (r.width - w) * (parseFloat(pos[0]) / 100), oy = (r.height - h) * (parseFloat(pos[1] || '50') / 100);
-    return { x: r.left - d.left + ox + w * pt.x / 100, y: r.top - d.top + oy + h * pt.y / 100 };
-  }
-  var targets = [];
-  function layoutVehicle(drawn) {
-    var v = vehicles[current], d = $('#vd-stage').getBoundingClientRect();
-    var dots = $$('.vd-dot', vdDots), cards = $$('.vd-card', vdCards), lines = $$('line', vdLines);
-    targets = [];
-    v.points.forEach(function (pt, k) {
-      var p = photoPoint(pt);
-      dots[k].style.left = p.x + 'px'; dots[k].style.top = p.y + 'px';
-      var c = cards[k].getBoundingClientRect();
-      var cx = Math.max(c.left - d.left, Math.min(p.x, c.right - d.left));
-      var cy = Math.max(c.top - d.top, Math.min(p.y, c.bottom - d.top));
-      targets.push({ x1: p.x, y1: p.y, x2: cx, y2: cy });
-      var L = lines[k];
-      L.setAttribute('x1', p.x); L.setAttribute('y1', p.y);
-      L.setAttribute('x2', drawn ? cx : p.x); L.setAttribute('y2', drawn ? cy : p.y);
-    });
-  }
-  // Dots appear, the dotted lines draw outward, then each glass card pops in (≈120 ms apart).
-  function revealDetails(instant) {
-    clearDraw();
-    var dots = $$('.vd-dot', vdDots), cards = $$('.vd-card', vdCards), lines = $$('line', vdLines);
-    if (instant) { layoutVehicle(true); dots.concat(cards).forEach(function (n) { n.classList.add('is-in'); }); return; }
-    layoutVehicle(false);
-    targets.forEach(function (t, k) {
-      drawTimers.push(setTimeout(function () {
-        dots[k].classList.add('is-in');
-        var start = performance.now(), dur = 420;
-        (function step(now) {
-          var q = dur ? Math.min(1, (now - start) / dur) : 1, e = 1 - Math.pow(1 - q, 3);
-          lines[k].setAttribute('x2', t.x1 + (t.x2 - t.x1) * e);
-          lines[k].setAttribute('y2', t.y1 + (t.y2 - t.y1) * e);
-          if (q < 1) requestAnimationFrame(step); else cards[k].classList.add('is-in');
-        })(start);
-      }, k * 280));
-    });
-  }
   function whenImageReady(cb) {
     var done = false, finish = function () { if (!done) { done = true; cb(); } };
     if (vdImg.complete && vdImg.naturalWidth) return finish();
@@ -1857,86 +1896,79 @@ document.addEventListener('DOMContentLoaded', function () {
     vdImg.addEventListener('error', finish, { once: true });
     setTimeout(finish, 1500);
   }
+  function animateIn() {
+    if (prefersReduced) return;
+    dialog.classList.add('no-trans', 'is-entering');
+    void dialog.offsetWidth;
+    dialog.classList.remove('no-trans');
+    whenImageReady(function () { requestAnimationFrame(function () { dialog.classList.remove('is-entering'); }); });
+  }
+  function announce() { $('#vd-status').textContent = vehicles[current].name + ', ' + (current + 1) + ' of ' + vehicles.length; }
 
   function openVehicle(id, trigger) {
     var idx = vehicles.map(function (v) { return v.id; }).indexOf(id);
     if (idx < 0) return;
     lastTrigger = trigger; returnFocusOnClose = true;
-    dialog.classList.add('no-trans');
-    if (!prefersReduced) dialog.classList.add('is-entering');
     fillVehicle(idx);
-    dialog.showModal(); lockScroll();
+    if (!dialog.open) { dialog.showModal(); lockScroll(); }
+    dialog.scrollTop = 0;
     $('#vd-close').focus();
-    void dialog.offsetWidth; dialog.classList.remove('no-trans');
-    whenImageReady(function () {
-      if (prefersReduced) { revealDetails(true); return; }
-      requestAnimationFrame(function () { dialog.classList.remove('is-entering'); });
-      drawTimers.push(setTimeout(function () { revealDetails(false); }, 450));
-    });
+    animateIn();
   }
-  function switchVehicle(step) {
-    if (switching || !dialog.open) return;
-    collapseCards();
-    if (prefersReduced) { fillVehicle(current + step); whenImageReady(function () { revealDetails(true); }); announce(); return; }
-    switching = true; clearDraw();
-    dialog.classList.add('is-switching');                 // details fade, the hall falls into darkness
+  function switchVehicle(target) {
+    if (switching || !dialog.open || target === current) return;
+    if (prefersReduced) { fillVehicle(target); announce(); return; }
+    switching = true;
+    dialog.classList.add('is-switching');                     // the car falls into darkness…
     setTimeout(function () {
-      dialog.classList.add('no-trans', 'is-entering');
-      fillVehicle(current + step);
-      void dialog.offsetWidth; dialog.classList.remove('no-trans');
+      fillVehicle(target);
       whenImageReady(function () {
-        dialog.classList.remove('is-switching', 'is-entering');  // the next car emerges from darkness
+        dialog.classList.remove('is-switching');              // …and the next one emerges
         switching = false; announce();
-        drawTimers.push(setTimeout(function () { revealDetails(false); }, 420));
       });
-    }, 400);
+    }, 380);
   }
-  function announce() { $('#vd-status').textContent = vehicles[current].name + ', ' + (current + 1) + ' of ' + vehicles.length; }
-  function collapseCards(except) {
-    $$('.vd-card', vdCards).forEach(function (c) { if (c !== except) c.setAttribute('aria-expanded', 'false'); });
-    syncOpen();
-  }
-  function syncOpen() { $('#vd-stage').classList.toggle('has-open', !!$('.vd-card[aria-expanded="true"]', vdCards)); }
 
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-view-vehicle]');
     if (b) openVehicle(b.getAttribute('data-vehicle-id') || b.closest('.vehicle').getAttribute('data-vehicle'), b);
   });
-  vdCards.addEventListener('click', function (e) {
-    var c = e.target.closest('.vd-card');
-    if (!c) { collapseCards(); return; }                      // tap outside the open panel closes it
-    var open = c.getAttribute('aria-expanded') !== 'true';
-    collapseCards(c); c.setAttribute('aria-expanded', String(open)); syncOpen();
-    setTimeout(function () { layoutVehicle(true); }, 320);   // keep lines attached as the card grows
-  });
-  vdDots.addEventListener('click', function (e) {            // tapping a marker opens its card
-    var d = e.target.closest('.vd-dot'); if (!d) return;
-    var c = $$('.vd-card', vdCards)[$$('.vd-dot', vdDots).indexOf(d)];
-    if (c) { c.click(); c.focus({ preventScroll: true }); }
-  });
   $('#vd-close').addEventListener('click', function () { dialog.close(); });
-  $('#vd-prev').addEventListener('click', function () { switchVehicle(-1); });
-  $('#vd-next').addEventListener('click', function () { switchVehicle(1); });
-  dialog.addEventListener('cancel', function (e) {          // Escape collapses an open card first
-    var openCard = $('.vd-card[aria-expanded="true"]', vdCards);
-    if (openCard) { e.preventDefault(); openCard.setAttribute('aria-expanded', 'false'); syncOpen(); openCard.focus(); }
-  });
+  $('#vd-prev').addEventListener('click', function () { switchVehicle((current - 1 + vehicles.length) % vehicles.length); });
+  $('#vd-next').addEventListener('click', function () { switchVehicle((current + 1) % vehicles.length); });
   dialog.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowRight') { e.preventDefault(); switchVehicle(1); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); switchVehicle(-1); }
+    if (e.target.closest('select, input')) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); switchVehicle((current + 1) % vehicles.length); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); switchVehicle((current - 1 + vehicles.length) % vehicles.length); }
   });
   (function swipe() {
     var sx = 0, sy = 0, stage = $('#vd-stage');
     stage.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
     stage.addEventListener('touchend', function (e) {
       var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
-      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) switchVehicle(dx < 0 ? 1 : -1);
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) switchVehicle((current + (dx < 0 ? 1 : -1) + vehicles.length) % vehicles.length);
     }, { passive: true });
   })();
-  window.addEventListener('resize', function () { if (dialog.open && !switching) layoutVehicle(true); });
+
+  // "Plan with this vehicle": carry city, service and vehicle into the booking form
+  $('#vd-plan').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = vehicles[current], city = ($('input[name="vd-city"]:checked', dialog) || {}).value, service = $('#vd-service').value;
+    var carried = [];
+    var name = setVehicle(v.id); if (name) carried.push(name);
+    if (city) { form.elements.city.value = city; carried.push(city); }
+    if (service) { setService(service); carried.push(service); }
+    returnFocusOnClose = false; dialog.close();
+    goToForm(carried.length ? 'Carried over: ' + carried.join(' · ') + '.' : '');
+  });
+  $('#vd-concierge').addEventListener('click', function () {
+    setService('Concierge assistance');
+    returnFocusOnClose = false; dialog.close();
+    goToForm('Service selected: Concierge assistance. Tell us about your journey and we will advise on a vehicle.');
+  });
   dialog.addEventListener('close', function () {
-    if (dialog.open) return;                  // reopened before this event fired
-    clearDraw(); switching = false;
+    if (dialog.open) return;
+    switching = false;
     dialog.classList.remove('is-switching', 'is-entering');
     unlockScroll();
     if (returnFocusOnClose && lastTrigger) lastTrigger.focus({ preventScroll: true });

@@ -55,12 +55,19 @@ The hero pins and steps through still keyframes as you scroll, with a deliberate
 
 Each fleet card is an `<article class="vehicle">`. Its `data-vehicle` id must match an `<option value>` in the enquiry form's "Preferred vehicle" select.
 
-"Explore this vehicle" opens a one-screen vehicle view: the car in the arrival hall, its model name behind it, and three glass detail cards joined to points on the car by dotted lines. Each card expands on click, tap or keyboard, and Escape collapses it. Previous/next, the arrow keys and swiping switch cars through a fade to darkness. "Request this vehicle" opens the booking form with the car preselected. Content is in the `VEHICLE DETAILS` script near the end of `index.html`:
+"Explore this vehicle" opens a dashboard-style vehicle view:
 
-- `WESTEND_VEHICLES`: name, collection, background word, image, one-sentence description and `points` (x/y % on the photo where each card attaches: rear cabin, front, wheel).
-- `stats`: each vehicle's three feature cards (feature, category, one-line detail). These are published model features checked against public sources in October 2026. Trims and markets vary, so confirm each one against Westend's own vehicles and edit or remove any that don't apply.
-- `WESTEND_SERVICE_STATS`: the fallback for a vehicle without `stats` (Executive travel, Private occasions, Airport arrivals).
-- On phones, tapping a card or its marker opens it as a frosted glass panel over the car; tap outside, tap again or press Escape to close.
+- **Desktop:** a sidebar lists the whole collection (with a concierge prompt). The main area shows the model name, four "at a glance" tiles with round icons, the car in the arrival hall, a glass "Plan with this vehicle" card, and an expandable features list.
+- **Phones:** the collection becomes a swipeable row and the page scrolls.
+- **Switching cars:** the sidebar, previous/next, the arrow keys or a swipe on the car, with a fade through darkness.
+- **Plan card:** sends city, service and vehicle straight into the booking form.
+
+Content is in the `VEHICLE DETAILS` script near the end of `index.html`:
+
+- `WESTEND_VEHICLES`: name, collection, background word, image, one-sentence description.
+- `tiles`: the four tiles (icon, short value, label). Icons: drive, frame, seat, star, engine, gear, wave, screen, design, lock, light, voice.
+- `stats`: the features list (feature, category, one-line detail). These are published model features checked against public sources in October 2026. Trims and markets vary, so confirm each against Westend's own vehicles.
+- `WESTEND_SERVICE_STATS`: the fallback features for a vehicle without `stats`.
 
 No prices, capacities, model years, specifications or availability are stated, by design.
 
