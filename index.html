@@ -729,7 +729,9 @@ figure { margin: 0; }
 .exp { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1rem, 2.5vw, 2.5rem); align-items: end; }
 .exp__media { position: relative; overflow: hidden; background: #ddd6c8; }
 .exp__media img { width: 100%; height: 100%; object-fit: cover; }
-.exp__media.is-parallax img { position: absolute; left: 0; top: -6%; height: 112%; }
+.exp__media.is-parallax img { position: absolute; left: 0; top: -12%; height: 124%; }
+.exp__num { display: inline-flex; align-items: center; }
+.exp__rule { display: inline-block; width: 3.5rem; height: 1px; margin-left: .9rem; background: currentColor; opacity: .7; transform-origin: left; }
 .exp__text { display: grid; gap: 1rem; align-content: end; }
 .exp__num { font-family: var(--serif); color: var(--gold-deep); font-size: 1rem; letter-spacing: .12em; }
 .exp__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.4rem + 2vw, 3.2rem); line-height: 1.02; }
@@ -1259,27 +1261,27 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
       <div class="exp-list">
         <article class="exp exp--a">
-          <figure class="exp__media" data-parallax data-clip>
+          <figure class="exp__media" data-parallax>
             <!-- IMAGE: replace assets/images/exp-airport.jpg (1122×1402) -->
             <img src="assets/images/exp-airport.jpg" width="1122" height="1402" loading="lazy" decoding="async"
                  alt="A chauffeur in a dark suit waiting with luggage beside a black SUV at an airport arrivals kerb at dusk">
           </figure>
           <div class="exp__text">
-            <span class="exp__num" data-reveal>01</span>
-            <h3 class="exp__title" data-reveal>Airport arrivals</h3>
-            <p data-reveal>Step off a long flight and straight into calm. Your chauffeur is ready when you land, with the onward journey arranged before you arrive in Lagos or Abuja.</p>
-            <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Airport arrivals" data-reveal>Plan an arrival</a>
+            <span class="exp__num" data-rise>01</span>
+            <h3 class="exp__title" data-words>Airport arrivals</h3>
+            <p data-rise>Step off a long flight and straight into calm. Your chauffeur is ready when you land, with the onward journey arranged before you arrive in Lagos or Abuja.</p>
+            <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Airport arrivals" data-rise>Plan an arrival</a>
           </div>
         </article>
 
         <article class="exp exp--b">
           <div class="exp__text">
-            <span class="exp__num" data-reveal>02</span>
-            <h3 class="exp__title" data-reveal>Executive chauffeur</h3>
-            <p data-reveal>Meetings, roadshows and full working days, kept to schedule with quiet efficiency — so your time in the car is yours to use as you wish.</p>
-            <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Executive chauffeur" data-reveal>Arrange a chauffeur</a>
+            <span class="exp__num" data-rise>02</span>
+            <h3 class="exp__title" data-words>Executive chauffeur</h3>
+            <p data-rise>Meetings, roadshows and full working days, kept to schedule with quiet efficiency — so your time in the car is yours to use as you wish.</p>
+            <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Executive chauffeur" data-rise>Arrange a chauffeur</a>
           </div>
-          <figure class="exp__media" data-parallax data-clip>
+          <figure class="exp__media" data-parallax>
             <!-- IMAGE: replace assets/images/exp-executive.jpg (1536×1024) -->
             <img src="assets/images/exp-executive.jpg" width="1536" height="1024" loading="lazy" decoding="async"
                  alt="A black Mercedes-Benz saloon driving along a palm-lined city boulevard between glass towers at sunset">
@@ -1288,41 +1290,41 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
         <div class="exp-pair">
           <article class="exp exp--c">
-            <figure class="exp__media" data-clip>
+            <figure class="exp__media">
               <!-- IMAGE: replace assets/images/exp-weddings.jpg (1122×1402) -->
               <img src="assets/images/exp-weddings.jpg" width="1122" height="1402" loading="lazy" decoding="async"
                    alt="A black Mercedes-Benz saloon with a white floral arrangement on the bonnet, waiting at a candlelit wedding venue entrance at sunset">
             </figure>
             <div class="exp__text">
-              <span class="exp__num" data-reveal>03</span>
-              <h3 class="exp__title" data-reveal>Weddings &amp; occasions</h3>
-              <p data-reveal>Elegant vehicles and composed chauffeurs for weddings, celebrations and evenings that deserve a considered arrival.</p>
-              <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Weddings & occasions" data-reveal>Discuss your occasion</a>
+              <span class="exp__num" data-rise>03</span>
+              <h3 class="exp__title" data-words>Weddings &amp; occasions</h3>
+              <p data-rise>Elegant vehicles and composed chauffeurs for weddings, celebrations and evenings that deserve a considered arrival.</p>
+              <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Weddings & occasions" data-rise>Discuss your occasion</a>
             </div>
           </article>
           <article class="exp exp--d">
-            <figure class="exp__media" data-parallax data-clip>
+            <figure class="exp__media" data-parallax>
               <!-- IMAGE: replace assets/images/exp-city.jpg (1536×1024) -->
               <img src="assets/images/exp-city.jpg" width="1536" height="1024" loading="lazy" decoding="async"
                    alt="City lights and an illuminated cable-stayed bridge reflected in the glossy black side of a vehicle at night">
             </figure>
             <div class="exp__text">
-              <span class="exp__num" data-reveal>04</span>
-              <h3 class="exp__title" data-reveal>Private city travel</h3>
-              <p data-reveal>Dinners, appointments, shopping and evenings out — move through Lagos and Abuja at your own pace, with a chauffeur who waits while you take your time.</p>
-              <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Private city travel" data-reveal>Plan city travel</a>
+              <span class="exp__num" data-rise>04</span>
+              <h3 class="exp__title" data-words>Private city travel</h3>
+              <p data-rise>Dinners, appointments, shopping and evenings out — move through Lagos and Abuja at your own pace, with a chauffeur who waits while you take your time.</p>
+              <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Private city travel" data-rise>Plan city travel</a>
             </div>
           </article>
         </div>
 
         <article class="exp exp--e">
           <div class="exp__text">
-            <span class="exp__num" data-reveal>05</span>
-            <h3 class="exp__title" data-reveal>Concierge assistance</h3>
-            <p data-reveal>Beyond the journey itself, our team can help coordinate the details around it. Tell us what you need and we will advise personally on what we can arrange.</p>
-            <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Concierge assistance" data-reveal>Speak to our concierge</a>
+            <span class="exp__num" data-rise>05</span>
+            <h3 class="exp__title" data-words>Concierge assistance</h3>
+            <p data-rise>Beyond the journey itself, our team can help coordinate the details around it. Tell us what you need and we will advise personally on what we can arrange.</p>
+            <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Concierge assistance" data-rise>Speak to our concierge</a>
           </div>
-          <figure class="exp__media" data-parallax data-clip>
+          <figure class="exp__media" data-parallax>
             <!-- IMAGE: replace assets/images/exp-concierge.jpg (1122×1402) -->
             <img src="assets/images/exp-concierge.jpg" width="1122" height="1402" loading="lazy" decoding="async"
                  alt="A white-gloved chauffeur holding open the rear door of a black saloon beneath a hotel canopy at night">
@@ -2469,11 +2471,31 @@ document.addEventListener('DOMContentLoaded', function () {
       gsap.fromTo($('img', frame), { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: frame, start: 'top bottom', end: 'bottom top', scrub: true } });
     })();
 
+    /* Experiences: each photograph opens with a directional wipe while it settles from a slow zoom,
+       then the number's rule draws out and the text rises; on desktop the text drifts against the photo. */
+    (function experiences() {
+      var narrow = window.matchMedia('(max-width: 860px)').matches;
+      var wipes = ['inset(100% 0% 0% 0%)', 'inset(0% 0% 0% 100%)', 'inset(0% 100% 0% 0%)', 'inset(0% 0% 100% 0%)', 'inset(0% 0% 0% 100%)'];
+      $$('.experiences .exp').forEach(function (item, k) {
+        var fig = $('.exp__media', item), img = $('img', fig), text = $('.exp__text', item), num = $('.exp__num', item);
+        var rule = document.createElement('span'); rule.className = 'exp__rule'; rule.setAttribute('aria-hidden', 'true'); num.appendChild(rule);
+        var rise = $$('[data-rise]', item);
+        gsap.set(rise, { opacity: 0, y: narrow ? 30 : 48 });
+        gsap.set(rule, { scaleX: 0 });
+        gsap.timeline({ defaults: { ease: 'power3.out' }, scrollTrigger: { trigger: item, start: 'top 80%', once: true } })
+          .fromTo(fig, { clipPath: wipes[k % wipes.length] }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'power4.inOut' }, 0)
+          .fromTo(img, { scale: narrow ? 1.18 : 1.3 }, { scale: 1, duration: 1.8 }, 0)
+          .to(rise, { opacity: 1, y: 0, duration: 1.1, stagger: .12 }, .45)
+          .to(rule, { scaleX: 1, duration: .9, ease: 'power2.out' }, .6);
+        if (!narrow) gsap.fromTo(text, { yPercent: 10 }, { yPercent: -10, ease: 'none', scrollTrigger: { trigger: item, start: 'top bottom', end: 'bottom top', scrub: true } });
+      });
+    })();
+
     var mm = gsap.matchMedia();
 
     /* Gentle parallax on selected photographs (smaller travel on phones) */
     mm.add({ wide: '(min-width: 861px)', narrow: '(max-width: 860px)' }, function (ctx) {
-      var amt = ctx.conditions.wide ? 5 : 4;
+      var amt = ctx.conditions.wide ? 10 : 6;
       $$('[data-parallax]').forEach(function (fig) {
         fig.classList.add('is-parallax');
         gsap.fromTo(fig.querySelector('img'), { yPercent: -amt }, {
@@ -2587,7 +2609,7 @@ document.addEventListener('DOMContentLoaded', function () {
     root.classList.remove('motion-pending');
     try {
       ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
-      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content, .hero__frame, .hero__dark, .hero__intro-dark, .word-inner, .hero h1 .char, [data-clip], .manifesto__word, .reveal-band__frame, .reveal-band__copy > *', { clearProps: 'all' });
+      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content, .hero__frame, .hero__dark, .hero__intro-dark, .word-inner, .hero h1 .char, [data-clip], .manifesto__word, .reveal-band__frame, .reveal-band__copy > *, [data-rise], .exp__media, .exp__media img, .exp__text, .exp__rule', { clearProps: 'all' });
       $$('.manifesto').forEach(function (m) { m.classList.remove('is-scrub'); });
     } catch (e2) {}
   }
