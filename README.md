@@ -55,6 +55,7 @@ Each vehicle is an `<article class="vehicle">` in the Fleet section. The card te
 
 - GSAP 3.12.5 + ScrollTrigger (cdnjs) and Lenis 1.1.13 (jsDelivr), pinned versions. Everything runs on GSAP's single ticker.
 - Hero entrance runs about 1.5 s: masked headline lines, staggered copy, and the image easing from 1.06 to 1. No loading screen.
+- Hero showcase (all screen sizes, motion allowed): the hero pins for about 4.5 screens of scrolling. The copy gives way to a 3D stage where each vehicle's feature callouts pop up, then the card flips to the next vehicle. Edit vehicles and callouts in the `.showcase` markup; each callout's `--x`/`--y` is a position on the 4:3 photo, and `feat--left` puts its label on the left. It reuses the `fleet-*.jpg` photos and loads them after the hero image.
 - Desktop (≥1024 px wide, ≥620 px tall): the fleet section pins for about 210 vh total and moves horizontally through three collections, with synced labels and progress. Tabbing into an off-screen card scrolls to its panel.
 - Smaller screens get stacked cards with no pinning. Lenis runs only on fine-pointer devices.
 - `prefers-reduced-motion`: no pinning, parallax, smooth scrolling or reveals; all content shows immediately.

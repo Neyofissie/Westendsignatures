@@ -318,6 +318,70 @@ figure { margin: 0; }
   .hero__actions .btn { flex: 1 1 auto; }
 }
 
+
+/* =========================================================================
+   Hero fleet showcase (scroll-driven; only shown when motion is enabled)
+   ========================================================================= */
+.showcase { display: none; }
+.has-showcase .showcase { display: block; position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.showcase__word {
+  position: absolute; inset: 0; margin: 0; overflow: hidden;
+  font-family: var(--serif); font-weight: 300; line-height: .8; letter-spacing: .02em;
+  font-size: clamp(4.5rem, 14vw, 16rem); color: rgba(243, 239, 230, .1); white-space: nowrap;
+}
+.showcase__word span { position: absolute; left: 50%; top: 46%; opacity: 0; }
+.showcase__layout {
+  position: absolute; inset: var(--header-h) 0 0 0;
+  display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.6fr); align-items: center; gap: 3vw;
+}
+.showcase__meta { position: relative; opacity: 0; }
+.showcase__count { font-family: var(--serif); font-size: 1rem; letter-spacing: .14em; color: var(--gold); }
+.showcase__names { position: relative; height: 9.5rem; margin-top: 1.25rem; }
+.showcase__name { position: absolute; inset: 0 auto auto 0; opacity: 0; }
+.showcase__collection { font-size: .7rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: var(--stone); }
+.showcase__model { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.3rem + 2.4vw, 3.6rem); line-height: 1; margin-top: .7rem; }
+.showcase__progress { height: 1px; background: var(--line-dark); width: min(260px, 100%); }
+.showcase__progress span { display: block; height: 100%; background: var(--gold); transform-origin: left; transform: scaleX(0); }
+.showcase__hint { margin-top: 1rem; font-size: .66rem; letter-spacing: .28em; text-transform: uppercase; color: rgba(243, 239, 230, .55); }
+.showcase__stage {
+  position: relative; justify-self: end; perspective: 1800px;
+  width: min(100%, calc((100svh - var(--header-h) - 7rem) * 4 / 3)); aspect-ratio: 4 / 3;
+}
+.showcase__card {
+  position: absolute; inset: 0; margin: 0; opacity: 0; visibility: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden; will-change: transform, opacity;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .85); border: 1px solid rgba(243, 239, 230, .12);
+}
+.showcase__card img { width: 100%; height: 100%; object-fit: cover; background: var(--charcoal); }
+.feat { position: absolute; left: var(--x); top: var(--y); opacity: 0; }
+.feat__dot {
+  position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 0 4px rgba(201, 170, 115, .28);
+}
+.feat__dot::after {
+  content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--gold);
+  animation: feat-pulse 2.2s var(--ease) infinite;
+}
+@keyframes feat-pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
+.feat__label {
+  position: absolute; bottom: 24px; left: -8px; white-space: nowrap;
+  padding: .55rem .8rem; background: rgba(9, 9, 9, .8); border: 1px solid rgba(201, 170, 115, .5);
+  font-size: .66rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--ivory);
+}
+.feat__label::before { content: ""; position: absolute; left: 7px; top: 100%; width: 1px; height: 18px; background: var(--gold); }
+.feat--left .feat__label { left: auto; right: -8px; }
+.feat--left .feat__label::before { left: auto; right: 7px; }
+@media (max-width: 860px) {
+  .showcase__layout { grid-template-columns: 1fr; align-content: center; gap: 1.75rem; padding-bottom: 2rem; }
+  .showcase__stage { justify-self: center; width: min(100%, calc((94svh - var(--header-h) - 15rem) * 4 / 3)); order: -1; }
+  .showcase__names { height: 6.5rem; margin-top: .9rem; }
+  .showcase__word { font-size: 26vw; }
+  .showcase__word span { top: 18%; }
+  .feat__label { font-size: .56rem; letter-spacing: .12em; padding: .4rem .55rem; bottom: 18px; }
+  .feat__label::before { height: 12px; }
+  .feat__dot { width: 10px; height: 10px; margin: -5px 0 0 -5px; }
+}
+
 /* =========================================================================
    Quick enquiry strip
    ========================================================================= */
@@ -724,6 +788,58 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       <div class="hero__aside" data-hero-fade>
         <span class="cities">Lagos · Abuja</span>
         <span class="scroll-cue" aria-hidden="true">Scroll</span>
+      </div>
+    </div>
+    <!-- Fleet showcase: scroll-driven, decorative (the Fleet section below carries the same content). -->
+    <div class="showcase" aria-hidden="true">
+      <p class="showcase__word">
+        <span>G-CLASS</span>
+        <span>RANGE ROVER</span>
+        <span>MERCEDES</span>
+        <span>LAND CRUISER</span>
+        <span>PRADO</span>
+        <span>SALOON</span>
+      </p>
+      <div class="container showcase__layout">
+        <div class="showcase__meta">
+          <p class="eyebrow">The fleet <span class="showcase__count">01 / 06</span></p>
+          <div class="showcase__names">
+          <div class="showcase__name"><p class="showcase__collection">Prestige SUVs</p><p class="showcase__model">Mercedes-Benz G-Class</p></div>
+          <div class="showcase__name"><p class="showcase__collection">Prestige SUVs</p><p class="showcase__model">Range Rover</p></div>
+          <div class="showcase__name"><p class="showcase__collection">Prestige SUVs</p><p class="showcase__model">Mercedes-Benz SUV</p></div>
+          <div class="showcase__name"><p class="showcase__collection">Signature SUVs</p><p class="showcase__model">Toyota Land Cruiser</p></div>
+          <div class="showcase__name"><p class="showcase__collection">Signature SUVs</p><p class="showcase__model">Toyota Prado</p></div>
+          <div class="showcase__name"><p class="showcase__collection">Executive Saloons</p><p class="showcase__model">Mercedes-Benz luxury saloon</p></div>
+          </div>
+          <div class="showcase__progress"><span></span></div>
+          <p class="showcase__hint">Keep scrolling</p>
+        </div>
+        <div class="showcase__stage">
+          <figure class="showcase__card" data-vehicle="mercedes-g-class">
+            <img data-src="assets/images/fleet-g-class.jpg" width="1448" height="1086" alt="" decoding="async">
+            <ul class="showcase__feats"><li class="feat" style="--x:28%;--y:22%"><span class="feat__dot"></span><span class="feat__label">Iconic upright silhouette</span></li><li class="feat feat--left" style="--x:56%;--y:49%"><span class="feat__dot"></span><span class="feat__label">Signature round headlamps</span></li><li class="feat" style="--x:43%;--y:68%"><span class="feat__dot"></span><span class="feat__label">Composed on every surface</span></li></ul>
+          </figure>
+          <figure class="showcase__card" data-vehicle="range-rover">
+            <img data-src="assets/images/fleet-range-rover.jpg" width="1448" height="1086" alt="" decoding="async">
+            <ul class="showcase__feats"><li class="feat" style="--x:24%;--y:30%"><span class="feat__dot"></span><span class="feat__label">Serene, refined cabin</span></li><li class="feat feat--left" style="--x:70%;--y:45%"><span class="feat__dot"></span><span class="feat__label">Slim signature lighting</span></li><li class="feat" style="--x:40%;--y:68%"><span class="feat__dot"></span><span class="feat__label">Effortless, composed ride</span></li></ul>
+          </figure>
+          <figure class="showcase__card" data-vehicle="mercedes-suv">
+            <img data-src="assets/images/fleet-mercedes-suv.jpg" width="1448" height="1086" alt="" decoding="async">
+            <ul class="showcase__feats"><li class="feat" style="--x:22%;--y:32%"><span class="feat__dot"></span><span class="feat__label">Generous, comfortable cabin</span></li><li class="feat feat--left" style="--x:76%;--y:53%"><span class="feat__dot"></span><span class="feat__label">The three-pointed star</span></li><li class="feat" style="--x:41%;--y:68%"><span class="feat__dot"></span><span class="feat__label">Smooth on longer journeys</span></li></ul>
+          </figure>
+          <figure class="showcase__card" data-vehicle="toyota-land-cruiser">
+            <img data-src="assets/images/fleet-land-cruiser.jpg" width="1448" height="1086" alt="" decoding="async">
+            <ul class="showcase__feats"><li class="feat" style="--x:27%;--y:32%"><span class="feat__dot"></span><span class="feat__label">Calm, elevated view</span></li><li class="feat feat--left" style="--x:70%;--y:48%"><span class="feat__dot"></span><span class="feat__label">Bold, purposeful front</span></li><li class="feat" style="--x:41%;--y:68%"><span class="feat__dot"></span><span class="feat__label">Assured, capable stance</span></li></ul>
+          </figure>
+          <figure class="showcase__card" data-vehicle="toyota-prado">
+            <img data-src="assets/images/fleet-prado.jpg" width="1448" height="1086" alt="" decoding="async">
+            <ul class="showcase__feats"><li class="feat" style="--x:18%;--y:32%"><span class="feat__dot"></span><span class="feat__label">Dependable everyday comfort</span></li><li class="feat feat--left" style="--x:72%;--y:47%"><span class="feat__dot"></span><span class="feat__label">Smart, understated presence</span></li><li class="feat" style="--x:40%;--y:68%"><span class="feat__dot"></span><span class="feat__label">Confident on any road</span></li></ul>
+          </figure>
+          <figure class="showcase__card" data-vehicle="mercedes-saloon">
+            <img data-src="assets/images/fleet-mercedes-saloon.jpg" width="1448" height="1086" alt="" decoding="async">
+            <ul class="showcase__feats"><li class="feat" style="--x:12%;--y:60%"><span class="feat__dot"></span><span class="feat__label">Understated elegance</span></li><li class="feat feat--left" style="--x:66%;--y:42%"><span class="feat__dot"></span><span class="feat__label">Spacious rear cabin</span></li><li class="feat feat--left" style="--x:93%;--y:24%"><span class="feat__dot"></span><span class="feat__label">Your door, held open</span></li></ul>
+          </figure>
+        </div>
       </div>
     </div>
   </section>
@@ -1690,11 +1806,76 @@ document.addEventListener('DOMContentLoaded', function () {
       .to(lines, { yPercent: 0, duration: .9, stagger: .12, ease: 'power4.out' }, .1)
       .to(fades.slice(1), { opacity: 1, y: 0, duration: .7, stagger: .08 }, .55);
 
-    /* Hero scroll (scrubbed) */
-    gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
-      .to('.hero__media', { scale: 1.08, ease: 'none' }, 0)
-      .to('.hero__word-inner', { yPercent: -45, ease: 'none' }, 0)
-      .to('.hero__content', { opacity: 0, y: -48, ease: 'none', duration: .6 }, 0);
+    /* Hero scroll: pinned fleet showcase. The hero copy gives way to a 3D stage where each
+       vehicle's features pop up, then the card flips to the next vehicle. */
+    (function heroShowcase() {
+      var cards = $$('.showcase__card'), names = $$('.showcase__name'), words = $$('.showcase__word span');
+      var count = $('.showcase__count'), bar = $('.showcase__progress span');
+      var n = cards.length;
+      root.classList.add('has-showcase');
+      ScrollTrigger.config({ ignoreMobileResize: true });
+
+      // Load the showcase photographs after the hero image, or as soon as scrolling starts.
+      var loaded = false;
+      function loadCards() {
+        if (loaded) return; loaded = true;
+        cards.forEach(function (c) { var img = c.querySelector('img'); img.src = img.getAttribute('data-src'); });
+      }
+      if (document.readyState === 'complete') setTimeout(loadCards, 300);
+      else window.addEventListener('load', function () { setTimeout(loadCards, 300); });
+
+      gsap.set(words, { xPercent: -50, yPercent: -50, x: 60 });
+      gsap.set(names, { y: 24 });
+      gsap.set(cards, { rotateY: 90, transformOrigin: '50% 50%' });
+      gsap.set(cards[0], { rotateY: 0, y: 80, scale: .88 });
+      gsap.set($$('.feat'), { scale: .6, y: 8 });
+
+      var starts = [];
+      var tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: '.hero', start: 'top top',
+          end: function () { return '+=' + Math.round(window.innerHeight * (0.8 + n * 0.62)); },
+          pin: true, scrub: .6, anticipatePin: 1, invalidateOnRefresh: true,
+          onUpdate: function (self) {
+            loadCards();
+            bar.style.transform = 'scaleX(' + self.progress.toFixed(4) + ')';
+            var t = tl.time(), i = 0;
+            for (var k = 0; k < n; k++) if (t >= starts[k] - .05) i = k;
+            count.textContent = pad(i + 1) + ' / ' + pad(n);
+          }
+        }
+      });
+
+      // Opening: copy and wordmark give way, the hero photograph recedes, the stage rises.
+      tl.to('.hero__content', { autoAlpha: 0, y: -60, duration: .55 }, 0)
+        .to('.hero__word-inner', { yPercent: -60, autoAlpha: 0, duration: .7 }, 0)
+        .to('.hero__media', { scale: 1.14, duration: 1.05 }, 0)
+        .to('.hero__media-inner', { opacity: .18, duration: .7 }, .15)
+        .to(cards[0], { autoAlpha: 1, y: 0, scale: 1, duration: .6, ease: 'power2.out' }, .35)
+        .to('.showcase__meta', { autoAlpha: 1, duration: .35 }, .55)
+        .to(names[0], { autoAlpha: 1, y: 0, duration: .35 }, .6)
+        .to(words[0], { autoAlpha: 1, x: 0, duration: .5 }, .45);
+
+      var t = 1.0;
+      cards.forEach(function (card, i) {
+        var feats = $$('.feat', card), next = cards[i + 1];
+        starts.push(i ? t - .3 : 0);
+        tl.to(card, { rotateY: -7, duration: .7 }, t)                                   // slow turn while on stage
+          .to(feats, { autoAlpha: 1, scale: 1, y: 0, duration: .22, stagger: .12, ease: 'back.out(2.2)' }, t + .02);
+        if (!next) { tl.to({}, { duration: .35 }, t + .7); return; }
+        tl.to(feats, { autoAlpha: 0, scale: .8, duration: .12, stagger: .03 }, t + .56)
+          .to(card, { rotateY: -90, scale: .94, duration: .28, ease: 'power1.in' }, t + .7)  // flip out…
+          .set(card, { autoAlpha: 0 }, t + .98)
+          .set(next, { autoAlpha: 1, scale: .94 }, t + .98)
+          .to(next, { rotateY: 0, scale: 1, duration: .3, ease: 'power2.out' }, t + .98)    // …and the next flips in
+          .to(names[i], { autoAlpha: 0, y: -24, duration: .25 }, t + .7)
+          .to(names[i + 1], { autoAlpha: 1, y: 0, duration: .3 }, t + .98)
+          .to(words[i], { autoAlpha: 0, x: -60, duration: .3 }, t + .7)
+          .to(words[i + 1], { autoAlpha: 1, x: 0, duration: .35 }, t + .95);
+        t += 1.3;
+      });
+    })();
 
     /* Section reveals: 24px rise + fade, 80ms stagger */
     function batchReveal(els) {
@@ -1821,10 +2002,10 @@ document.addEventListener('DOMContentLoaded', function () {
   } catch (err) {
     // Never leave content hidden if motion fails.
     console.error('[Westend] motion disabled:', err);
-    root.classList.remove('motion-pending');
+    root.classList.remove('motion-pending', 'has-showcase');
     try {
       ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
-      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content', { clearProps: 'all' });
+      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media, .hero__media-inner, .hero__content, .hero__word-inner', { clearProps: 'all' });
     } catch (e2) {}
   }
 });
