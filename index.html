@@ -161,10 +161,12 @@ figure { margin: 0; }
   background: none; border: 0; padding: 0;
   font-size: .75rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
   text-decoration: none; color: inherit;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 100% 1px; background-position: 0 calc(50% + .85em); background-repeat: no-repeat;
-  transition: color var(--t-hover) var(--ease), background-size var(--t-hover) var(--ease);
+  /* a faint resting underline, with a solid one that draws in from the left and retracts to the right */
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(rgba(201, 170, 115, .45), rgba(201, 170, 115, .45));
+  background-size: 0 1px, 100% 1px; background-position: 100% calc(50% + .85em), 0 calc(50% + .85em); background-repeat: no-repeat;
+  transition: color var(--t-hover) var(--ease), background-size 320ms var(--ease);
 }
+.text-link:hover, .text-link:focus-visible { background-size: 100% 1px, 100% 1px; background-position: 0 calc(50% + .85em), 0 calc(50% + .85em); }
 .text-link:hover { color: var(--gold); }
 .on-ivory .text-link:hover { color: var(--gold-deep); }
 .text-link--gold { color: var(--gold); }
@@ -209,10 +211,10 @@ figure { margin: 0; }
 }
 .primary-nav a::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 10px; height: 1px; background: var(--gold);
-  transform: scaleX(0); transform-origin: left; transition: transform var(--t-hover) var(--ease);
+  transform: scaleX(0); transform-origin: right; transition: transform 300ms var(--ease);
 }
 .primary-nav a:hover, .primary-nav a[aria-current="true"] { color: var(--ivory); }
-.primary-nav a:hover::after, .primary-nav a[aria-current="true"]::after { transform: scaleX(1); }
+.primary-nav a:hover::after, .primary-nav a:focus-visible::after, .primary-nav a[aria-current="true"]::after { transform: scaleX(1); transform-origin: left; }
 .header-actions { display: flex; align-items: center; gap: 1.75rem; }
 .cities { font-size: .7rem; letter-spacing: .26em; text-transform: uppercase; color: var(--stone); white-space: nowrap; }
 .header-actions .btn { min-height: 44px; padding: .65rem 1.25rem; font-size: .7rem; }
@@ -356,6 +358,59 @@ figure { margin: 0; }
   .hero__actions .btn { padding-inline: .7rem; font-size: .64rem; letter-spacing: .12em; }
   .hero__actions .btn .arrow { display: none; }
 }
+
+/* =========================================================================
+   Scroll storytelling: progress line, dimming header, word reveals, manifesto, expanding image
+   ========================================================================= */
+.scroll-progress { position: fixed; left: 0; right: 0; bottom: 0; height: 2px; z-index: 150; pointer-events: none; background: rgba(243, 239, 230, .08); }
+.scroll-progress span { display: block; height: 100%; background: var(--gold); transform-origin: left; transform: scaleX(0); }
+.site-header { transition: background-color 400ms var(--ease), border-color 400ms var(--ease), opacity 400ms var(--ease); }
+.site-header.is-dimmed:not(.menu-open):not(:hover):not(:focus-within) { opacity: .6; }
+
+/* Headlines split into words that rise from a mask */
+.word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .12em; margin-bottom: -.12em; }
+.word-inner { display: inline-block; will-change: transform; }
+.hero h1 .char { display: inline-block; will-change: transform, filter, opacity; }
+
+/* Outlined buttons draw their border clockwise the first time they are seen */
+.btn--draw { position: relative; --draw: var(--bd); }
+.btn--draw:not(.is-drawn) { border-color: transparent; }
+.btn--draw::before, .btn--draw::after { content: ""; position: absolute; width: 0; height: 0; border: 1px solid transparent; pointer-events: none; }
+.btn--draw::before { top: -1px; left: -1px; }
+.btn--draw::after { bottom: -1px; right: -1px; }
+.btn--draw.is-drawing::before { width: calc(100% + 2px); height: calc(100% + 2px); border-top-color: var(--draw); border-right-color: var(--draw); transition: width 150ms linear, height 150ms linear 150ms; }
+.btn--draw.is-drawing::after { width: calc(100% + 2px); height: calc(100% + 2px); border-bottom-color: var(--draw); border-left-color: var(--draw); transition: border-color 0s 300ms, width 150ms linear 300ms, height 150ms linear 450ms; }
+
+/* Manifesto: each word brightens as you scroll past */
+.manifesto { position: relative; overflow: clip; background: var(--obsidian); }
+.manifesto__inner { position: relative; min-height: 80vh; display: grid; align-items: center; padding-block: var(--section-pad); }
+.manifesto.is-scrub { height: 190vh; }
+.manifesto.is-scrub .manifesto__inner { position: sticky; top: 0; height: 100vh; min-height: 0; padding-block: 0; }
+.manifesto__text { position: relative; z-index: 1; font-family: var(--serif); font-weight: 300; font-size: clamp(2.2rem, 1.2rem + 4vw, 5.4rem); line-height: 1.08; letter-spacing: -.01em; max-width: 18ch; margin: 0 auto; text-align: center; }
+.manifesto__text em { color: var(--gold); }
+.manifesto__word { opacity: 1; }
+.manifesto.is-scrub .manifesto__word { opacity: .15; }
+.manifesto__imgs { position: absolute; inset: 0; pointer-events: none; }
+.manifesto__img { position: absolute; margin: 0; overflow: hidden; opacity: .4; }
+.manifesto__img img { width: 100%; height: 100%; object-fit: cover; }
+.manifesto__img--a { width: clamp(140px, 17vw, 260px); aspect-ratio: 4 / 5; top: 12%; left: 6%; }
+.manifesto__img--b { width: clamp(160px, 20vw, 320px); aspect-ratio: 3 / 2; bottom: 10%; right: 5%; }
+.manifesto__img--c { width: clamp(110px, 12vw, 190px); aspect-ratio: 1; top: 18%; right: 16%; }
+@media (max-width: 720px) {
+  .manifesto.is-scrub { height: 160vh; }
+  .manifesto__img--a { left: -6%; top: 8%; }
+  .manifesto__img--b { right: -10%; bottom: 8%; }
+  .manifesto__img--c { display: none; }
+}
+
+/* Expanding image: a narrow strip that opens to full width */
+.reveal-band { position: relative; background: var(--obsidian); padding-block: clamp(4rem, 9vw, 8rem) 0; }
+.reveal-band__frame { position: relative; height: min(78vh, 56vw); min-height: 320px; overflow: hidden; margin: 0; }
+.reveal-band__frame img { width: 100%; height: 100%; object-fit: cover; object-position: 58% 55%; }
+.reveal-band__frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9, 9, 9, 0) 45%, rgba(9, 9, 9, .85) 100%); }
+.reveal-band__copy { position: absolute; left: 0; right: 0; bottom: clamp(1.5rem, 5vh, 3.5rem); z-index: 1; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 2rem; }
+.reveal-band__copy h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 1.3rem + 2.6vw, 3.8rem); line-height: 1; }
+.reveal-band__copy p { color: rgba(243, 239, 230, .8); max-width: 26rem; }
 
 /* =========================================================================
    Quick enquiry strip
@@ -885,6 +940,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
+<div class="scroll-progress" aria-hidden="true"><span></span></div>
 
 <!-- =====================================================================
      SITE CONFIGURATION — edit these values; leave a value empty to hide it.
@@ -1029,13 +1085,25 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     </div>
   </section>
 
+  <!-- ============================== MANIFESTO ============================== -->
+  <section class="manifesto on-dark" aria-label="Our promise">
+    <div class="manifesto__inner">
+      <div class="manifesto__imgs" aria-hidden="true">
+        <figure class="manifesto__img manifesto__img--a"><img src="assets/images/exp-concierge.jpg" width="1122" height="1402" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="manifesto__img manifesto__img--b"><img src="assets/images/exp-city.jpg" width="1536" height="1024" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="manifesto__img manifesto__img--c"><img src="assets/images/standard-interior.jpg" width="1122" height="1402" alt="" loading="lazy" decoding="async"></figure>
+      </div>
+      <p class="container manifesto__text">Every arrival is planned around you — <em>your time, your privacy, your pace.</em></p>
+    </div>
+  </section>
+
   <!-- ================================ FLEET ================================ -->
   <section class="fleet on-dark" id="fleet" aria-labelledby="fleet-title">
     <div class="container fleet__intro">
       <div class="section-head">
         <div>
           <p class="eyebrow" data-reveal>The fleet</p>
-          <h2 class="display" id="fleet-title" data-reveal>A presence for <em>every</em> occasion.</h2>
+          <h2 class="display" id="fleet-title" data-words>A presence for <em>every</em> occasion.</h2>
         </div>
         <p class="lead" data-reveal>Every vehicle is Westend-owned, prepared before each journey and presented with care — from capable SUVs to quietly elegant saloons.</p>
       </div>
@@ -1207,14 +1275,14 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       <div class="section-head">
         <div>
           <p class="eyebrow" data-reveal>Experiences</p>
-          <h2 class="display" id="exp-title" data-reveal>More than a <em>journey.</em></h2>
+          <h2 class="display" id="exp-title" data-words>More than a <em>journey.</em></h2>
         </div>
         <p class="lead" data-reveal>Whether it is a single airport arrival or a full day of engagements, every journey is planned around you — your timings, your preferences, your pace.</p>
       </div>
 
       <div class="exp-list">
         <article class="exp exp--a">
-          <figure class="exp__media" data-parallax data-reveal>
+          <figure class="exp__media" data-parallax data-clip>
             <!-- IMAGE: replace assets/images/exp-airport.jpg (1122×1402) -->
             <img src="assets/images/exp-airport.jpg" width="1122" height="1402" loading="lazy" decoding="async"
                  alt="A chauffeur in a dark suit waiting with luggage beside a black SUV at an airport arrivals kerb at dusk">
@@ -1234,7 +1302,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
             <p data-reveal>Meetings, roadshows and full working days, kept to schedule with quiet efficiency — so your time in the car is yours to use as you wish.</p>
             <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Executive chauffeur" data-reveal>Arrange a chauffeur</a>
           </div>
-          <figure class="exp__media" data-parallax data-reveal>
+          <figure class="exp__media" data-parallax data-clip>
             <!-- IMAGE: replace assets/images/exp-executive.jpg (1536×1024) -->
             <img src="assets/images/exp-executive.jpg" width="1536" height="1024" loading="lazy" decoding="async"
                  alt="A black Mercedes-Benz saloon driving along a palm-lined city boulevard between glass towers at sunset">
@@ -1243,7 +1311,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
         <div class="exp-pair">
           <article class="exp exp--c">
-            <figure class="exp__media" data-reveal>
+            <figure class="exp__media" data-clip>
               <!-- IMAGE: replace assets/images/exp-weddings.jpg (1122×1402) -->
               <img src="assets/images/exp-weddings.jpg" width="1122" height="1402" loading="lazy" decoding="async"
                    alt="A black Mercedes-Benz saloon with a white floral arrangement on the bonnet, waiting at a candlelit wedding venue entrance at sunset">
@@ -1256,7 +1324,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
             </div>
           </article>
           <article class="exp exp--d">
-            <figure class="exp__media" data-parallax data-reveal>
+            <figure class="exp__media" data-parallax data-clip>
               <!-- IMAGE: replace assets/images/exp-city.jpg (1536×1024) -->
               <img src="assets/images/exp-city.jpg" width="1536" height="1024" loading="lazy" decoding="async"
                    alt="City lights and an illuminated cable-stayed bridge reflected in the glossy black side of a vehicle at night">
@@ -1277,7 +1345,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
             <p data-reveal>Beyond the journey itself, our team can help coordinate the details around it. Tell us what you need and we will advise personally on what we can arrange.</p>
             <a class="text-link text-link--gold" href="#enquiry" data-enquire-service="Concierge assistance" data-reveal>Speak to our concierge</a>
           </div>
-          <figure class="exp__media" data-parallax data-reveal>
+          <figure class="exp__media" data-parallax data-clip>
             <!-- IMAGE: replace assets/images/exp-concierge.jpg (1122×1402) -->
             <img src="assets/images/exp-concierge.jpg" width="1122" height="1402" loading="lazy" decoding="async"
                  alt="A white-gloved chauffeur holding open the rear door of a black saloon beneath a hotel canopy at night">
@@ -1287,11 +1355,23 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     </div>
   </section>
 
+  <!-- ============================ REVEAL BAND ============================ -->
+  <section class="reveal-band on-dark" aria-labelledby="band-title">
+    <figure class="reveal-band__frame">
+      <img src="assets/hero/frame-4-land-cruiser.webp" width="1672" height="941" loading="lazy" decoding="async"
+           alt="A black Toyota Land Cruiser on a turntable in Westend's dark arrival hall">
+      <figcaption class="container reveal-band__copy">
+        <h2 id="band-title">Every vehicle, our own.</h2>
+        <p>Maintained, prepared and presented to our standard before every journey. <a class="text-link text-link--gold" href="#fleet">Explore the fleet</a></p>
+      </figcaption>
+    </figure>
+  </section>
+
   <!-- ========================= THE WESTEND STANDARD ========================= -->
   <section class="standard on-dark" id="standard" aria-labelledby="standard-title">
     <div class="standard__grid">
       <div class="standard__visual">
-        <figure class="standard__figure">
+        <figure class="standard__figure" data-clip>
           <!-- IMAGE: replace assets/images/standard-interior.jpg (1122×1402) -->
           <img src="assets/images/standard-interior.jpg" width="1122" height="1402" loading="lazy" decoding="async"
                alt="The rear cabin of a luxury saloon with quilted cream leather seats, a centre armrest and warm ambient lighting, the city at dusk beyond the window">
@@ -1301,7 +1381,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
       <div class="standard__content">
         <div class="standard__head">
           <p class="eyebrow" data-reveal>The Westend Standard</p>
-          <h2 class="display" id="standard-title" data-reveal>Every detail, <em>considered.</em></h2>
+          <h2 class="display" id="standard-title" data-words>Every detail, <em>considered.</em></h2>
           <p class="lead" data-reveal>Luxury, for us, is the absence of friction — the quiet confidence that everything has been thought of before you needed to ask.</p>
         </div>
         <ol class="statements">
@@ -1335,7 +1415,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     <div class="container booking__grid">
       <div class="booking__intro">
         <p class="eyebrow" data-reveal>Reserve your journey</p>
-        <h2 class="display" id="booking-title" data-reveal>Your next arrival, <em>considered.</em></h2>
+        <h2 class="display" id="booking-title" data-words>Your next arrival, <em>considered.</em></h2>
         <p class="lead" data-reveal>Share a few details and our team will reply personally to confirm availability and the finer points of your journey.</p>
         <p class="booking__notice" data-reveal>This is an enquiry, not a confirmed booking. Nothing is reserved or charged until we have spoken with you.</p>
         <ul class="contact-channels" id="contact-channels" hidden aria-label="Contact Westend directly"></ul>
@@ -1523,6 +1603,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     <div class="footer__bottom">
       <p>© <span id="year">2026</span> Westend Signature. All rights reserved.</p>
       <ul>
+        <li><a href="#top" class="back-top">Back to top ↑</a></li>
         <li><a href="privacy.html">Privacy notice</a></li>
         <li><a href="terms.html">Terms</a></li>
       </ul>
@@ -1722,7 +1803,13 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#year').textContent = new Date().getFullYear();
 
   /* ---------- Header state ---------- */
-  function onScroll() { header.classList.toggle('is-solid', window.scrollY > 40); }
+  var progressBar = $('.scroll-progress span'), lastY = window.scrollY;
+  function onScroll() {
+    var y = window.scrollY, max = document.documentElement.scrollHeight - window.innerHeight;
+    header.classList.toggle('is-solid', y > 40);
+    progressBar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0).toFixed(4) + ')';
+    if (Math.abs(y - lastY) > 6) { header.classList.toggle('is-dimmed', y > lastY && y > 200); lastY = y; }  // dims going down, returns going up
+  }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
@@ -1795,7 +1882,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!target) return;
     if (menuOpen()) setMenu(false, false);
     e.preventDefault();
-    scrollToEl(target);
+    if (id === 'top') scrollToY(0);                 // the hero is pinned, so scroll to the very top rather than to its spacer
+    else scrollToEl(target);
     if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
     target.focus({ preventScroll: true });
     history.replaceState(null, '', '#' + id);
@@ -2231,7 +2319,7 @@ document.addEventListener('DOMContentLoaded', function () {
     gsap.registerPlugin(ScrollTrigger);
 
     if (cfg.smoothScroll !== false && window.Lenis && window.matchMedia('(pointer: fine)').matches) {
-      lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+      lenis = new Lenis({ lerp: .08, smoothWheel: true });
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
       gsap.ticker.lagSmoothing(0);
@@ -2245,6 +2333,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Remove the CSS pending state first so GSAP doesn't read it as an existing transform
     // (same task, so nothing is painted in between).
     root.classList.remove('motion-pending');
+    // "exceptionally." rises letter by letter from a soft blur; screen readers keep the whole headline.
+    var h1 = $('#hero-title');
+    h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
+    var em = $('.hero h1 .line:nth-child(2) em');
+    var chars = em.textContent.split('').map(function (c) { var sp = document.createElement('span'); sp.className = 'char'; sp.textContent = c; return sp; });
+    em.textContent = ''; chars.forEach(function (c) { em.appendChild(c); });
+    em.setAttribute('aria-hidden', 'true');
+    gsap.set(lines[1], { yPercent: 0 });
+    gsap.set(chars, { y: 40, opacity: 0, filter: 'blur(10px)' });
+    lines = [lines[0]];
     gsap.set(lines, { yPercent: 110 });
     gsap.set(fades, { opacity: 0, y: 16 });
     gsap.set(mediaInner, { scale: 1.06 });
@@ -2253,7 +2351,8 @@ document.addEventListener('DOMContentLoaded', function () {
       .to(mediaInner, { scale: 1, duration: 1.5, ease: 'power2.out' }, 0)
       .to('.hero__intro-dark', { opacity: 0, duration: 1.5, ease: 'power2.inOut' }, 0)
       .to(fades[0], { opacity: 1, y: 0, duration: .7 }, 0)
-      .to(lines, { yPercent: 0, duration: .9, stagger: .12, ease: 'power4.out' }, .1)
+      .to(lines, { yPercent: 0, duration: .9, ease: 'power4.out' }, .1)
+      .to(chars, { y: 0, opacity: 1, filter: 'blur(0px)', duration: .9, stagger: .03, ease: 'power3.out', clearProps: 'filter' }, .25)
       .to(fades.slice(1), { opacity: 1, y: 0, duration: .7, stagger: .08 }, .55);
 
     /* Hero sequence: the pinned hero steps through the fleet keyframes as you scroll.
@@ -2322,6 +2421,80 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
     batchReveal($$('[data-reveal]'));
+
+    /* Headlines rise word by word from a mask (emphasis kept) */
+    function splitWords(el) {
+      var out = [];
+      (function walk(node, parent) {
+        Array.prototype.slice.call(node.childNodes).forEach(function (ch) {
+          if (ch.nodeType === 3) {
+            ch.textContent.split(/(\s+)/).forEach(function (tok) {
+              if (!tok) return;
+              if (/^\s+$/.test(tok)) { parent.appendChild(document.createTextNode(' ')); return; }
+              var w = document.createElement('span'), inner = document.createElement('span');
+              w.className = 'word'; inner.className = 'word-inner'; inner.textContent = tok;
+              w.appendChild(inner); parent.appendChild(w); out.push(inner);
+            });
+          } else if (ch.nodeType === 1) {
+            var clone = ch.cloneNode(false); parent.appendChild(clone); walk(ch, clone);
+          }
+        });
+      })(el.cloneNode(true), (el.textContent = '', el));
+      return out;
+    }
+    $$('[data-words]').forEach(function (h) {
+      var words = splitWords(h);
+      gsap.set(words, { yPercent: 110 });
+      ScrollTrigger.create({ trigger: h, start: 'top 85%', once: true,
+        onEnter: function () { gsap.to(words, { yPercent: 0, duration: 1.1, stagger: .06, ease: 'power3.out' }); } });
+    });
+
+    /* Photographs open with a clip-path wipe from the bottom as they enter */
+    $$('[data-clip]').forEach(function (fig) {
+      gsap.fromTo(fig, { clipPath: 'inset(100% 0% 0% 0%)' }, {
+        clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'power3.out',
+        scrollTrigger: { trigger: fig, start: 'top 85%', once: true }
+      });
+    });
+
+    /* Outlined buttons draw their border clockwise the first time they are seen */
+    $$('.btn').filter(function (b) { return !/btn--(solid|dark)/.test(b.className) && b.offsetParent; }).forEach(function (b) {
+      b.classList.add('btn--draw');
+      ScrollTrigger.create({ trigger: b, start: 'top 95%', once: true, onEnter: function () {
+        setTimeout(function () { b.classList.add('is-drawing'); setTimeout(function () { b.classList.add('is-drawn'); }, 650); }, b.closest('.hero, .site-header') ? 900 : 0);
+      } });
+    });
+
+    /* Manifesto: words brighten one by one with the scroll; photographs drift behind at different speeds */
+    (function manifesto() {
+      var sec = $('.manifesto'); if (!sec) return;
+      var text = $('.manifesto__text', sec);
+      var words = splitWords(text).map(function (w) { w.parentNode.classList.add('manifesto__word'); return w.parentNode; });
+      sec.classList.add('is-scrub');
+      ScrollTrigger.refresh();
+      gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top top', end: 'bottom bottom', scrub: true } })
+        .to(words, { opacity: 1, stagger: .5, duration: 1, ease: 'none' }, 0)
+        .to({}, { duration: 2 });                     // hold the full statement for the last part of the scroll
+      var narrow = window.matchMedia('(max-width: 720px)').matches ? .5 : 1;
+      [['.manifesto__img--a', -18], ['.manifesto__img--b', 26], ['.manifesto__img--c', -32]].forEach(function (d) {
+        gsap.fromTo(d[0], { xPercent: -d[1] * narrow }, { xPercent: d[1] * narrow, ease: 'none',
+          scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } });
+      });
+    })();
+
+    /* Expanding image: a narrow centred strip opens to full width, then its caption rises */
+    (function band() {
+      var frame = $('.reveal-band__frame'); if (!frame) return;
+      var side = window.matchMedia('(max-width: 720px)').matches ? 15 : 30;
+      var copy = $$('.reveal-band__copy > *');
+      gsap.set(copy, { opacity: 0, y: 24 });
+      gsap.fromTo(frame, { clipPath: 'inset(0% ' + side + '% 0% ' + side + '%)' }, {
+        clipPath: 'inset(0% 0% 0% 0%)', ease: 'none',
+        scrollTrigger: { trigger: frame, start: 'top 90%', end: 'center 55%', scrub: true,
+          onLeave: function () { gsap.to(copy, { opacity: 1, y: 0, duration: .9, stagger: .12, ease: 'power3.out', overwrite: true }); } }
+      });
+      gsap.fromTo($('img', frame), { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: frame, start: 'top bottom', end: 'bottom top', scrub: true } });
+    })();
 
     var mm = gsap.matchMedia();
 
@@ -2441,7 +2614,8 @@ document.addEventListener('DOMContentLoaded', function () {
     root.classList.remove('motion-pending');
     try {
       ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
-      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content, .hero__frame, .hero__dark, .hero__intro-dark, .hero__word-item', { clearProps: 'all' });
+      gsap.set('[data-reveal], [data-reveal-stack], [data-panel-text], .hero .line-inner, [data-hero-fade], .hero__media-inner, .hero__content, .hero__frame, .hero__dark, .hero__intro-dark, .hero__word-item, .word-inner, .hero h1 .char, [data-clip], .manifesto__word, .reveal-band__frame, .reveal-band__copy > *', { clearProps: 'all' });
+      $$('.manifesto').forEach(function (m) { m.classList.remove('is-scrub'); });
     } catch (e2) {}
   }
 });

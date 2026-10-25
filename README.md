@@ -73,6 +73,9 @@ No prices, capacities, model years, specifications or availability are stated, b
 
 ## Motion and accessibility
 
+- Scroll storytelling: a thin gold progress line along the bottom of the screen; the header dims to 60% while scrolling down and returns on scroll up, hover or focus; section headlines rise word by word; Experiences and Standard photographs open with a clip-path wipe; outlined buttons draw their border clockwise on first view; links draw their underline in from the left and retract to the right.
+- The manifesto after the enquiry strip brightens word by word as you scroll, with three photographs drifting behind at different speeds. The "Every vehicle, our own." band opens from a narrow strip to full width before its caption rises. "Back to top" is in the footer.
+
 - GSAP 3.12.5 + ScrollTrigger (cdnjs) and Lenis 1.1.13 (jsDelivr), pinned versions. Everything runs on GSAP's single ticker.
 - Hero entrance runs about 1.5 s: masked headline lines, staggered copy, and the image easing from 1.06 to 1. No loading screen.
 - Desktop (≥1024 px wide, ≥620 px tall): the fleet section pins for about 210 vh total and moves horizontally through three collections, with synced labels and progress. Tabbing into an off-screen card scrolls to its panel.
