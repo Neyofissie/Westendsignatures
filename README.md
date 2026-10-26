@@ -83,9 +83,11 @@ Each fleet card is an `<article class="vehicle">`. Its `data-vehicle` id must ma
 - **Switching cars:** the sidebar, previous/next, the arrow keys or a swipe on the car, with a fade through darkness.
 - **Plan card:** sends city, service and vehicle straight into the booking form.
 
+When the screen opens, the car **emerges from darkness**: its own frames from the hero video play once (about 1.3 seconds), then the tiles and panels rise in, and a fine gold line draws from the car to the highlighted feature. The line follows whichever feature is hovered, focused or tapped. Switching cars replays the reveal. On phones the reveal plays without the line; with reduced motion the finished screen shows at once.
+
 Content is in the `VEHICLE DETAILS` script near the end of `index.html`:
 
-- `WESTEND_VEHICLES`: name, collection, image, one-sentence description.
+- `WESTEND_VEHICLES`: name, collection, image (the last reveal frame), `reveal` (first and last frame of the car emerging in the hero video), one-sentence description.
 - `tiles`: the four tiles (icon, short value, label). Icons: drive, frame, seat, star, engine, gear, wave, screen, design, lock, light, voice.
 - `stats`: the features list (feature, category, one-line detail). These are published model features checked against public sources in October 2026. Trims and markets vary, so confirm each against Westend's own vehicles.
 - `WESTEND_SERVICE_STATS`: the fallback features for a vehicle without `stats`.
