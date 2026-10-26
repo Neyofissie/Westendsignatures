@@ -11,7 +11,7 @@ assets/images/      demonstration images (placeholders, see below)
 
 ## Enquiries go to WhatsApp
 
-Enquiries are sent to **+234 703 651 7790** on WhatsApp (`whatsapp` in `WESTEND_CONFIG`). After a visitor fills in the form and taps "Request availability", the summary page leads with "Send on WhatsApp". This opens WhatsApp with their details already written in a message to that number. The page states clearly that the enquiry is only received once they press send in WhatsApp; it never claims it was sent. Copy and download remain as alternatives. The number also appears as "WhatsApp · Message us" next to the form and in the footer.
+Enquiries are sent to **+234 703 651 7790** on WhatsApp (`whatsapp` in `WESTEND_CONFIG`). The form's main button is "Send to WhatsApp". When tapped, it checks the required fields and opens WhatsApp with the visitor's journey details already written in a message to that number; the enquiry reaches you when they press send. The site never claims it was sent. The number also appears as "WhatsApp · Message us" next to the form and in the footer.
 
 ## Booking form suggestions
 
