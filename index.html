@@ -623,7 +623,7 @@ figure { margin: 0; }
 /* Features panel */
 .vd-feats { display: grid; }
 .vd-feat {
-  width: 100%; display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: .7rem; text-align: left;
+  width: 100%; display: grid; grid-template-columns: auto auto 1fr auto; align-items: baseline; gap: .7rem; text-align: left;
   padding: .7rem 0; background: none; border: 0; border-top: 1px solid var(--line-dark); color: var(--ivory);
 }
 .vd-feats li:first-child .vd-feat { border-top: 0; padding-top: .2rem; }
@@ -633,32 +633,14 @@ figure { margin: 0; }
 .vd-feat__chev { width: 14px; height: 14px; color: var(--stone); transition: transform 300ms var(--ease); align-self: center; }
 .vd-feat[aria-expanded="true"] .vd-feat__chev { transform: rotate(180deg); color: var(--gold); }
 .vd-feat:hover .vd-feat__value { color: var(--gold); }
-.vd-feat__detail { max-height: 0; overflow: hidden; opacity: 0; font-size: .84rem; color: rgba(243, 239, 230, .78); transition: max-height 320ms var(--ease), opacity 320ms var(--ease), padding 320ms var(--ease); padding-left: calc(34px + .7rem); }
+.vd-feat__detail { max-height: 0; overflow: hidden; opacity: 0; font-size: .84rem; color: rgba(243, 239, 230, .78); transition: max-height 320ms var(--ease), opacity 320ms var(--ease), padding 320ms var(--ease); padding-left: 1.6rem; }
 .vd-feat[aria-expanded="true"] + .vd-feat__detail { max-height: 6rem; opacity: 1; padding-bottom: .7rem; }
 .vd__note { margin-top: .6rem; font-size: .68rem; color: var(--stone); }
-
-/* Reveal canvas (the car emerging from darkness) and the connector line to the features */
-.vd__reveal { opacity: 0; pointer-events: none; }
-.vd__reveal.is-on { opacity: 1; }
-.vd.is-entering .vd__img.vd__reveal.is-on { opacity: 1; transform: none; }
-.vd__link { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 3; opacity: 0; transition: opacity 400ms var(--ease); }
-.vd__link.is-on { opacity: 1; }
-.vd__link polyline { fill: none; stroke: var(--gold); stroke-width: 1; stroke-linejoin: round; }
-.vd__link-dot { fill: var(--gold); }
-.vd__link-ring { fill: none; stroke: var(--gold); stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: link-ring 2.2s var(--ease) infinite; }
-@keyframes link-ring { from { transform: scale(1); opacity: .9; } to { transform: scale(3.2); opacity: 0; } }
-.vd-feat__icon { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; align-self: center; border: 1px solid var(--line-dark); color: var(--stone); background: #121211; transition: background-color 250ms var(--ease), color 250ms var(--ease), border-color 250ms var(--ease); }
-.vd-feat__icon svg { width: 16px; height: 16px; }
-.vd-feat.is-active .vd-feat__icon { background: var(--ivory); color: var(--obsidian); border-color: var(--ivory); }
-.vd-feat.is-active .vd-feat__value { color: var(--ivory); }
-.vd-feat:not(.is-active) .vd-feat__value { color: rgba(243, 239, 230, .78); }
 
 /* Entrance and switching */
 .vd.is-entering .vd__img { opacity: 0; transform: scale(1.04); }
 .vd.is-entering .vd-tile { opacity: 0; transform: translateY(14px); }
 .vd.is-entering .vd__panels { opacity: 0; transform: translateY(16px); }
-.vd .vd__panels { transition-delay: .25s; }
-.vd.is-entering .vd__panels, .vd.is-switching .vd__panels { transition-delay: 0s; }
 .vd.is-switching .vd__dark { opacity: 1; }
 .vd.is-switching .vd-tile { opacity: 0; transition-duration: 250ms; }
 
@@ -699,7 +681,6 @@ figure { margin: 0; }
   .vd-tile__value { font-size: 1.6rem; }
   .vd-tile__label { font-size: .8rem; }
   .vd__panels { grid-template-columns: 1fr; }
-  .vd__link { display: none; }
 }
 @media (max-height: 560px) and (min-width: 600px) {
   .vd__car { height: 70vh; }
@@ -1706,7 +1687,6 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
   </aside>
 
   <div class="vd__main">
-    <svg class="vd__link" id="vd-link" aria-hidden="true"><polyline points=""/><circle class="vd__link-dot" r="4"/><circle class="vd__link-ring" r="4"/></svg>
     <div class="vd__head">
       <div class="vd__heading">
         <p class="eyebrow" id="vd-collection"></p>
@@ -1724,7 +1704,6 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
     <div class="vd__car" id="vd-stage">
       <img class="vd__img" id="vd-img" src="" alt="">
-      <canvas class="vd__img vd__reveal" id="vd-reveal" width="1280" height="720" aria-hidden="true"></canvas>
       <div class="vd__dark" aria-hidden="true"></div>
     </div>
 
@@ -1762,8 +1741,6 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 <!-- =====================================================================
      VEHICLE DETAILS — content for the "Explore this vehicle" screen.
      id must match the fleet card's data-vehicle and the enquiry form option.
-     reveal: [first, last] frames of the hero video in which this car emerges from darkness; they play
-             when the screen opens. image is the last of those frames.
      tiles:  the four "at a glance" tiles (icon, short value, label). Icons: drive, frame, seat,
              star, engine, gear, wave, screen, design, lock, light, voice.
      stats:  the features list (feature, category, one-line detail).
@@ -1779,7 +1756,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
   ];
   window.WESTEND_VEHICLES = [
     { id: "toyota-prado", name: "Toyota Prado", collection: "Signature SUVs",
-      image: "assets/hero/sequence/233.jpg", focus: "62% 55%", reveal: [223, 233],
+      image: "assets/hero/frame-5-prado.webp", focus: "62% 55%",
       alt: "A black Toyota Prado on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "A calm, comfortable ride for everyday city travel and longer journeys alike.",
       tiles: [ { icon: "drive", value: "4WD", label: "With low range" }, { icon: "frame", value: "Ladder", label: "Frame build" }, { icon: "seat", value: "3rd row", label: "On seven-seat versions" }, { icon: "star", value: "Signature", label: "Collection" } ],
@@ -1789,7 +1766,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "Four-wheel drive with low range", label: "Capability", detail: "A two-speed transfer case gives extra control on rough or unmade roads." }
       ] },
     { id: "toyota-land-cruiser", name: "Toyota Land Cruiser", collection: "Signature SUVs",
-      image: "assets/hero/sequence/176.jpg", focus: "62% 55%", reveal: [162, 176],
+      image: "assets/hero/frame-4-land-cruiser.webp", focus: "62% 55%",
       alt: "A black Toyota Land Cruiser on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "A settled, elevated ride for long days, airport runs and journeys beyond the city.",
       tiles: [ { icon: "engine", value: "V6", label: "Twin-turbo" }, { icon: "gear", value: "10", label: "Speed automatic" }, { icon: "drive", value: "4WD", label: "Four-wheel drive" }, { icon: "star", value: "Signature", label: "Collection" } ],
@@ -1799,7 +1776,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "Four-wheel drive", label: "Capability", detail: "Four-wheel drive paired with a 10-speed automatic for composed progress on every surface." }
       ] },
     { id: "range-rover", name: "Range Rover", collection: "Prestige SUVs",
-      image: "assets/hero/sequence/074.jpg", focus: "62% 55%", reveal: [63, 74],
+      image: "assets/hero/frame-2-range-rover.webp", focus: "62% 55%",
       alt: "A black Range Rover on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Quietly confident comfort for engagements where first impressions matter.",
       tiles: [ { icon: "wave", value: "Air", label: "Electronic suspension" }, { icon: "screen", value: "Pivi Pro", label: "Infotainment" }, { icon: "design", value: "Flush", label: "Door handles" }, { icon: "star", value: "Prestige", label: "Collection" } ],
@@ -1809,7 +1786,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "Electronic air suspension", label: "Comfort", detail: "Air suspension smooths the road for a calm, gliding ride." }
       ] },
     { id: "mercedes-g-class", name: "Mercedes-Benz G-Class", collection: "Prestige SUVs",
-      image: "assets/hero/sequence/028.jpg", focus: "62% 55%", reveal: [9, 28],
+      image: "assets/images/fleet-g-class.jpg", focus: "50% 60%",
       alt: "A black Mercedes-Benz G-Class under a softly lit arrival canopy at night",
       sentence: "An unmistakable arrival for celebrations, evenings and statement occasions.",
       tiles: [ { icon: "lock", value: "3", label: "Locking differentials" }, { icon: "light", value: "LED", label: "Round headlamps" }, { icon: "drive", value: "4×4", label: "Low-range gearing" }, { icon: "star", value: "Prestige", label: "Collection" } ],
@@ -1819,7 +1796,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "Three locking differentials", label: "Capability", detail: "Full-time four-wheel drive with three locking differentials and low-range gearing." }
       ] },
     { id: "mercedes-suv", name: "Mercedes-Benz SUV", collection: "Prestige SUVs",
-      image: "assets/hero/sequence/121.jpg", focus: "62% 55%", reveal: [104, 121],
+      image: "assets/hero/frame-3-mercedes-gls.webp", focus: "62% 55%",
       alt: "A black Mercedes-Benz SUV on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Generous, composed comfort for families, small groups and airport arrivals.",
       tiles: [ { icon: "seat", value: "3", label: "Rows of seating" }, { icon: "screen", value: "2 × 12.3″", label: "MBUX displays" }, { icon: "drive", value: "4MATIC", label: "All-wheel drive" }, { icon: "star", value: "Prestige", label: "Collection" } ],
@@ -1829,7 +1806,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         { value: "4MATIC all-wheel drive", label: "Capability", detail: "Mercedes-Benz all-wheel drive for sure-footed travel in all conditions." }
       ] },
     { id: "mercedes-saloon", name: "Mercedes-Benz luxury saloon", collection: "Executive Saloons",
-      image: "assets/hero/sequence/282.jpg", focus: "62% 55%", reveal: [270, 282],
+      image: "assets/hero/frame-6-s-class.webp", focus: "62% 55%",
       alt: "A black Mercedes-Benz luxury saloon on a turntable in a dark private arrival hall, lit by warm wall lights",
       sentence: "Understated elegance and a quiet rear cabin for executive days and evenings.",
       tiles: [ { icon: "light", value: "~250", label: "Ambient-light LEDs" }, { icon: "voice", value: "MBUX", label: "Voice assistant" }, { icon: "wave", value: "AIRMATIC", label: "Air suspension" }, { icon: "star", value: "Executive", label: "Collection" } ],
@@ -2050,7 +2027,6 @@ document.addEventListener('DOMContentLoaded', function () {
     voice: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
     chevron: '<path d="M6 9l6 6 6-6"/>'
   };
-  var FEAT_ICON = { Design: 'design', Lighting: 'light', Capability: 'drive', Technology: 'screen', Comfort: 'wave', Space: 'seat', Construction: 'frame', Engine: 'engine', Interior: 'light', 'Chauffeur service': 'star' };
   function icon(name) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || ICONS.star) + '</svg>'; }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
@@ -2101,15 +2077,13 @@ document.addEventListener('DOMContentLoaded', function () {
     feats.forEach(function (f, k) {
       var li = el('li'), b = el('button', 'vd-feat');
       b.type = 'button'; b.setAttribute('aria-expanded', 'false'); b.setAttribute('aria-controls', 'vd-feat-' + k);
-      var fi = el('span', 'vd-feat__icon'); fi.innerHTML = icon(FEAT_ICON[f.label] || 'star'); fi.setAttribute('aria-hidden', 'true');
-      b.appendChild(fi);
+      b.appendChild(el('span', 'vd-feat__num', pad(k + 1)));
       b.appendChild(el('span', 'vd-feat__value', f.value));
       b.appendChild(el('span', 'vd-feat__label', f.label));
       var chev = el('span'); chev.innerHTML = icon('chevron'); chev.firstChild.setAttribute('class', 'vd-feat__chev'); b.appendChild(chev.firstChild);
       var det = el('p', 'vd-feat__detail', f.detail); det.id = 'vd-feat-' + k;
       li.appendChild(b); li.appendChild(det); vdFeats.appendChild(li);
     });
-    setActiveFeat(0, false);
     if (!prefersReduced) { replay($('.vd__heading', dialog)); replay($('#vd-index')); replay(vdFeats); }
     countUp();
   }
@@ -2142,14 +2116,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     stage.addEventListener('pointerleave', function () { stage.style.setProperty('--px', '0px'); stage.style.setProperty('--py', '0px'); });
   })();
-  function featIndex(b) { return $$('.vd-feat', vdFeats).indexOf(b); }
-  ['mouseover', 'focusin'].forEach(function (ev) {
-    vdFeats.addEventListener(ev, function (e) { var b = e.target.closest('.vd-feat'); if (b && featIndex(b) !== activeFeat) setActiveFeat(featIndex(b), true); });
-  });
   vdFeats.addEventListener('click', function (e) {
     var b = e.target.closest('.vd-feat'); if (!b) return;
-    setActiveFeat(featIndex(b), false);
-    setTimeout(function () { if (linkSvg.classList.contains('is-on')) drawLink(); }, 340);
     var open = b.getAttribute('aria-expanded') !== 'true';
     $$('.vd-feat', vdFeats).forEach(function (x) { x.setAttribute('aria-expanded', 'false'); });
     b.setAttribute('aria-expanded', String(open));
@@ -2162,85 +2130,13 @@ document.addEventListener('DOMContentLoaded', function () {
     vdImg.addEventListener('error', finish, { once: true });
     setTimeout(finish, 1500);
   }
-  /* The car emerges from darkness: play its own frames from the hero video, then stage the rest of the screen. */
-  var revealCanvas = $('#vd-reveal'), revealCtx = revealCanvas.getContext && revealCanvas.getContext('2d'), revealToken = 0, revealCache = {};
-  var narrowScreen = window.matchMedia('(max-width: 720px)').matches;
-  function revealFrames(v) {
-    var out = [], a = v.reveal[0], b = v.reveal[1];
-    for (var f = a; f <= b; f++) if (!narrowScreen || f % 2 === 0 || f === b) out.push(f);   // phones reuse the hero's even frames
-    return out.map(function (f) {
-      var src = 'assets/hero/sequence/' + String(f).padStart(3, '0') + '.jpg';
-      if (!revealCache[src]) { var im = new Image(); im.decoding = 'async'; im.src = src; revealCache[src] = im; }
-      return revealCache[src];
-    });
-  }
-  function playReveal(done) {
-    var my = ++revealToken, v = vehicles[current];
-    if (!revealCtx || !v.reveal) return done();
-    var frames = revealFrames(v), t0 = performance.now();
-    var wait = setInterval(function () {
-      if (my !== revealToken) return clearInterval(wait);
-      var ready = frames.every(function (im) { return im.complete && im.naturalWidth; });
-      if (!ready && performance.now() - t0 < 700) return;
-      clearInterval(wait);
-      if (!ready) return done();                                  // slow connection: skip straight to the lit photo
-      revealCanvas.classList.add('is-on');
-      var dur = narrowScreen ? 1000 : 1350, start = performance.now();
-      (function step(now) {
-        if (my !== revealToken) return;
-        var q = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - q, 2.2);
-        revealCtx.drawImage(frames[Math.min(frames.length - 1, Math.round(e * (frames.length - 1)))], 0, 0, 1280, 720);
-        if (q < 1) return requestAnimationFrame(step);
-        whenImageReady(function () {
-          if (my !== revealToken) return;
-          done();                                                     // the photo (same frame) fades in underneath…
-          setTimeout(function () { if (my === revealToken) revealCanvas.classList.remove('is-on'); }, 950);   // …then the canvas steps aside
-        });
-      })(start);
-    }, 40);
-  }
   function animateIn() {
-    hideLink();
-    if (prefersReduced) { setTimeout(drawLink, 50); return; }
+    if (prefersReduced) return;
     dialog.classList.add('no-trans', 'is-entering');
-    revealCanvas.classList.remove('is-on');
     void dialog.offsetWidth;
     dialog.classList.remove('no-trans');
-    playReveal(function () {
-      dialog.classList.remove('is-entering');                     // tiles, then panels, rise in
-      setTimeout(drawLink, 900);                                  // then the line draws out to the features
-    });
+    whenImageReady(function () { requestAnimationFrame(function () { dialog.classList.remove('is-entering'); }); });
   }
-
-  /* Connector: a fine gold line from the car to the active feature */
-  var linkSvg = $('#vd-link'), activeFeat = 0;
-  function hideLink() { linkSvg.classList.remove('is-on'); }
-  function drawLink() {
-    if (!dialog.open || getComputedStyle(linkSvg).display === 'none') return;
-    var row = $$('.vd-feat', vdFeats)[activeFeat]; if (!row) return;
-    var main = $('.vd__main', dialog).getBoundingClientRect(), car = $('#vd-stage').getBoundingClientRect();
-    var ic = $('.vd-feat__icon', row).getBoundingClientRect(), img = vdImg.getBoundingClientRect();
-    // the car sits in the middle of the contained 16:9 frame; anchor on its body, just behind the front wheel arch
-    var w = img.width, h = img.height, fw = Math.min(w, h * 16 / 9), fh = fw * 9 / 16;
-    var ax = img.left + (w - fw) / 2 + fw * .55 - main.left, ay = img.top + (h - fh) / 2 + fh * .56 - main.top;
-    ay = Math.max(car.top - main.top + 20, Math.min(ay, car.bottom - main.top - 20));
-    var ex = ic.left - main.left - 8, ey = ic.top + ic.height / 2 - main.top;
-    var kx = Math.max(ax + 30, ex - 40);
-    var pl = $('polyline', linkSvg);
-    pl.setAttribute('points', ax + ',' + ay + ' ' + kx + ',' + ey + ' ' + ex + ',' + ey);
-    $$('circle', linkSvg).forEach(function (c) { c.setAttribute('cx', ax); c.setAttribute('cy', ay); });
-    var len = Math.hypot(kx - ax, ey - ay) + (ex - kx);
-    pl.style.transition = 'none'; pl.style.strokeDasharray = len; pl.style.strokeDashoffset = prefersReduced ? 0 : len;
-    linkSvg.classList.add('is-on');
-    void pl.getBoundingClientRect();
-    pl.style.transition = 'stroke-dashoffset 700ms cubic-bezier(.22, .61, .36, 1)'; pl.style.strokeDashoffset = 0;
-  }
-  function setActiveFeat(k, redraw) {
-    activeFeat = k;
-    $$('.vd-feat', vdFeats).forEach(function (b, i) { b.classList.toggle('is-active', i === k); });
-    if (redraw && linkSvg.classList.contains('is-on')) drawLink();
-  }
-  window.addEventListener('resize', function () { if (dialog.open && linkSvg.classList.contains('is-on')) drawLink(); });
   function announce() { $('#vd-status').textContent = vehicles[current].name + ', ' + (current + 1) + ' of ' + vehicles.length; }
 
   function openVehicle(id, trigger) {
@@ -2256,17 +2152,13 @@ document.addEventListener('DOMContentLoaded', function () {
   function switchVehicle(target) {
     if (switching || !dialog.open || target === current) return;
     if (prefersReduced) { fillVehicle(target); announce(); return; }
-    switching = true; hideLink();
+    switching = true;
     dialog.classList.add('is-switching');                     // the car falls into darkness…
     setTimeout(function () {
       fillVehicle(target);
-      dialog.classList.add('is-entering');
-      revealCanvas.classList.remove('is-on');
-      dialog.classList.remove('is-switching');
-      switching = false; announce();
-      playReveal(function () {                                // …and the next one emerges from it
-        dialog.classList.remove('is-entering');
-        setTimeout(drawLink, 900);
+      whenImageReady(function () {
+        dialog.classList.remove('is-switching');              // …and the next one emerges
+        switching = false; announce();
       });
     }, 380);
   }
@@ -2310,7 +2202,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   dialog.addEventListener('close', function () {
     if (dialog.open) return;
-    revealToken++; hideLink(); revealCanvas.classList.remove('is-on');
     switching = false;
     dialog.classList.remove('is-switching', 'is-entering');
     unlockScroll();
