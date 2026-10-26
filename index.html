@@ -855,6 +855,30 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 .field__error { font-size: .82rem; color: #8E271C; display: flex; gap: .4rem; }
 .field__error:empty { display: none; }
 .field__error::before { content: "!"; display: inline-grid; place-items: center; width: 1.1rem; height: 1.1rem; flex: none; border: 1px solid currentColor; border-radius: 50%; font-size: .65rem; font-weight: 700; margin-top: .15rem; }
+/* Suggestions (place search, email domains) and request chips */
+.suggest { position: relative; }
+.suggest__list {
+  position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 30; max-height: 320px; overflow-y: auto;
+  margin: 0; padding: .35rem 0; list-style: none; background: #fffdf8; border: 1px solid rgba(9, 9, 9, .14); border-radius: 12px;
+  box-shadow: 0 18px 40px -18px rgba(9, 9, 9, .35);
+}
+.suggest__list[hidden] { display: none; }
+.suggest__group { padding: .55rem 1rem .25rem; font-size: .6rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--stone-deep); }
+.suggest__opt { display: flex; gap: .75rem; align-items: flex-start; padding: .6rem 1rem; cursor: pointer; color: var(--obsidian); }
+.suggest__opt svg { flex: none; width: 16px; height: 16px; margin-top: .2rem; color: var(--gold-deep); }
+.suggest__opt b { font-weight: 500; }
+.suggest__main { display: block; font-size: .95rem; }
+.suggest__sub { display: block; font-size: .78rem; color: var(--stone-deep); }
+.suggest__opt[aria-selected="true"], .suggest__opt:hover { background: rgba(201, 170, 115, .18); }
+.suggest__note { padding: .5rem 1rem .3rem; font-size: .68rem; color: var(--stone-deep); border-top: 1px solid rgba(9, 9, 9, .08); margin-top: .3rem; }
+.suggest__status { padding: .5rem 1rem; font-size: .8rem; color: var(--stone-deep); }
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+.chip {
+  min-height: 40px; padding: .4rem .9rem; border-radius: 999px; border: 1px solid rgba(9, 9, 9, .22); background: transparent;
+  font-size: .8rem; color: var(--obsidian); transition: background-color var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease);
+}
+.chip:hover { border-color: var(--obsidian); background: rgba(9, 9, 9, .04); }
+.chip.is-added { background: var(--obsidian); color: var(--ivory); border-color: var(--obsidian); }
 .phone { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; }
 .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 
@@ -953,7 +977,8 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
     phone: "",            // e.g. "+234 800 000 0000" — shown in Contact as a tap-to-call link
     whatsapp: "2347036517790", // +234 703 651 7790 — enquiries are sent here via WhatsApp (digits only, with country code)
     enquiryEndpoint: "",  // URL that accepts a JSON POST of the enquiry. Empty = no backend: a summary is shown instead.
-    smoothScroll: true    // Lenis smooth scrolling on desktop pointers (always off for reduced motion and touch)
+    smoothScroll: true,   // Lenis smooth scrolling on desktop pointers (always off for reduced motion and touch)
+    placeSearch: true     // live address suggestions from OpenStreetMap (Photon). false = only the built-in Lagos/Abuja list
   };
 </script>
 
@@ -1459,7 +1484,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
           <div class="field" data-field="email">
             <label for="f-email">Email<span class="req" aria-hidden="true">*</span></label>
-            <input class="input" id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="f-email-error">
+            <input class="input" id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="f-email-error" data-suggest="email">
             <p class="field__error" id="f-email-error"></p>
           </div>
 
@@ -1545,13 +1570,13 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 
           <div class="field" data-field="pickup">
             <label for="f-pickup">Pickup location<span class="req" aria-hidden="true">*</span></label>
-            <input class="input" id="f-pickup" name="pickup" type="text" autocomplete="off" placeholder="Address, hotel or airport" required aria-describedby="f-pickup-error">
+            <input class="input" id="f-pickup" name="pickup" type="text" autocomplete="off" placeholder="Address, hotel or airport" required aria-describedby="f-pickup-error" data-suggest="place">
             <p class="field__error" id="f-pickup-error"></p>
           </div>
 
           <div class="field" data-field="destination">
             <label for="f-destination">Destination</label>
-            <input class="input" id="f-destination" name="destination" type="text" autocomplete="off" placeholder="Or “as directed” for hourly service">
+            <input class="input" id="f-destination" name="destination" type="text" autocomplete="off" placeholder="Or “as directed” for hourly service" data-suggest="place" data-suggest-extra="As directed (hourly service)">
           </div>
 
           <div class="field" data-field="passengers">
@@ -1563,6 +1588,15 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
           <div class="field form__full" data-field="requirements">
             <label for="f-requirements">Luggage &amp; special requirements</label>
             <textarea class="input" id="f-requirements" name="requirements" rows="4" placeholder="Luggage, flight number, child seats, accessibility needs, stops along the way…"></textarea>
+            <div class="chips" role="group" aria-label="Add a common request">
+              <button type="button" class="chip" data-add="Flight number: ">+ Flight number</button>
+              <button type="button" class="chip" data-add="Extra luggage">+ Extra luggage</button>
+              <button type="button" class="chip" data-add="Child seat">+ Child seat</button>
+              <button type="button" class="chip" data-add="Meet & greet with name sign">+ Meet &amp; greet sign</button>
+              <button type="button" class="chip" data-add="Wheelchair accessibility">+ Wheelchair access</button>
+              <button type="button" class="chip" data-add="Additional stop: ">+ Additional stop</button>
+              <button type="button" class="chip" data-add="Return journey">+ Return journey</button>
+            </div>
           </div>
 
           <div class="field form__full" data-field="privacy">
@@ -2171,6 +2205,175 @@ document.addEventListener('DOMContentLoaded', function () {
     dialog.classList.remove('is-switching', 'is-entering');
     unlockScroll();
     if (returnFocusOnClose && lastTrigger) lastTrigger.focus({ preventScroll: true });
+  });
+
+  /* ---------- Suggestions: places (built-in list + live OpenStreetMap search), email domains, request chips ---------- */
+  var PLACES = [
+    // [name, area, city, kind]
+    ['Murtala Muhammed International Airport (International terminal)', 'Ikeja', 'Lagos', 'airport'],
+    ['Murtala Muhammed Airport Terminal 2 (MMA2, domestic)', 'Ikeja', 'Lagos', 'airport'],
+    ['Murtala Muhammed Airport (General Aviation Terminal)', 'Ikeja', 'Lagos', 'airport'],
+    ['Eko Hotels & Suites', 'Victoria Island', 'Lagos', 'hotel'],
+    ['The Federal Palace Hotel', 'Victoria Island', 'Lagos', 'hotel'],
+    ['Lagos Continental Hotel', 'Victoria Island', 'Lagos', 'hotel'],
+    ['Radisson Blu Anchorage Hotel', 'Victoria Island', 'Lagos', 'hotel'],
+    ['Four Points by Sheraton', 'Oniru, Victoria Island', 'Lagos', 'hotel'],
+    ['The Wheatbaker', 'Ikoyi', 'Lagos', 'hotel'],
+    ['Sheraton Lagos Hotel', 'Ikeja', 'Lagos', 'hotel'],
+    ['Victoria Island', 'Lagos Island', 'Lagos', 'area'],
+    ['Ikoyi', 'Lagos Island', 'Lagos', 'area'],
+    ['Banana Island', 'Ikoyi', 'Lagos', 'area'],
+    ['Lekki Phase 1', 'Eti-Osa', 'Lagos', 'area'],
+    ['Eko Atlantic City', 'Victoria Island', 'Lagos', 'area'],
+    ['Ikeja GRA', 'Ikeja', 'Lagos', 'area'],
+    ['Nnamdi Azikiwe International Airport (International terminal)', 'Abuja', 'Abuja', 'airport'],
+    ['Nnamdi Azikiwe International Airport (Domestic terminal)', 'Abuja', 'Abuja', 'airport'],
+    ['Transcorp Hilton Abuja', 'Maitama', 'Abuja', 'hotel'],
+    ['Abuja Continental Hotel', 'Ladi Kwali Way', 'Abuja', 'hotel'],
+    ['Fraser Suites Abuja', 'Central Business District', 'Abuja', 'hotel'],
+    ['Maitama', 'Abuja Municipal', 'Abuja', 'area'],
+    ['Asokoro', 'Abuja Municipal', 'Abuja', 'area'],
+    ['Wuse 2', 'Abuja Municipal', 'Abuja', 'area'],
+    ['Central Business District', 'Abuja Municipal', 'Abuja', 'area'],
+    ['Jabi Lake Mall', 'Jabi', 'Abuja', 'area'],
+    ['Gwarinpa', 'Abuja Municipal', 'Abuja', 'area']
+  ];
+  var CITY_BIAS = { Lagos: [6.5244, 3.3792], Abuja: [9.0765, 7.3986] };
+  var PIN = { airport: '<path d="M2.5 16.5l19-7-2-2-7 2.5-5-5H6l3 6-4.5 1.6-2-1.4-1 .9 2.5 3z"/>', hotel: '<path d="M3 20V8l9-4 9 4v12M8 20v-5h8v5M7.5 11h1M11.5 11h1M15.5 11h1"/>', area: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.2"/>', email: '<rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/>' };
+  function pinSvg(kind) { return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">' + (PIN[kind] || PIN.area) + '</svg>'; }
+  function norm(t) { return t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]+/g, ' ').trim(); }
+  function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function bold(text, q) {
+    var i = text.toLowerCase().indexOf(q.toLowerCase());
+    return i < 0 || !q ? esc(text) : esc(text.slice(0, i)) + '<b>' + esc(text.slice(i, i + q.length)) + '</b>' + esc(text.slice(i + q.length));
+  }
+  function currentCity() { var c = form.elements.city.value; return c || ($('#q-city') && $('#q-city').value) || ''; }
+
+  var suggestId = 0;
+  function makeSuggest(input, source) {
+    var id = 'sg-' + (++suggestId), wrap = document.createElement('div');
+    wrap.className = 'suggest'; input.parentNode.insertBefore(wrap, input); wrap.appendChild(input);
+    var list = document.createElement('ul'); list.className = 'suggest__list'; list.id = id; list.setAttribute('role', 'listbox'); list.hidden = true;
+    list.setAttribute('aria-label', 'Suggestions');
+    wrap.appendChild(list);
+    input.setAttribute('role', 'combobox'); input.setAttribute('aria-autocomplete', 'list');
+    input.setAttribute('aria-expanded', 'false'); input.setAttribute('aria-controls', id);
+    var items = [], active = -1, token = 0;
+    function close() { list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; }
+    function render(groups, q, note, status) {
+      items = []; var html = '';
+      groups.forEach(function (g) {
+        if (!g.items.length) return;
+        if (g.title) html += '<li class="suggest__group" role="presentation">' + esc(g.title) + '</li>';
+        g.items.forEach(function (it) {
+          var k = items.length; items.push(it);
+          html += '<li class="suggest__opt" role="option" id="' + id + '-' + k + '" data-k="' + k + '" aria-selected="false">' + pinSvg(it.kind) +
+            '<span><span class="suggest__main">' + bold(it.label, q) + '</span>' + (it.sub ? '<span class="suggest__sub">' + esc(it.sub) + '</span>' : '') + '</span></li>';
+        });
+      });
+      if (status) html += '<li class="suggest__status" role="presentation">' + esc(status) + '</li>';
+      if (note && items.length) html += '<li class="suggest__note" role="presentation">' + note + '</li>';
+      list.innerHTML = html; active = -1; input.removeAttribute('aria-activedescendant');
+      var show = !!html && document.activeElement === input;
+      list.hidden = !show; input.setAttribute('aria-expanded', String(show));
+    }
+    function move(d) {
+      if (list.hidden || !items.length) return;
+      active = (active + d + items.length) % items.length;
+      $$('.suggest__opt', list).forEach(function (o, k) { o.setAttribute('aria-selected', String(k === active)); if (k === active) o.scrollIntoView({ block: 'nearest' }); });
+      input.setAttribute('aria-activedescendant', id + '-' + active);
+    }
+    function pick(k) {
+      var it = items[k]; if (!it) return;
+      input.value = it.value; close(); token++;
+      input.dispatchEvent(new Event('input', { bubbles: true })); clearTimeout(timer);
+      if (input.getAttribute('aria-invalid')) input.dispatchEvent(new Event('blur'));
+      if (it.after) it.after(input);
+    }
+    function update() {
+      var q = input.value, my = ++token;
+      source(q, function (groups, note, status) { if (my === token) render(groups, q.trim(), note, status); });
+    }
+    var timer;
+    input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(update, 120); });
+    input.addEventListener('focus', update);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); if (list.hidden) update(); else move(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Enter' && !list.hidden && active > -1) { e.preventDefault(); pick(active); }
+      else if (e.key === 'Escape' && !list.hidden) { e.preventDefault(); e.stopPropagation(); close(); }
+      else if (e.key === 'Tab') close();
+    });
+    input.addEventListener('blur', function () { setTimeout(close, 120); });
+    list.addEventListener('mousedown', function (e) { e.preventDefault(); });   // keep focus in the field
+    list.addEventListener('click', function (e) { var o = e.target.closest('.suggest__opt'); if (o) pick(Number(o.getAttribute('data-k'))); });
+  }
+
+  // Places: built-in Lagos/Abuja list first (instant), then live OpenStreetMap results via Photon
+  var liveCache = {};
+  function placeSource(input) {
+    var extra = input.getAttribute('data-suggest-extra');
+    return function (raw, done) {
+      var q = raw.trim(), nq = norm(q), city = currentCity();
+      var local = PLACES.filter(function (p) {
+        if (!nq) return !city || p[2] === city ? p[3] !== 'area' : false;
+        return norm(p[0] + ' ' + p[1] + ' ' + p[2]).indexOf(nq) > -1 || norm(p[0]).split(' ').some(function (w) { return w.indexOf(nq) === 0; });
+      }).sort(function (a, b) { return (b[2] === city) - (a[2] === city); }).slice(0, nq ? 5 : 6)
+        .map(function (p) { return { label: p[0], sub: p[1] + ', ' + p[2], value: p[0] + ', ' + p[1] + ', ' + p[2], kind: p[3] }; });
+      var groups = [];
+      if (extra && (!nq || norm(extra).indexOf(nq) > -1)) groups.push({ items: [{ label: extra, sub: 'Your chauffeur follows your plans for the day', value: extra, kind: 'area' }] });
+      groups.push({ title: nq ? 'Suggested' : (city ? 'Popular in ' + city : 'Popular places'), items: local });
+      done(groups);
+      if (cfg.placeSearch === false || q.length < 3 || !window.fetch) return;
+      var key = city + '|' + nq;
+      function finish(live) {
+        var seen = local.map(function (l) { return norm(l.label); });
+        live = live.filter(function (l) { return seen.indexOf(norm(l.label)) < 0; });
+        done(groups.concat([{ title: 'Addresses', items: live }]), live.length ? 'Address suggestions © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors' : '', !local.length && !live.length ? 'No suggestions — type the full address.' : '');
+      }
+      if (liveCache[key]) return finish(liveCache[key]);
+      var b = CITY_BIAS[city] || [7.5, 5.5];
+      var url = 'https://photon.komoot.io/api/?limit=6&lang=en&bbox=2.67,4.24,14.68,13.89&lat=' + b[0] + '&lon=' + b[1] + '&q=' + encodeURIComponent(q);
+      var ctl = window.AbortController ? new AbortController() : null;
+      var t = setTimeout(function () { if (ctl) ctl.abort(); }, 4000);
+      fetch(url, ctl ? { signal: ctl.signal } : {}).then(function (r) { return r.ok ? r.json() : { features: [] }; }).then(function (data) {
+        clearTimeout(t);
+        var live = (data.features || []).map(function (f) {
+          var pr = f.properties || {};
+          var name = pr.name || [pr.housenumber, pr.street].filter(Boolean).join(' ');
+          if (!name) return null;
+          var street = pr.name && pr.street ? [pr.housenumber, pr.street].filter(Boolean).join(' ') : '';
+          var sub = [street, pr.district || pr.locality, pr.city || pr.county, pr.state].filter(function (v, i, a) { return v && a.indexOf(v) === i && v !== name; }).join(', ');
+          var kind = /aerodrome|airport/.test(pr.osm_value || '') ? 'airport' : /hotel/.test(pr.osm_value || '') ? 'hotel' : 'area';
+          return { label: name, sub: sub, value: sub ? name + ', ' + sub : name, kind: kind };
+        }).filter(Boolean);
+        liveCache[key] = live; finish(live);
+      }).catch(function () { clearTimeout(t); });   // offline or blocked: the built-in list remains
+    };
+  }
+  $$('[data-suggest="place"]', form).forEach(function (inp) { makeSuggest(inp, placeSource(inp)); });
+
+  // Email: complete common domains after "@"
+  var DOMAINS = ['gmail.com', 'yahoo.com', 'outlook.com', 'icloud.com', 'hotmail.com', 'live.com', 'yahoo.co.uk', 'aol.com'];
+  $$('[data-suggest="email"]', form).forEach(function (inp) {
+    makeSuggest(inp, function (raw, done) {
+      var at = raw.indexOf('@'), user = raw.slice(0, at), dom = raw.slice(at + 1).toLowerCase();
+      if (at < 1 || raw.indexOf('@', at + 1) > -1) return done([]);
+      var m = DOMAINS.filter(function (d) { return d.indexOf(dom) === 0 && d !== dom; }).slice(0, 5)
+        .map(function (d) { return { label: user + '@' + d, value: user + '@' + d, kind: 'email' }; });
+      done([{ items: m }]);
+    });
+  });
+
+  // Requests: tap a chip to add it to the requirements box
+  $$('.chips .chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      var ta = $('#f-requirements'), add = chip.getAttribute('data-add'), v = ta.value.replace(/\s+$/, '');
+      if (v.indexOf(add.replace(/:\s*$/, '')) > -1 && !/:\s*$/.test(add)) { ta.focus(); return; }
+      ta.value = (v ? v + (/[.,;]$/.test(v) ? ' ' : '\n') : '') + add;
+      chip.classList.add('is-added');
+      ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+    });
   });
 
   /* ---------- Form validation ---------- */

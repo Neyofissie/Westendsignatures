@@ -13,7 +13,17 @@ assets/images/      demonstration images (placeholders, see below)
 
 Enquiries are sent to **+234 703 651 7790** on WhatsApp (`whatsapp` in `WESTEND_CONFIG`). After a visitor fills in the form and taps "Request availability", the summary page leads with "Send on WhatsApp". This opens WhatsApp with their details already written in a message to that number. The page states clearly that the enquiry is only received once they press send in WhatsApp; it never claims it was sent. Copy and download remain as alternatives. The number also appears as "WhatsApp · Message us" next to the form and in the footer.
 
-## Before launch
+## Booking form suggestions
+
+- **Pickup and destination:** suggestions appear as you type.
+  - A built-in list of Lagos and Abuja airports, hotels and districts (`PLACES` in `index.html`) shows instantly, favouring the selected city.
+  - Live address results come from Photon (OpenStreetMap, free, no key needed), limited to Nigeria.
+  - Turn live results off with `placeSearch: false` in `WESTEND_CONFIG`; the built-in list still works.
+  - The destination also offers "As directed (hourly service)".
+- **Email:** common domains (gmail.com and so on) are suggested after "@".
+- **Requirements:** tap-to-add chips for common requests.
+
+
 
 1. **Replace the photographs.** Every image in `assets/images/` is a labelled placeholder. Overwrite each file with a real photograph under the same name and at roughly the same proportions; no code changes are needed. Then update the matching `alt` text in `index.html`. Each `<img>` sits beside an `<!-- IMAGE: ... -->` comment.
 
