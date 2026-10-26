@@ -910,6 +910,8 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
 .summary dt { font-size: .68rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--stone-deep); padding-right: 1.5rem; padding-top: 1rem; }
 .summary dd { overflow-wrap: anywhere; white-space: pre-line; }
 .summary__actions { display: flex; flex-wrap: wrap; gap: .9rem; }
+.summary__wa { gap: .6rem; }
+.summary__wa svg { flex: none; }
 .summary__feedback { font-size: .85rem; color: var(--stone-deep); min-height: 1.4em; }
 @media (max-width: 560px) { .summary dl { grid-template-columns: 1fr; } .summary dt { border-bottom: 0; padding-bottom: 0; } .summary__actions .btn { flex: 1 1 100%; } }
 
@@ -949,7 +951,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
   window.WESTEND_CONFIG = {
     email: "",            // e.g. "reservations@yourdomain.com" — shown in Contact and used for "Email this enquiry"
     phone: "",            // e.g. "+234 800 000 0000" — shown in Contact as a tap-to-call link
-    whatsapp: "",         // international number, digits only, e.g. "2348000000000" — enables "Send via WhatsApp"
+    whatsapp: "2347036517790", // +234 703 651 7790 — enquiries are sent here via WhatsApp (digits only, with country code)
     enquiryEndpoint: "",  // URL that accepts a JSON POST of the enquiry. Empty = no backend: a summary is shown instead.
     smoothScroll: true    // Lenis smooth scrolling on desktop pointers (always off for reduced motion and touch)
   };
@@ -1441,7 +1443,7 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         <p class="eyebrow" data-reveal>Reserve your journey</p>
         <h2 class="display" id="booking-title" data-words>Your next arrival, <em>considered.</em></h2>
         <p class="lead" data-reveal>Share a few details and our team will reply personally to confirm availability and the finer points of your journey.</p>
-        <p class="booking__notice" data-reveal>This is an enquiry, not a confirmed booking. Nothing is reserved or charged until we have spoken with you.</p>
+        <p class="booking__notice" data-reveal>This is an enquiry, not a confirmed booking. After you request availability, you send your details to us on WhatsApp. Nothing is reserved or charged until we have spoken with you.</p>
         <ul class="contact-channels" id="contact-channels" hidden aria-label="Contact Westend directly"></ul>
       </div>
 
@@ -1587,15 +1589,15 @@ textarea.input { min-height: 120px; resize: vertical; line-height: 1.55; }
         <div class="summary" id="enquiry-summary" hidden>
           <h3 id="summary-title" tabindex="-1">Your enquiry summary</h3>
           <div class="summary__alert" id="summary-alert"></div>
-          <dl id="summary-list"></dl>
           <div class="summary__actions" id="summary-actions">
-            <button type="button" class="btn btn--dark" id="summary-copy">Copy summary</button>
+            <a class="btn btn--dark summary__wa" id="summary-whatsapp" hidden target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4 5.2 5.2 0 0 0 3.2.7 2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>Send on WhatsApp</a>
+            <button type="button" class="btn btn--ghost-dark" id="summary-copy">Copy summary</button>
             <button type="button" class="btn btn--ghost-dark" id="summary-download">Download (.txt)</button>
             <a class="btn btn--ghost-dark" id="summary-email" hidden>Email this enquiry</a>
-            <a class="btn btn--ghost-dark" id="summary-whatsapp" hidden target="_blank" rel="noopener">Send via WhatsApp</a>
             <button type="button" class="btn btn--ghost-dark" id="summary-edit">Edit enquiry</button>
           </div>
           <p class="summary__feedback" id="summary-feedback" role="status" aria-live="polite"></p>
+          <dl id="summary-list"></dl>
         </div>
       </div>
     </div>
@@ -2259,8 +2261,9 @@ document.addEventListener('DOMContentLoaded', function () {
       $('#summary-title').textContent = 'Thank you — your enquiry has been sent.';
       alert.innerHTML = '<strong>Enquiry received, not yet confirmed</strong>This is not a booking confirmation. Our team will contact you personally to confirm availability.';
     } else {
-      $('#summary-title').textContent = 'Your enquiry summary';
-      alert.innerHTML = '<strong>Not sent</strong>' + (mode === 'error'
+      $('#summary-title').textContent = cfg.whatsapp ? 'One last step — send it on WhatsApp' : 'Your enquiry summary';
+      if (cfg.whatsapp && mode !== 'error') alert.innerHTML = '<strong>Not sent yet</strong>Tap \u201cSend on WhatsApp\u201d to send these details to Westend Signature on +234 703 651 7790. WhatsApp opens with your message ready \u2014 your enquiry is only received once you press send there.';
+      else alert.innerHTML = '<strong>Not sent</strong>' + (mode === 'error'
         ? 'We could not send your enquiry just now, so it has <em>not</em> been received.'
         : 'This website is not yet connected to a booking system, so your enquiry has <em>not</em> been sent.') +
         (channels.length ? ' Please send it to us by ' + channels.join(' or ') + ', or copy or download it below.' : ' Please copy or download it below and share it with Westend Signature directly.');
@@ -2274,15 +2277,19 @@ document.addEventListener('DOMContentLoaded', function () {
     email.hidden = !(cfg.email && mode !== 'sent');
     if (cfg.email) email.href = 'mailto:' + cfg.email + '?subject=' + encodeURIComponent('Journey enquiry — ' + rows[0][1]) + '&body=' + encodeURIComponent(summaryText);
     wa.hidden = !(cfg.whatsapp && mode !== 'sent');
-    if (cfg.whatsapp) wa.href = 'https://wa.me/' + String(cfg.whatsapp).replace(/\D/g, '') + '?text=' + encodeURIComponent(summaryText);
+    var waText = ['Hello Westend Signature, I would like to request availability for a journey.', ''].concat(
+      rows.filter(function (r) { return r[0] !== 'Privacy notice'; }).map(function (r) { return r[0] + ': ' + r[1]; })).join('\n');
+    if (cfg.whatsapp) wa.href = 'https://wa.me/' + String(cfg.whatsapp).replace(/\D/g, '') + '?text=' + encodeURIComponent(waText);
     $('#summary-copy').hidden = mode === 'sent'; $('#summary-download').hidden = false;
     $('#summary-edit').textContent = mode === 'sent' ? 'Start a new enquiry' : 'Edit enquiry';
     $('#summary-edit').setAttribute('data-mode', mode);
     $('#summary-feedback').textContent = '';
     form.hidden = true; summary.hidden = false;
-    scrollToEl(formWrap);
-    $('#summary-title').focus({ preventScroll: true });
-    if (window.ScrollTrigger) ScrollTrigger.refresh();
+    if (window.ScrollTrigger) ScrollTrigger.refresh();   // re-measure first: the page got shorter
+    requestAnimationFrame(function () {
+      scrollToEl(formWrap);
+      $('#summary-title').focus({ preventScroll: true });
+    });
   }
 
   form.addEventListener('submit', function (e) {
@@ -2307,6 +2314,9 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(function () { btn.disabled = false; btn.firstChild.textContent = 'Request availability '; });
   });
 
+  $('#summary-whatsapp').addEventListener('click', function () {
+    $('#summary-feedback').textContent = 'WhatsApp is opening with your enquiry. Once you press send there, our team will reply personally to confirm availability.';
+  });
   $('#summary-copy').addEventListener('click', function () {
     var fb = $('#summary-feedback');
     function fallback() {

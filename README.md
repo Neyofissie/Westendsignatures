@@ -9,6 +9,10 @@ terms.html          terms TEMPLATE (needs completing and review)
 assets/images/      demonstration images (placeholders, see below)
 ```
 
+## Enquiries go to WhatsApp
+
+Enquiries are sent to **+234 703 651 7790** on WhatsApp (`whatsapp` in `WESTEND_CONFIG`). After a visitor fills in the form and taps "Request availability", the summary page leads with "Send on WhatsApp". This opens WhatsApp with their details already written in a message to that number. The page states clearly that the enquiry is only received once they press send in WhatsApp; it never claims it was sent. Copy and download remain as alternatives. The number also appears as "WhatsApp · Message us" next to the form and in the footer.
+
 ## Before launch
 
 1. **Replace the photographs.** Every image in `assets/images/` is a labelled placeholder. Overwrite each file with a real photograph under the same name and at roughly the same proportions; no code changes are needed. Then update the matching `alt` text in `index.html`. Each `<img>` sits beside an `<!-- IMAGE: ... -->` comment.
@@ -36,7 +40,7 @@ assets/images/      demonstration images (placeholders, see below)
    ```js
    email: "",            // shown under Contact; enables "Email this enquiry"
    phone: "",            // shown as a tap-to-call link
-   whatsapp: "",         // digits only, e.g. 2348000000000; enables "Send via WhatsApp"
+   whatsapp: "2347036517790", // +234 703 651 7790 — enquiries are sent here via WhatsApp
    enquiryEndpoint: "",  // URL accepting a JSON POST of the enquiry
    smoothScroll: true
    ```
