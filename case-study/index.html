@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Westend Signature — UX case study</title>
+<meta name="description" content="A retrospective UX/UI case study of the Westend Signature website: a private chauffeur and concierge service in Lagos and Abuja.">
+<meta name="theme-color" content="#090909">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --obsidian: #090909; --charcoal: #191918; --ivory: #F3EFE6; --paper: #E9E6E1;
+    --gold: #C9AA73; --gold-deep: #7A5F30; --stone: #A29B90; --stone-deep: #5F594F;
+    --line-d: rgba(243,239,230,.14); --line-l: rgba(9,9,9,.14);
+    --serif: "Cormorant Garamond", "Iowan Old Style", "Times New Roman", serif;
+    --sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --g: clamp(1.25rem, 4.5vw, 4.5rem);
+    --max: 1440px;
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--obsidian); color: var(--ivory); font: 300 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+  img { display: block; max-width: 100%; height: auto; }
+  a { color: inherit; }
+  h1, h2, h3, p { margin: 0; }
+  .skip { position: absolute; left: -999px; top: 1rem; background: var(--gold); color: var(--obsidian); padding: .6rem 1rem; z-index: 10; }
+  .skip:focus { left: 1rem; }
+
+  /* ---------- frame ---------- */
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--g); }
+  section { position: relative; padding: clamp(5rem, 10vw, 9rem) 0; }
+  .dark  { background: var(--obsidian); color: var(--ivory); }
+  .char  { background: var(--charcoal); color: var(--ivory); }
+  .ivory { background: var(--ivory); color: var(--obsidian); }
+  .paper { background: var(--paper); color: var(--obsidian); }
+  .muted { color: var(--stone); }
+  .ivory .muted, .paper .muted { color: var(--stone-deep); }
+
+  .meta { display: flex; justify-content: space-between; gap: 1rem; font: 500 11px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .ivory .meta, .paper .meta { color: var(--gold-deep); }
+  .meta span:last-child { color: var(--stone); }
+  .ivory .meta span:last-child, .paper .meta span:last-child { color: var(--stone-deep); }
+
+  .h2 { font: 300 clamp(2.6rem, 6vw, 5.4rem)/1 var(--serif); letter-spacing: -.01em; }
+  .h2 em, .lede em, .big em { font-style: italic; color: var(--gold); }
+  .ivory .h2 em, .paper .h2 em, .ivory .lede em, .paper .big em { color: var(--gold-deep); }
+  .lede { font: 300 clamp(1.35rem, 2.3vw, 2rem)/1.3 var(--serif); max-width: 36ch; }
+  .label { font: 500 11px/1.2 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+  .ivory .label, .paper .label { color: var(--gold-deep); }
+  .small { font-size: 14px; }
+  .src { margin-top: clamp(2.5rem, 5vw, 4rem); padding-top: 1rem; border-top: 1px solid var(--line-d); font-size: 12px; color: var(--stone); display: flex; justify-content: space-between; gap: 1rem; }
+  .ivory .src, .paper .src { border-color: var(--line-l); color: var(--stone-deep); }
+  .file { font: 400 11px/1 var(--sans); letter-spacing: .04em; margin-top: .6rem; color: var(--stone); }
+  .ivory .file, .paper .file { color: var(--stone-deep); }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: clamp(2rem, 5vw, 5rem); }
+  .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: clamp(1.5rem, 3vw, 3rem); }
+  .split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  @media (max-width: 860px) { .grid2, .grid3, .split { grid-template-columns: 1fr; } }
+
+  /* ---------- top bar ---------- */
+  .bar { position: fixed; inset: 0 0 auto 0; z-index: 5; display: flex; justify-content: space-between; align-items: center; padding: 1.1rem var(--g); mix-blend-mode: difference; color: #fff; pointer-events: none; }
+  .bar b { font: 400 18px/1 var(--serif); letter-spacing: .32em; }
+  .bar i { display: block; width: 30px; height: 7px; border-top: 1px solid; border-bottom: 1px solid; }
+  .progress { position: fixed; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--gold); transform-origin: 0 50%; transform: scaleX(0); z-index: 6; }
+
+  /* ---------- cover: oversized wordmark ---------- */
+  .cover { min-height: 100svh; padding: 0; overflow: hidden; background: var(--paper); color: var(--obsidian); display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto; }
+  .cover__word { font: 300 clamp(7rem, 27vw, 26rem)/.82 var(--serif); letter-spacing: -.035em; white-space: nowrap; margin: clamp(5rem, 9vw, 7rem) 0 0 calc(var(--g) - .06em); }
+  .cover__word em { color: var(--gold-deep); }
+  .cover__body { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.15fr) minmax(0,1fr); gap: var(--g); padding: clamp(2rem, 4vw, 3.5rem) var(--g); align-items: end; }
+  .cover__body > * { min-width: 0; }
+  .cover__body .shot:nth-child(2) { transform: translateY(2.5rem); }
+  .strip { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; margin-top: 1rem; }
+  .strip img { border-radius: 3px; }
+  @media (max-width: 700px) { .strip { grid-template-columns: 1fr; } }
+  .cover__copy { text-align: right; font: 400 clamp(1rem, 1.3vw, 1.15rem)/1.45 var(--sans); }
+  .cover__copy p + p { margin-top: 1.4rem; }
+  .cover__foot { display: flex; justify-content: space-between; gap: 1rem; padding: 1.2rem var(--g); border-top: 1px solid var(--line-l); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--stone-deep); }
+  @media (max-width: 860px) {
+    .cover__body { grid-template-columns: 1fr 1.4fr; gap: 1rem; }
+    .cover__body .shot:nth-child(2) { transform: translateY(1.2rem); }
+    .cover__copy { grid-column: 1 / -1; text-align: left; margin-top: 1.5rem; }
+  }
+
+  /* ---------- devices ---------- */
+  .phone { position: relative; width: 100%; max-width: 300px; aspect-ratio: 390 / 844; padding: 3.2%; border-radius: 13% / 6%; background: linear-gradient(145deg, #d9d6d0, #8f8c86 40%, #c8c5bf 60%, #77746f); box-shadow: 0 2px 0 #fff inset, 0 40px 80px -30px rgba(0,0,0,.55), 0 18px 30px -18px rgba(0,0,0,.45); }
+  .phone::before { content: ""; position: absolute; inset: 1.2%; border-radius: 12.4% / 5.7%; background: #050505; }
+  .phone__screen { position: relative; height: 100%; border-radius: 10.5% / 4.9%; overflow: hidden; background: #000; }
+  .phone__screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .phone__screen::after { content: ""; position: absolute; top: 1.4%; left: 50%; width: 30%; height: 3.6%; transform: translateX(-50%); background: #000; border-radius: 99px; }
+  .phone--tilt { transform: perspective(1400px) rotateY(-14deg) rotateX(6deg) rotateZ(3deg); }
+  .phone--tilt-r { transform: perspective(1400px) rotateY(14deg) rotateX(6deg) rotateZ(-3deg); }
+
+  .laptop { width: 100%; padding: 0 6%; }
+  .laptop__lid { position: relative; background: #0b0b0b; border-radius: 2.2% / 3.4%; padding: 2.2% 2.2% 3%; box-shadow: 0 0 0 1px #3a3936 inset, 0 30px 60px -30px rgba(0,0,0,.6); }
+  .laptop__lid img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-radius: 3px; }
+  .laptop__base { position: relative; height: clamp(10px, 1.6vw, 22px); margin: 0 -7%; background: linear-gradient(#cfccc6, #8d8a84); border-radius: 0 0 50% 50% / 0 0 100% 100%; }
+  .laptop__base::before { content: ""; position: absolute; left: 42%; right: 42%; top: 0; height: 40%; background: #a9a6a0; border-radius: 0 0 8px 8px; }
+
+  .browser { border-radius: 10px; overflow: hidden; background: #1c1c1b; box-shadow: 0 40px 90px -40px rgba(0,0,0,.7); }
+  .ivory .browser, .paper .browser { box-shadow: 0 40px 80px -40px rgba(0,0,0,.45); }
+  .browser__bar { display: flex; gap: 6px; padding: 10px 12px; background: #242423; }
+  .browser__bar i { width: 9px; height: 9px; border-radius: 50%; background: #4a4946; }
+  .browser img { width: 100%; }
+
+  /* mood panel — "laptop on a coloured desk" concept */
+  .desk { border-radius: 4px; padding: clamp(2rem, 6vw, 6rem) clamp(1.5rem, 8vw, 8rem) clamp(1.5rem, 4vw, 4rem); background:
+      radial-gradient(120% 90% at 85% 10%, rgba(255,255,255,.55), transparent 55%),
+      linear-gradient(160deg, #dcd2bf, #b9a98c); position: relative; overflow: hidden; }
+  .desk::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(100deg, transparent 0 70px, rgba(255,255,255,.08) 70px 110px); mix-blend-mode: screen; pointer-events: none; }
+
+  /* gradient phone — "akoya" concept */
+  .dusk { background: linear-gradient(180deg, #c79b84 0%, #6d6a78 32%, #2f3446 60%, #0d0e12 100%); }
+
+  /* ribbon — curved display concept */
+  .ribbon { perspective: 1800px; display: grid; grid-template-columns: 1fr 1fr; gap: 6%; max-width: 760px; margin: 0 auto; padding: 2rem 0 5rem; }
+  .ribbon__s { transform: rotateX(38deg) rotateZ(-16deg); transform-origin: 50% 50%; border-radius: 14px; overflow: hidden; box-shadow: -30px 50px 60px -30px rgba(0,0,0,.45); background: #111; }
+  .ribbon__s img { width: 100%; aspect-ratio: 9 / 15; object-fit: cover; object-position: top; }
+  .ribbon__s:nth-child(2) { margin-top: 14%; }
+
+  /* ---------- components ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1.5rem; border-top: 1px solid var(--line-l); padding-top: 2rem; margin-top: clamp(2.5rem, 5vw, 4rem); }
+  .dark .stats, .char .stats { border-color: var(--line-d); }
+  .stats b { display: block; font: 300 clamp(3rem, 6vw, 5.2rem)/1 var(--serif); }
+  .stats span { font-size: 13px; }
+  @media (max-width: 700px) { .stats { grid-template-columns: 1fr 1fr; } }
+
+  .rows { border-top: 1px solid var(--line-l); }
+  .dark .rows, .char .rows { border-color: var(--line-d); }
+  .row { display: grid; grid-template-columns: 4rem minmax(0, 14rem) minmax(0,1fr) minmax(0, 11rem); gap: 1.5rem; padding: 1.4rem 0; border-bottom: 1px solid var(--line-l); align-items: baseline; }
+  .dark .row, .char .row { border-color: var(--line-d); }
+  .row .n { font: 300 1.6rem/1 var(--serif); color: var(--gold); }
+  .ivory .row .n, .paper .row .n { color: var(--gold-deep); }
+  .row h3 { font: 400 1.35rem/1.2 var(--serif); }
+  .row .tag { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; text-align: right; color: var(--stone); }
+  .ivory .row .tag, .paper .row .tag { color: var(--stone-deep); }
+  .row .tag.pass { color: #6f8f5e; }
+  .row .tag.no { color: #b0644e; }
+  @media (max-width: 760px) { .row { grid-template-columns: 2.5rem 1fr; } .row p, .row .tag { grid-column: 2; text-align: left; } }
+
+  .card { border-top: 1px solid var(--line-d); padding-top: 1.4rem; }
+  .ivory .card, .paper .card { border-color: var(--line-l); }
+  .card h3 { font: 400 clamp(1.5rem, 2.2vw, 2rem)/1.15 var(--serif); margin: .8rem 0 .8rem; }
+  .card p + p { margin-top: .9rem; }
+
+  .ia { display: grid; grid-template-columns: 12rem 1fr 15rem; gap: 2rem; align-items: center; }
+  .node { padding: 1rem 1.2rem; background: #1f1f1d; border-left: 2px solid var(--gold); }
+  .node small { display: block; color: var(--stone); font-size: 12px; margin-top: .25rem; }
+  .node--root { background: var(--gold); color: var(--obsidian); border: 0; }
+  .node--root small { color: rgba(9,9,9,.65); }
+  .node--alt { background: var(--ivory); color: var(--obsidian); border-color: var(--gold-deep); }
+  .node--alt small { color: var(--stone-deep); }
+  .ia__col { display: grid; gap: .8rem; }
+  @media (max-width: 860px) { .ia { grid-template-columns: 1fr; } }
+
+  .flow { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: .6rem; margin: 1rem 0 .8rem; counter-reset: s; }
+  .flow li { list-style: none; position: relative; padding: 1rem; background: var(--obsidian); color: var(--ivory); font-size: 14px; min-height: 5.2rem; counter-increment: s; }
+  .flow li::before { content: counter(s, decimal-leading-zero); display: block; font-size: 11px; letter-spacing: .14em; color: var(--gold); margin-bottom: .4rem; }
+  .flow li.out { background: var(--gold); color: var(--obsidian); }
+  .flow li.out::before { color: var(--gold-deep); }
+  .flow { padding: 0; }
+  @media (max-width: 760px) { .flow { grid-template-columns: 1fr 1fr; } }
+
+  .wire { display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 1.5rem; }
+  .wf { border: 1px solid rgba(9,9,9,.25); background: #e3ddd1; padding: .8rem; display: grid; gap: .5rem; align-content: start; min-height: 20rem; }
+  .wf i { display: block; background: #c9c1b2; height: .9rem; }
+  .wf i.t { height: 9rem; display: grid; place-items: center; font: italic 300 1.2rem/1.2 var(--serif); color: var(--stone-deep); font-style: italic; }
+  .wf i.s { width: 55%; }
+  .wf i.k { background: var(--obsidian); width: 35%; }
+  .wf .cols { display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem; }
+  .wf .cols i { height: 6rem; }
+  .wf .side { display: grid; grid-template-columns: 1fr 3fr; gap: .5rem; }
+  .wf .side i { height: auto; min-height: 12rem; }
+  @media (max-width: 860px) { .wire { grid-template-columns: 1fr; } }
+
+  .swatches { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 1rem; }
+  .sw i { display: block; aspect-ratio: 1 / 1.1; border: 1px solid var(--line-d); }
+  .sw b { display: block; margin-top: .7rem; font-weight: 500; font-size: 14px; }
+  .sw span { font-size: 12px; color: var(--stone); }
+  @media (max-width: 860px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+  .type { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: clamp(3rem, 6vw, 5rem); }
+  .type div { border-top: 1px solid var(--line-d); padding-top: 1.2rem; }
+  .type .aa { font-size: clamp(5rem, 10vw, 9rem); line-height: 1; }
+  .btns { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.5rem; }
+  .btn { font: 500 12px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; padding: 1.05rem 1.6rem; border: 1px solid; }
+  .btn--solid { background: var(--ivory); color: var(--obsidian); border-color: var(--ivory); }
+  .btn--gold { background: var(--gold); color: var(--obsidian); border-color: var(--gold); }
+  .btn--ghost { color: var(--ivory); border-color: rgba(243,239,230,.45); }
+
+  .mobiles { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: clamp(1rem, 3vw, 3rem); align-items: start; }
+  .mobiles figure { margin: 0; }
+  .mobiles figure:nth-child(even) { margin-top: 4rem; }
+  @media (max-width: 860px) { .mobiles { grid-template-columns: 1fr 1fr; } }
+
+  .hold { display: grid; place-items: center; padding: clamp(2rem, 6vw, 5rem) 0; border-radius: 4px; }
+  .hold .phone { max-width: 320px; }
+
+  .bigquote { font: 300 clamp(2.4rem, 6.5vw, 6rem)/1.02 var(--serif); letter-spacing: -.01em; }
+  .bigquote em { color: var(--gold); }
+
+  figure { margin: 0; }
+  figcaption { margin-top: .9rem; font-size: 13px; color: var(--stone); max-width: 60ch; }
+  .ivory figcaption, .paper figcaption { color: var(--stone-deep); }
+
+  .sources { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem 3rem; font-size: 13px; color: var(--stone); }
+  .sources b { color: var(--ivory); font-weight: 500; margin-right: .6rem; }
+  @media (max-width: 700px) { .sources { grid-template-columns: 1fr; } }
+
+  /* reveal */
+  .js .rv { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+  .js .rv.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .js .rv { opacity: 1; transform: none; transition: none; } .progress { display: none; } }
+
+  @media print {
+    .bar, .progress, .skip { display: none; }
+    section { break-inside: avoid; }
+    .js .rv { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#overview">Skip to the case study</a>
+<div class="bar" aria-hidden="true"><b>WESTEND</b><i></i></div>
+<div class="progress" aria-hidden="true"></div>
+
+<main>
+
+<!-- 00 — COVER -->
+<section class="cover" aria-labelledby="cover-title">
+  <h1 class="cover__word" id="cover-title">Westend <em>Signature</em></h1>
+  <div class="cover__body">
+    <figure class="shot rv">
+      <div class="phone phone--tilt"><div class="phone__screen"><img src="assets/m-hero.jpg" alt="Westend Signature homepage on a phone: 'Arrive exceptionally.' over a black Mercedes-Benz G-Class."></div></div>
+      <p class="file">001001.jpg — mobile hero</p>
+    </figure>
+    <figure class="shot rv">
+      <div class="browser"><div class="browser__bar"><i></i><i></i><i></i></div><img src="assets/d-vehicle.jpg" alt="The desktop vehicle view showing the Toyota Prado with four at-a-glance tiles."></div>
+      <p class="file">001002.jpg — vehicle view</p>
+    </figure>
+    <div class="cover__copy rv">
+      <p>A UX/UI case study of a private chauffeur and concierge website for Lagos and Abuja.</p>
+      <p>From a scroll-driven fleet reveal to an enquiry that lands, pre-written, in WhatsApp.</p>
+      <p class="small muted">Experience design &amp; creative direction<br>Niyi Yaroglah / Vision and Sounds</p>
+    </div>
+  </div>
+  <div class="cover__foot"><span>UX/UI case study</span><span>October 2026</span></div>
+</section>
+
+<!-- 01 — OVERVIEW -->
+<section class="ivory" id="overview" aria-labelledby="ov-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>01 / Scope</span></div>
+    <div class="grid2">
+      <div>
+        <h2 class="h2 rv" id="ov-title">Project <em>overview</em></h2>
+        <p class="lede rv" style="margin-top:2rem">A one-page brand website that lets a visitor feel the fleet, choose a vehicle and send a useful journey enquiry in under a minute.</p>
+      </div>
+      <div class="rv">
+        <p class="label">Delivered scope</p>
+        <p style="margin-top:.8rem">Art direction, scroll-driven hero, fleet showcase, dashboard-style vehicle view, booking form with place and email suggestions, WhatsApp hand-off, motion and accessibility layer, privacy and terms templates.</p>
+        <p class="label" style="margin-top:2rem">Implementation</p>
+        <p style="margin-top:.8rem">A single static <code>index.html</code> with embedded CSS and JavaScript. GSAP 3.12.5 + ScrollTrigger, Lenis 1.1.13. No build step, no backend, no payments.</p>
+        <p class="label" style="margin-top:2rem">Timeline</p>
+        <p style="margin-top:.8rem">24–26 October 2026 · 35 commits</p>
+      </div>
+    </div>
+    <div class="stats rv">
+      <div><b>06</b><span class="muted">vehicles in 3 collections</span></div>
+      <div><b>05</b><span class="muted">service experiences</span></div>
+      <div><b>296</b><span class="muted">hero frames drawn on scroll</span></div>
+      <div><b>02</b><span class="muted">cities: Lagos and Abuja</span></div>
+    </div>
+    <p class="src"><span>Counts describe the implementation, not business performance.</span><span>02</span></p>
+  </div>
+</section>
+
+<!-- 02 — PROBLEM -->
+<section class="dark" aria-labelledby="pr-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>02 / Problem</span></div>
+    <div class="split">
+      <div>
+        <h2 class="h2 rv" id="pr-title">Make the arrival feel <em>certain</em> before the car is even booked.</h2>
+        <p class="rv" style="margin-top:2rem;max-width:44ch">Then turn that feeling into an enquiry the team can act on: city, service, vehicle, date, pickup and destination, in one message.</p>
+        <div class="card rv" style="margin-top:3rem">
+          <p class="label">Design tension</p>
+          <p style="margin-top:.8rem;max-width:46ch" class="muted">Cinematic presentation sells discretion and quality, but a chauffeur enquiry is practical and time-sensitive. Every flourish has to stay out of the way of “where, when, which car”.</p>
+        </div>
+      </div>
+      <figure class="rv">
+        <div class="laptop"><div class="laptop__lid"><img src="assets/d-hero-motion.jpg" alt="Desktop hero: 'Arrive exceptionally.' beside a G-Class in a dark arrival hall."></div><div class="laptop__base"></div></div>
+      </figure>
+    </div>
+    <p class="src"><span>Problem framing derived from the brief and the implementation, not participant research.</span><span>03</span></p>
+  </div>
+</section>
+
+<!-- 03 — EVIDENCE -->
+<section class="ivory" aria-labelledby="ev-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>03 / Evidence</span></div>
+    <h2 class="h2 rv" id="ev-title">Research &amp; <em>supporting evidence</em></h2>
+    <div class="rows rv" style="margin-top:3rem">
+      <div class="row"><span class="n">A</span><h3>Client brief</h3><p>Private chauffeur and concierge for Lagos and Abuja. Westend-owned fleet. Enquiries to WhatsApp +234 703 651 7790. No prices or availability promised online.</p><span class="tag">Project instructions</span></div>
+      <div class="row"><span class="n">B</span><h3>Source audit</h3><p>6 vehicles, 3 collections, 5 experiences, 14 form fields, 297 sequence frames (296 used), 13 illustrative images with a written disclosure.</p><span class="tag">index.html, assets/</span></div>
+      <div class="row"><span class="n">C</span><h3>Interface inspection</h3><p>Captures at 1440 × 900 and 390 × 844 show the real layouts, the vehicle dialog, the menu and live pickup suggestions.</p><span class="tag">Browser, 31 Oct 2026</span></div>
+      <div class="row"><span class="n">D</span><h3>Commit history</h3><p>35 commits show what was tried, kept and reverted, including two reverted motion ideas.</p><span class="tag">git log</span></div>
+      <div class="row"><span class="n">E</span><h3>Evidence gaps</h3><p>No interviews, surveys, analytics or booking data were available. None are invented here.</p><span class="tag no">No user data</span></div>
+    </div>
+    <p class="src"><span>Evidence audit completed 31 October 2026.</span><span>04</span></p>
+  </div>
+</section>
+
+<!-- 04 — AUDIENCE -->
+<section class="char" aria-labelledby="au-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>04 / Audience</span></div>
+    <h2 class="h2 rv" id="au-title">Who it is <em>for</em></h2>
+    <div class="grid3" style="margin-top:3.5rem">
+      <div class="card rv"><p class="label">Hypothesis 01</p><h3>The arriving executive</h3><p class="muted">Lands at Murtala Muhammed or Nnamdi Azikiwe with meetings across the city. Wants to know the car will be there, and who to message.</p><p class="small"><span class="label">Likely task</span><br>Book an airport pickup plus hourly service.</p></div>
+      <div class="card rv"><p class="label">Hypothesis 02</p><h3>The assistant or planner</h3><p class="muted">Books on behalf of a principal, family or wedding party. Needs clear vehicle choices, passenger needs and a summary to forward.</p><p class="small"><span class="label">Likely task</span><br>Brief a multi-stop day with requirements.</p></div>
+      <div class="card rv"><p class="label">Hypothesis 03</p><h3>The returning client</h3><p class="muted">Already trusts Westend and arrives on a phone. Wants the shortest path to WhatsApp with the details pre-filled.</p><p class="small"><span class="label">Likely task</span><br>Quick enquiry from the hero strip.</p></div>
+    </div>
+    <p class="src"><span>Audience hypotheses inferred from content, service types and form options. Not validated.</span><span>05</span></p>
+  </div>
+</section>
+
+<!-- 05 — PROCESS -->
+<section class="ivory" aria-labelledby="ps-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>05 / Process</span></div>
+    <h2 class="h2 rv" id="ps-title">Design <em>process</em></h2>
+    <div class="rows rv" style="margin-top:3rem">
+      <div class="row"><span class="n">01</span><h3>Editorial foundation</h3><p>Obsidian and ivory sections, Cormorant Garamond display with Manrope UI, fleet, experiences and booking on one page.</p><span class="tag">24 Oct</span></div>
+      <div class="row"><span class="n">02</span><h3>Imagery &amp; hero</h3><p>Illustrative fleet and service images. Hero moved from still keyframes to a 296-frame turntable drawn to canvas on scroll.</p><span class="tag">25 Oct</span></div>
+      <div class="row"><span class="n">03</span><h3>Vehicle view</h3><p>From a modal, to full-screen, to a dashboard: collection sidebar, at-a-glance tiles, a plan card and a feature list.</p><span class="tag">25 Oct</span></div>
+      <div class="row"><span class="n">04</span><h3>Scroll storytelling</h3><p>Progress line, word reveals, manifesto, expanding band. Two ideas were tried and reverted when they competed with content.</p><span class="tag">25–26 Oct</span></div>
+      <div class="row"><span class="n">05</span><h3>Enquiry to WhatsApp</h3><p>Place and email suggestions, requirement chips, and a form that writes the WhatsApp message for the visitor.</p><span class="tag">26 Oct</span></div>
+    </div>
+    <p class="src"><span>Sequence reconstructed from the commit history.</span><span>06</span></p>
+  </div>
+</section>
+
+<!-- 06 — IA -->
+<section class="dark" aria-labelledby="ia-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>06 / Structure</span></div>
+    <h2 class="h2 rv" id="ia-title">Information <em>architecture</em></h2>
+    <p class="rv muted" style="margin:1rem 0 3.5rem">One page, read in the order a booking decision is made. Vehicle details open in a dialog.</p>
+    <div class="ia rv">
+      <div class="node node--root">Homepage<small>Single scroll</small></div>
+      <div class="ia__col">
+        <div class="node">Feel<small>Hero sequence · Quick enquiry · Manifesto</small></div>
+        <div class="node">Choose<small>Fleet: Signature SUVs · Prestige SUVs · Executive Saloons</small></div>
+        <div class="node">Trust<small>Experiences · Every vehicle, our own · The Westend Standard</small></div>
+        <div class="node">Enquire<small>Booking form · WhatsApp · Footer</small></div>
+      </div>
+      <div class="ia__col">
+        <div class="node node--alt">Vehicle view<small>Collection · Tiles · Features · Plan card</small></div>
+        <div class="node node--root">WhatsApp draft<small>Sent by the visitor</small></div>
+      </div>
+    </div>
+    <p class="src"><span>Implemented sections and dialog.</span><span>07</span></p>
+  </div>
+</section>
+
+<!-- 07 — FLOWS -->
+<section class="paper" aria-labelledby="fl-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>07 / Task flows</span></div>
+    <h2 class="h2 rv" id="fl-title">Three ways <em>in</em>, one way out</h2>
+    <div class="rv" style="margin-top:3rem">
+      <p class="label">Vehicle-led</p>
+      <ol class="flow"><li>Explore the fleet</li><li>Explore this vehicle</li><li>Plan card: city &amp; service</li><li>Form pre-filled</li><li class="out">Send to WhatsApp</li></ol>
+      <p class="small muted">The plan card carries city, service and vehicle into the booking form, so the choice is never re-typed.</p>
+    </div>
+    <div class="rv" style="margin-top:2.5rem">
+      <p class="label">Journey-led</p>
+      <ol class="flow"><li>Plan a journey strip</li><li>City, service, date</li><li>Pickup suggestions</li><li>Validate required fields</li><li class="out">Send to WhatsApp</li></ol>
+      <p class="small muted">Required: name, email, phone, city, service, date, time, pickup, passengers and privacy consent. Errors are announced and focus moves to the first one.</p>
+    </div>
+    <div class="rv" style="margin-top:2.5rem">
+      <p class="label">Direct</p>
+      <ol class="flow"><li>Menu or footer</li><li>WhatsApp · Message us</li><li class="out">Open chat</li></ol>
+      <p class="small muted">The website never claims an enquiry was sent: the visitor reviews the draft and taps Send in WhatsApp.</p>
+    </div>
+    <p class="src"><span>Implemented routes. The WhatsApp send happens outside the website.</span><span>08</span></p>
+  </div>
+</section>
+
+<!-- 08 — WIREFRAMES -->
+<section class="ivory" aria-labelledby="wf-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>08 / Wireframes</span></div>
+    <h2 class="h2 rv" id="wf-title">Retrospective <em>wireframes</em></h2>
+    <div class="wire rv" style="margin-top:3rem">
+      <figure><div class="wf" aria-hidden="true"><i class="s"></i><i class="t">Scroll-driven turntable hero</i><i class="s"></i><i class="k"></i><i></i><i class="s"></i></div><figcaption>Homepage: headline per car, index rail, two CTAs.</figcaption></figure>
+      <figure><div class="wf" aria-hidden="true"><i class="s"></i><div class="side"><i></i><i></i></div><div class="cols"><i></i><i></i><i></i></div></div><figcaption>Vehicle view: collection sidebar, tiles, car, plan card.</figcaption></figure>
+      <figure><div class="wf" aria-hidden="true"><i class="s"></i><i></i><i></i><i></i><i class="k"></i><i></i><i class="s"></i><i class="k"></i></div><figcaption>Mobile form: single column, requirement chips, send action.</figcaption></figure>
+    </div>
+    <p class="src"><span>Reconstructed from the final implementation; not original design-stage artefacts.</span><span>09</span></p>
+  </div>
+</section>
+
+<!-- 09 — HERO (desk concept) -->
+<section class="ivory" style="padding-top:0" aria-labelledby="he-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>09 / Desktop</span></div>
+    <div class="split" style="align-items:end;margin-bottom:3rem">
+      <h2 class="h2 rv" id="he-title">The arrival <em>sequence</em></h2>
+      <p class="rv">Scrolling turns a lit turntable through all six cars. Each car gets its own headline, and the copy changes in the dark moments between them, so nothing swaps in view. Scrolling up plays it in reverse.</p>
+    </div>
+    <div class="desk rv">
+      <div class="laptop" style="position:relative;z-index:1"><div class="laptop__lid"><img src="assets/d-seq-range-rover.jpg" alt="Hero sequence at the Range Rover: 'Quietly commanding.', index 02 of 06."></div><div class="laptop__base"></div></div>
+    </div>
+    <div class="strip rv">
+      <figure><img src="assets/d-seq-land-cruiser.jpg" alt="Hero at the Land Cruiser: 'Every road, assured.'"><p class="file">04 — Every road, assured.</p></figure>
+      <figure><img src="assets/d-seq-prado.jpg" alt="Hero at the Prado: 'Calm, every day.'"><p class="file">05 — Calm, every day.</p></figure>
+      <figure><img src="assets/d-seq-s-class.jpg" alt="Hero at the S-Class: 'The art of arriving.'"><p class="file">06 — The art of arriving.</p></figure>
+    </div>
+    <div class="grid3" style="margin-top:3rem">
+      <div class="card rv"><p class="label">Loading</p><p style="margin-top:.6rem">Frame 002 first, then in order, six at a time. Phones use every second frame: about 3.4 MB instead of 6.7 MB.</p></div>
+      <div class="card rv"><p class="label">Copy per car</p><p style="margin-top:.6rem">“Arrive exceptionally.” · “Quietly commanding.” · “Room for everyone.” · “Every road, assured.” · “Calm, every day.” · “The art of arriving.”</p></div>
+      <div class="card rv"><p class="label">Fallback</p><p style="margin-top:.6rem">With reduced motion or failed scripts, a single lit frame is shown and all content is visible immediately.</p></div>
+    </div>
+    <p class="src"><span>Actual UI capture. Vehicle imagery is AI-generated and disclosed on the site.</span><span>10</span></p>
+  </div>
+</section>
+
+<!-- 10 — FLEET -->
+<section class="dark" aria-labelledby="fe-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>10 / Desktop</span></div>
+    <div class="split">
+      <div>
+        <h2 class="h2 rv" id="fe-title">A fleet you <em>move through</em></h2>
+        <p class="rv" style="margin-top:2rem">On wide screens the fleet pins for about 210 vh and travels sideways through three collections, with labels and progress kept in sync.</p>
+        <p class="rv muted small" style="margin-top:1.2rem">Tabbing into an off-screen card scrolls to its panel. Smaller screens get stacked cards with no pinning.</p>
+      </div>
+      <figure class="rv"><div class="browser"><div class="browser__bar"><i></i><i></i><i></i></div><img src="assets/d-fleet-pinned.jpg" alt="Pinned fleet part-way through its sideways travel: Toyota Prado and Land Cruiser in Signature SUVs."></div></figure>
+    </div>
+    <p class="src"><span>Actual UI capture.</span><span>11</span></p>
+  </div>
+</section>
+
+<!-- 11 — VEHICLE VIEW -->
+<section class="char" aria-labelledby="vv-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>11 / Desktop</span></div>
+    <div class="split">
+      <figure class="rv"><div class="browser"><div class="browser__bar"><i></i><i></i><i></i></div><img src="assets/d-vehicle.jpg" alt="Vehicle view for the Toyota Prado: sidebar, four tiles, car and plan card."></div></figure>
+      <div>
+        <h2 class="h2 rv" id="vv-title">Details before the <em>enquiry</em></h2>
+        <p class="rv" style="margin-top:2rem">A dashboard rather than a spec sheet: the collection on the left, four at-a-glance tiles, the car in the arrival hall and an expandable list of published model features.</p>
+        <ul class="rv small muted" style="margin:1.5rem 0 0;padding-left:1.1rem;line-height:1.9">
+          <li>Switch by sidebar, previous/next, arrow keys or swipe</li>
+          <li>“Plan with this vehicle” sends city, service and car to the form</li>
+          <li>No prices, capacities, model years or availability, by design</li>
+          <li>Native <code>&lt;dialog&gt;</code>: focus contained, Escape closes</li>
+        </ul>
+      </div>
+    </div>
+    <p class="src"><span>Actual dialog capture. Feature lists were checked against public model sources in October 2026.</span><span>12</span></p>
+  </div>
+</section>
+
+<!-- 12 — MOBILE (gradient concept) -->
+<section class="dusk" aria-labelledby="mo-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>12 / Mobile</span></div>
+    <h2 class="h2 rv" id="mo-title">The actual <em>mobile</em> experience</h2>
+    <p class="rv" style="margin:1.2rem 0 4rem;max-width:52ch">Stacked hero, swipeable collection row, a full-screen menu that traps focus, and 44 px tap targets throughout.</p>
+    <div class="mobiles">
+      <figure class="rv"><div class="phone"><div class="phone__screen"><img src="assets/m-hero.jpg" alt="Mobile hero with G-Class and two calls to action."></div></div><p class="file">Hero</p></figure>
+      <figure class="rv"><div class="phone"><div class="phone__screen"><img src="assets/m-menu.jpg" alt="Mobile menu: Fleet, Experiences, The Westend Standard, Contact."></div></div><p class="file">Menu</p></figure>
+      <figure class="rv"><div class="phone"><div class="phone__screen"><img src="assets/m-fleet.jpg" alt="Mobile fleet section with collection tabs."></div></div><p class="file">Fleet</p></figure>
+      <figure class="rv"><div class="phone"><div class="phone__screen"><img src="assets/m-vehicle.jpg" alt="Mobile vehicle view with swipeable collection row and tiles."></div></div><p class="file">Vehicle view</p></figure>
+    </div>
+    <p class="src" style="border-color:rgba(243,239,230,.2)"><span>Browser captures at 390 × 844 CSS pixels, 31 October 2026.</span><span>13</span></p>
+  </div>
+</section>
+
+<!-- 13 — ENQUIRY -->
+<section class="paper" aria-labelledby="en-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>13 / Mobile &amp; hand-off</span></div>
+    <div class="split">
+      <div class="hold rv" style="background:#d9d4ca">
+        <div class="phone phone--tilt-r"><div class="phone__screen"><img src="assets/m-suggest.jpg" alt="Pickup field showing suggestions for Murtala Muhammed airport terminals."></div></div>
+      </div>
+      <div>
+        <h2 class="h2 rv" id="en-title">An enquiry that <em>writes itself</em></h2>
+        <div class="rows rv" style="margin-top:2.5rem">
+          <div class="row" style="grid-template-columns:1fr"><h3>Places as you type</h3><p class="small muted">Lagos and Abuja airports, hotels and districts appear instantly, favouring the chosen city. Live OpenStreetMap results, limited to Nigeria, fill the gaps.</p></div>
+          <div class="row" style="grid-template-columns:1fr"><h3>Small helpers</h3><p class="small muted">Email domains after “@”. Tap-to-add chips: flight number, child seat, meet &amp; greet sign, wheelchair access, return journey.</p></div>
+          <div class="row" style="grid-template-columns:1fr"><h3>Honest status</h3><p class="small muted">“Your details open in WhatsApp, ready to send to us. This is an enquiry, not a confirmed booking.” The site never says it was sent.</p></div>
+        </div>
+      </div>
+    </div>
+    <p class="src"><span>Actual UI capture. WhatsApp opens a draft for the visitor to send.</span><span>14</span></p>
+  </div>
+</section>
+
+<!-- 14 — DECISIONS -->
+<section class="dark" aria-labelledby="de-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>14 / Rationale</span></div>
+    <h2 class="h2 rv" id="de-title">Key design <em>decisions</em></h2>
+    <div class="grid2" style="margin-top:3.5rem">
+      <div class="card rv"><p class="label">01</p><h3>Presence before specification</h3><p class="muted">The cars appear lit in a hall, not on a grid. Trust is built on composure; details follow on request.</p></div>
+      <div class="card rv"><p class="label">02</p><h3>Changes happen in darkness</h3><p class="muted">Headlines and model names swap only at the dark frames between cars, so text never changes over a visible vehicle.</p></div>
+      <div class="card rv"><p class="label">03</p><h3>WhatsApp, not a booking engine</h3><p class="muted">Lagos and Abuja clients already book by chat. The site prepares the message; people confirm the journey.</p></div>
+      <div class="card rv"><p class="label">04</p><h3>Nothing invented</h3><p class="muted">Empty contact fields stay hidden. No prices, ratings or availability. Illustrative photography is labelled.</p></div>
+    </div>
+    <p class="src"><span>Rationale inferred from the brief, implementation and commit history.</span><span>15</span></p>
+  </div>
+</section>
+
+<!-- 15 — DESIGN SYSTEM -->
+<section class="char" aria-labelledby="ds-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>15 / Visual language</span></div>
+    <h2 class="h2 rv" id="ds-title">The implemented <em>design system</em></h2>
+    <div class="swatches rv" style="margin-top:3rem">
+      <div class="sw"><i style="background:#090909"></i><b>Obsidian</b><span>#090909</span></div>
+      <div class="sw"><i style="background:#191918"></i><b>Charcoal</b><span>#191918</span></div>
+      <div class="sw"><i style="background:#F3EFE6"></i><b>Ivory</b><span>#F3EFE6</span></div>
+      <div class="sw"><i style="background:#C9AA73"></i><b>Gold</b><span>#C9AA73</span></div>
+      <div class="sw"><i style="background:#7A5F30"></i><b>Gold deep</b><span>#7A5F30</span></div>
+      <div class="sw"><i style="background:#A29B90"></i><b>Stone</b><span>#A29B90</span></div>
+      <div class="sw"><i style="background:#5F594F"></i><b>Stone deep</b><span>#5F594F</span></div>
+    </div>
+    <div class="type rv">
+      <div><p class="aa" style="font-family:var(--serif);font-weight:300">Aa <em style="color:var(--gold)">Aa</em></p><p><b style="font-weight:500">Cormorant Garamond</b> <span class="muted">300 / 400, italic for emphasis</span></p></div>
+      <div><p class="aa" style="font-family:var(--sans);font-weight:300">Aa</p><p><b style="font-weight:500">Manrope</b> <span class="muted">300–600, tracked capitals for labels</span></p></div>
+    </div>
+    <div class="btns rv"><span class="btn btn--solid">Explore the fleet →</span><span class="btn btn--ghost">Plan your journey</span><span class="btn btn--gold">Send to WhatsApp</span></div>
+    <p class="src"><span>Tokens and typography extracted from index.html.</span><span>16</span></p>
+  </div>
+</section>
+
+<!-- 16 — MOTION & ACCESS -->
+<section class="ivory" aria-labelledby="ma-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>16 / Motion &amp; access</span></div>
+    <div class="split" style="align-items:start">
+      <div>
+        <h2 class="h2 rv" id="ma-title">Motion that <em>steps aside</em></h2>
+        <figure class="rv" style="margin-top:2.5rem"><div class="browser"><div class="browser__bar"><i></i><i></i><i></i></div><img src="assets/d-manifesto.jpg" alt="Manifesto: 'Every arrival is planned around you' with drifting photographs."></div><figcaption>The manifesto brightens word by word as you scroll.</figcaption></figure>
+      </div>
+      <div class="rows rv">
+        <div class="row" style="grid-template-columns:1fr auto"><p>One GSAP ticker drives everything; Lenis smooth scroll only on fine pointers</p><span class="tag">Performance</span></div>
+        <div class="row" style="grid-template-columns:1fr auto"><p>Header dims to 60% on scroll down, returns on scroll up, hover or focus</p><span class="tag">Wayfinding</span></div>
+        <div class="row" style="grid-template-columns:1fr auto"><p><code>prefers-reduced-motion</code>: no pinning, parallax, smooth scroll or reveals</p><span class="tag">Access</span></div>
+        <div class="row" style="grid-template-columns:1fr auto"><p>Content stays visible if CDN scripts fail or JavaScript is off</p><span class="tag">Resilience</span></div>
+        <div class="row" style="grid-template-columns:1fr auto"><p>Menu traps focus and makes the page inert; dialog restores focus</p><span class="tag">Keyboard</span></div>
+        <div class="row" style="grid-template-columns:1fr auto"><p>Rounded consent checkboxes with 44 px tap areas</p><span class="tag">Touch</span></div>
+      </div>
+    </div>
+    <p class="src"><span>Behaviour documented in README.md and verified in the source.</span><span>17</span></p>
+  </div>
+</section>
+
+<!-- 17 — TESTING -->
+<section class="dark" aria-labelledby="ts-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>17 / Verification</span></div>
+    <h2 class="h2 rv" id="ts-title">Testing &amp; <em>validation</em></h2>
+    <div class="rows rv" style="margin-top:3rem">
+      <div class="row"><span class="n">01</span><h3>Page load</h3><p>Desktop 1440 × 900 and mobile 390 × 844 load with no script errors, with and without GSAP and Lenis</p><span class="tag pass">Pass</span></div>
+      <div class="row"><span class="n">02</span><h3>Vehicle view</h3><p>“Explore this vehicle” opens the dialog on desktop and phone; Escape closes it</p><span class="tag pass">Pass</span></div>
+      <div class="row"><span class="n">03</span><h3>Pickup suggestions</h3><p>Typing “Murtala” lists three Lagos airport terminals from the built-in list</p><span class="tag pass">Pass</span></div>
+      <div class="row"><span class="n">04</span><h3>Hero sequence</h3><p>Scrolling changes the headline per car: “Quietly commanding.” → “The art of arriving.”</p><span class="tag pass">Pass</span></div>
+      <div class="row"><span class="n">05</span><h3>Mobile menu</h3><p>Opens full-screen with four destinations and a reserve action</p><span class="tag pass">Pass</span></div>
+      <div class="row"><span class="n">06</span><h3>WhatsApp delivery</h3><p>Message arrival on the business number</p><span class="tag">Not checked here</span></div>
+      <div class="row"><span class="n">07</span><h3>Usability &amp; outcomes</h3><p>Participant tasks, completion rates and enquiry conversion</p><span class="tag no">Not tested</span></div>
+    </div>
+    <p class="src"><span>Automated browser checks on 31 October 2026. No participant usability study.</span><span>18</span></p>
+  </div>
+</section>
+
+<!-- 18 — RESULTS -->
+<section class="char" aria-labelledby="rs-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>18 / Results</span></div>
+    <h2 class="h2 rv" id="rs-title">What shipped, and what is <em>unknown</em></h2>
+    <div class="grid2" style="margin-top:3.5rem">
+      <div class="card rv"><p class="label">Implemented</p><h3>A connected browse-to-WhatsApp experience</h3><p class="muted">Scroll-driven six-car hero · Pinned fleet showcase · Dashboard vehicle view · Suggestion-led booking form · Pre-written WhatsApp enquiry · Reduced-motion and no-JS fallbacks</p></div>
+      <div class="card rv"><p class="label">Not established</p><h3>Business and user impact remain unmeasured</h3><p class="muted">No conversion baseline · No user study · Imagery is AI-generated, not the real fleet · Email and phone not yet configured · Privacy and terms are unreviewed templates</p></div>
+    </div>
+    <p class="src"><span>Implementation outcomes only; no conversion or revenue claims.</span><span>19</span></p>
+  </div>
+</section>
+
+<!-- 19 — NEXT -->
+<section class="ivory" aria-labelledby="nx-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>19 / Next steps</span></div>
+    <h2 class="h2 rv" id="nx-title">Priority <em>improvements</em></h2>
+    <div class="rows rv" style="margin-top:3rem">
+      <div class="row"><span class="n">First</span><h3>Real fleet, real details</h3><p>Replace the 13 illustrative images with Westend’s own vehicles. Add email and phone. Complete and review privacy and terms.</p><span class="tag">Content</span></div>
+      <div class="row"><span class="n">Next</span><h3>Lighter first visit</h3><p>Defer the hero sequence on slow connections and measure load on mid-range Android phones over mobile data.</p><span class="tag">Performance</span></div>
+      <div class="row"><span class="n">Then</span><h3>Evidence &amp; iteration</h3><p>Run five task-based sessions per audience and count WhatsApp hand-offs before making any conversion claims.</p><span class="tag">Research</span></div>
+    </div>
+    <p class="src"><span>Proposed work, not implemented.</span><span>20</span></p>
+  </div>
+</section>
+
+<!-- 20 — SHOWCASE (ribbon concept) -->
+<section class="paper" style="overflow:hidden" aria-labelledby="sh-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>20 / Showcase</span></div>
+    <h2 class="h2 rv" id="sh-title">Westend, <em>across screens</em></h2>
+    <div class="ribbon rv" aria-hidden="true">
+      <div class="ribbon__s"><img src="assets/m-booking.jpg" alt=""></div>
+      <div class="ribbon__s"><img src="assets/m-standard.jpg" alt=""></div>
+    </div>
+    <div class="grid2">
+      <figure class="rv"><div class="browser"><div class="browser__bar"><i></i><i></i><i></i></div><img src="assets/d-exp.jpg" alt="Experiences section: 'More than a journey.'"></div><p class="file">Experiences</p></figure>
+      <figure class="rv"><div class="browser"><div class="browser__bar"><i></i><i></i><i></i></div><img src="assets/d-standard.jpg" alt="The Westend Standard: 'Every detail, considered.' beside a cabin interior."></div><p class="file">The Westend Standard</p></figure>
+    </div>
+    <p class="src"><span>Actual UI captures, presented in illustrative device frames.</span><span>21</span></p>
+  </div>
+</section>
+
+<!-- 21 — THANK YOU -->
+<section class="dark" aria-labelledby="ty-title">
+  <div class="wrap">
+    <div class="meta"><span>Westend Signature</span><span>21 / Sources</span></div>
+    <h2 class="bigquote rv" id="ty-title">Arrive exceptionally.<br><em>Enquire simply.</em></h2>
+    <p class="rv" style="margin-top:3rem">Niyi Yaroglah<br><span class="muted">Experience Designer &amp; Creative Director · Vision and Sounds</span></p>
+    <div class="sources rv" style="margin-top:4rem;border-top:1px solid var(--line-d);padding-top:1.5rem">
+      <p><b>S1</b>index.html: HTML, CSS and JavaScript</p>
+      <p><b>S2</b>README.md and assets/images/IMAGE-README.md</p>
+      <p><b>S3</b>Git history, 24–26 October 2026 (35 commits)</p>
+      <p><b>S4</b>Desktop and mobile captures, 31 October 2026</p>
+      <p><b>S5</b>Case-study format: Westend Africa UX/UI case study</p>
+      <p><b>S6</b>Presentation concepts: supplied device mockups</p>
+    </div>
+    <p class="src"><span>All interface images are captures of the real site. Vehicle and venue imagery inside them is AI-generated.</span><span>22</span></p>
+  </div>
+</section>
+
+</main>
+
+<script>
+  (function () {
+    document.documentElement.classList.add('js');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var els = document.querySelectorAll('.rv');
+    if (reduce || !('IntersectionObserver' in window)) {
+      els.forEach(function (e) { e.classList.add('in'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      els.forEach(function (e) { io.observe(e); });
+    }
+    var bar = document.querySelector('.progress');
+    function onScroll() {
+      var h = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = 'scaleX(' + (h > 0 ? scrollY / h : 0) + ')';
+    }
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    addEventListener('beforeprint', function () { els.forEach(function (e) { e.classList.add('in'); }); });
+  })();
+</script>
+</body>
+</html>

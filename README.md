@@ -7,7 +7,10 @@ index.html          the site (CSS + JS embedded)
 privacy.html        privacy notice TEMPLATE (needs completing and review)
 terms.html          terms TEMPLATE (needs completing and review)
 assets/images/      demonstration images (placeholders, see below)
+case-study/         UX/UI case study of this website (open case-study/index.html)
 ```
+
+The case study is a single static page. It uses real screenshots of the site, taken on 31 October 2026, in `case-study/assets/`. No interview, survey or conversion data is invented, and audience profiles and wireframes are labelled as hypotheses and reconstructions. If the site changes, retake the screenshots.
 
 ## Enquiries go to WhatsApp
 
